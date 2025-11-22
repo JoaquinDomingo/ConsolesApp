@@ -18,7 +18,7 @@ class ViewHConsolas (view : View) : RecyclerView.ViewHolder (view) {
         binding.txtviewName.setText(console.name)
         binding.txtviewReleaseDate.setText(console.releasedate)
         binding.txtviewCompany.setText(console.company)
-        binding.txtviewDescription.setText(console.hashCode())
+        binding.txtviewDescription.setText(console.description)
         Glide
             .with(itemView.context)
             .load(console.image)
