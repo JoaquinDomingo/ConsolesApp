@@ -1,4 +1,8 @@
 package com.example.consolas.interfaces
 
-class InterfaceDao {
+import com.example.consolas.models.Console
+
+interface InterfaceDao {
+
+    fun getDataConsoles(): List<Console>
 }

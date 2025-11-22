@@ -19,4 +19,7 @@ class AdapterConsolas (var listConsoles : MutableList<Console>) :
     override fun onBindViewHolder(holder: ViewHConsolas, position: Int) {
         holder.renderize(listConsoles.get(position))
     }
+
+    override fun getItemCount(): Int = listConsoles.size
+
 }
