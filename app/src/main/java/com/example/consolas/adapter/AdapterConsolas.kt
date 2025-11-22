@@ -11,7 +11,7 @@ class AdapterConsolas (var listConsoles : MutableList<Console>) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHConsolas {
         val layoutInflater = LayoutInflater.from(parent.context)
-        val layoutItemConsole = R.layout.item_consola
+        val layoutItemConsole = R.layout.item_console
         return ViewHConsolas(layoutInflater.inflate(layoutItemConsole, parent, false))
     }
 

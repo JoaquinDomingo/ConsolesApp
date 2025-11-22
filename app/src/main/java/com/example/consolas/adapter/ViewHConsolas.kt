@@ -3,6 +3,7 @@ package com.example.consolas.adapter
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.consolas.databinding.ItemConsoleBinding
 import com.example.consolas.models.Console
 
 
