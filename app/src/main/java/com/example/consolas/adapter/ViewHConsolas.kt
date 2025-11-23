@@ -16,6 +16,7 @@ class ViewHConsolas (
 
     init{
         binding = ItemConsoleBinding.bind(view)
+        setOnClickListeners()
     }
 
     fun renderize(console: Console){
