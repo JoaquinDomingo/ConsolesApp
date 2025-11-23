@@ -63,3 +63,16 @@ the application logic into three interconnected components:
 - Implement user authentication and profile management using Firebase.
 - Add functionality to edit and delete consoles from the catalog.
 - Integrate a backend service to fetch console data and related games.
+
+- Migrate from MVC to MVVM architecture for better separation of concerns and easier testing.
+
+
+## Author
+
+- Joaquin Domingo Domingo
+- Email: dojoaquindo@gmail.com
+- GitHub: [JoaquinDomingo]
+
+## Other Information
+- This project is an educational project and is not intended for commercial use. It is being developed to enhance my skills in Android development using Kotlin
+    for a class project. 

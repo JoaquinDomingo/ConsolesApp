@@ -7,7 +7,11 @@ import com.example.consolas.databinding.ItemConsoleBinding
 import com.example.consolas.models.Console
 
 
-class ViewHConsolas (view : View) : RecyclerView.ViewHolder (view) {
+class ViewHConsolas (
+    view : View,
+    var deleteOnClick: (Int) -> Unit,
+    var editOnClick: (Int) -> Unit
+    ) : RecyclerView.ViewHolder (view) {
     lateinit var  binding : ItemConsoleBinding
 
     init{
@@ -24,5 +28,15 @@ class ViewHConsolas (view : View) : RecyclerView.ViewHolder (view) {
             .load(console.image)
             .centerCrop()
             .into(binding.ivConsole)
+    }
+
+    private  fun setOnClickListeners(){
+
+        binding.btnDelete.setOnClickListener {
+            deleteOnClick (adapterPosition)
+        }
+        binding.btnEdit.setOnClickListener {
+            editOnClick (adapterPosition)
+        }
     }
 }

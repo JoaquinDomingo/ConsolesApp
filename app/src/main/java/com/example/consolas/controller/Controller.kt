@@ -9,6 +9,8 @@ import com.example.consolas.models.Console
 
 class Controller (val context: Context) {
     lateinit var listConsoles : MutableList<Console>
+    lateinit var adapterConsole: AdapterConsolas
+
 
     init {
         initData()
@@ -27,7 +29,27 @@ class Controller (val context: Context) {
     }
 
     fun setAdapter(){
+    adapterConsole = AdapterConsolas(
+            listConsoles,
+            {
+                pos -> delConsole(pos)
+            },
+            {
+                pos -> editConsole(pos)
+            }
+        )
         val myActivity = context as MainActivity
-        myActivity.binding.myRecyclerView.adapter = AdapterConsolas(listConsoles)
+        myActivity.binding.myRecyclerView.adapter = adapterConsole
+    }
+
+    fun delConsole(pos :Int){
+        Toast.makeText(context, "Borrar la consola en la posicion $pos", Toast.LENGTH_SHORT)
+            .show()
+        listConsoles.removeAt(pos)
+        adapterConsole.notifyItemRemoved(pos)
+    }
+    fun editConsole(pos: Int){
+        Toast.makeText(context, "Editar la consola en la posicion $pos", Toast.LENGTH_SHORT)
+            .show()
     }
 }
