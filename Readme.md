@@ -1,78 +1,75 @@
-# Consoles App
+#  Aplicación Consolas
 
-## Project Overview
+##  Resumen del Proyecto
 
-This app is a mobile application built using Kotlin for Android Devices. 
+Esta aplicación es una aplicación móvil construida usando **Kotlin** para dispositivos **Android**.
 
-In the initial versios it will provide users 
-with a comprehensive catalog of gaming consoles, allowing them 
-to browse through various consoles, view a bit of information which will be expanded with a drop-down menu (this will be available
-in further versions, and manage their favorite consoles). 
+En las versiones iniciales, proporcionará a los usuarios un **catálogo completo de consolas de videojuegos**, permitiéndoles navegar a través de varias consolas, ver información básica (que se ampliará con un menú desplegable en versiones posteriores) y **gestionar sus consolas favoritas**.
 
-Besides that, users can also add new consoles to the catalog, ensuring that 
-the app remains up-to-date with the latest releases. In future versions, users will be able to edit and delete consoles as well, furthermore,
-the functions of seeing related games to each console will be added, beeing it either games that are compatible with the console or games that 
-were released for it.
+Además, los usuarios pueden **añadir nuevas consolas** al catálogo, asegurando que la aplicación se mantenga actualizada. En futuras versiones, los usuarios también podrán **editar y eliminar** consolas. Además, se añadirán las funciones para ver **juegos relacionados** con cada consola, ya sean juegos compatibles con la consola o juegos que se lanzaron para ella.
 
-## Features
+##  Características
 
-- Browse a catalog of gaming consoles
-- View detailed information about each console
-- Add new consoles to the catalog
-- Manage a list of favorite consoles
-- Future updates will include editing and deleting consoles
-- Future updates will include viewing related games for each console
-- User authentication and profile management (planned for future versions)
-- Social sharing features (planned for future versions)
+* Navegar por un catálogo de consolas de videojuegos.
+* Ver información detallada sobre cada consola.
+* **Añadir nuevas consolas** al catálogo.
+* **Gestionar una lista de consolas favoritas**.
+* **Futuras actualizaciones** incluirán edición y eliminación de consolas.
+* **Futuras actualizaciones** incluirán la visualización de juegos relacionados para cada consola.
+* Autenticación de usuario y gestión de perfiles (planeado para futuras versiones).
+* Funciones para compartir en redes sociales (planeado para futuras versiones).
 
-## Technologies Used
+##  Tecnologías Utilizadas
 
-- Kotlin
-- Android SDK
-- SQLite for local data storage (not yet implemented)
-- Retrofit for network operations (planned for future versions)
-- Firebase for user authentication (planned for future versions)
-- MVC Architecture that will be migrated to MVVM in future versions
-- Activities for different screens and their respective layouts
-- RecyclerView for displaying lists of consoles
-- Intents for navigation between activities (not yet implemented)
+* **Kotlin**
+* **Android SDK**
+* **SQLite** para almacenamiento de datos local (aún no implementado).
+* **Retrofit** para operaciones de red (planeado para futuras versiones).
+* **Firebase** para autenticación de usuario (planeado para futuras versiones).
+* **Arquitectura MVC** que se migrará a **MVVM** en futuras versiones.
+* `Activities` para diferentes pantallas y sus respectivos *layouts*.
+* `RecyclerView` para mostrar listas de consolas.
+* `Intents` para la navegación entre *activities* (aún no implementado).
 
+## ️ Arquitectura
 
-## Architecture 
+La aplicación sigue el patrón de arquitectura **Modelo-Vista-Controlador (MVC)**, que separa la lógica de la aplicación en tres componentes interconectados:
 
-The app follows the Model-View-Controller (MVC) architecture pattern, which separates 
-the application logic into three interconnected components:
+* **Modelo (Model):**
+    * Representa los datos y la lógica de negocio.
+    * Incluye clases que definen la estructura de una consola de videojuegos y manejan las operaciones de datos.
+    * La clase `Console` se encuentra en el paquete 'model'.
 
-- Model: Represents the data and business logic of the application. In this app, the Model includes classes that define the structure 
-    of a gaming console and handle data operations. The class Console is located in the 'model' package.
+* **Vista (View):**
+    * Representa la interfaz de usuario de la aplicación.
+    * Es responsable de mostrar datos al usuario y capturar la entrada del usuario.
+    * Consiste en archivos *layout* XML que definen los componentes de la UI para diferentes pantallas.
+    * Se utiliza `RecyclerView` para mostrar listas de consolas.
+    * (En futuras versiones, la Vista incluirá componentes de UI para autenticación y perfiles).
 
-- View: Represents the user interface of the application. The View is responsible for displaying data to the user and capturing user input.
-- In this app, the View consists of XML layout files that define the UI components for different screens, such as the main activity layout and 
-  the console detail layout. These files are located in the 'res/layout' directory. In addition, the RecyclerView is used to display 
-  lists of consoles in a scrollable format. In future versions, the View will also include UI components for user authentication and profile management.
+* **Controlador (Controller):**
+    * Actúa como un intermediario entre el Modelo y la Vista.
+    * Maneja la entrada del usuario, actualiza el Modelo y refresca la Vista.
+    * Incluye `Activities` que gestionan las interacciones. La `MainActivity` es responsable de mostrar la lista de consolas.
 
-- Controller: Acts as an intermediary between the Model and the View. The Controller handles user input, 
-  updates the Model, and refreshes the View. In this app, the Controller includes Activities that manage the interactions between the user and the application. 
-  The MainActivity is responsible for displaying the list of consoles.
+* **Adaptadores (Adapters):**
+    * La aplicación utiliza `Adapters` para vincular datos del Modelo a los componentes de la Vista, particularmente para mostrar listas en `RecyclerViews`.
+    * El `ConsoleAdapter` es responsable de poblar el `RecyclerView` con datos de la consola.
+    * `ViewHConsole` se utiliza para contener las vistas de cada elemento de consola en el `RecyclerView`.
 
-- Adapters: The app uses Adapters to bind data from the Model to the View components, particularly for displaying lists in RecyclerViews. 
-  The ConsoleAdapter is responsible for populating the RecyclerView with console data. ViewHConsole is used to hold the views for each console item in the RecyclerView.
+##  Futuras Mejoras
 
-## Future Improvements
+* Implementar autenticación de usuario y gestión de perfiles usando **Firebase**.
+* Añadir funcionalidad para **editar y eliminar** consolas del catálogo.
+* Integrar un servicio *backend* para obtener datos de consolas y juegos relacionados.
+* Migrar de **MVC a MVVM** para una mejor separación de preocupaciones y facilitar las pruebas.
 
-- Implement user authentication and profile management using Firebase.
-- Add functionality to edit and delete consoles from the catalog.
-- Integrate a backend service to fetch console data and related games.
+##  Autor
 
-- Migrate from MVC to MVVM architecture for better separation of concerns and easier testing.
+* **Joaquin Domingo Domingo**
+* **Email:** dojoaquindo@gmail.com
+* **GitHub:** [JoaquinDomingo]
 
+## Otra Información
 
-## Author
-
-- Joaquin Domingo Domingo
-- Email: dojoaquindo@gmail.com
-- GitHub: [JoaquinDomingo]
-
-## Other Information
-- This project is an educational project and is not intended for commercial use. It is being developed to enhance my skills in Android development using Kotlin
-    for a class project. 
+> Este proyecto es un proyecto educativo y no está destinado a uso comercial. Se está desarrollando para mejorar mis habilidades en el desarrollo de Android usando Kotlin para un proyecto de clase.
