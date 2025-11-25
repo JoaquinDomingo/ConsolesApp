@@ -24,7 +24,6 @@ Además, los usuarios pueden **añadir nuevas consolas** al catálogo, asegurand
 * **Kotlin**
 * **Android SDK**
 * **SQLite** para almacenamiento de datos local (aún no implementado).
-* **Retrofit** para operaciones de red (planeado para futuras versiones).
 * **Firebase** para autenticación de usuario (planeado para futuras versiones).
 * **Arquitectura MVC** que se migrará a **MVVM** en futuras versiones.
 * `Activities` para diferentes pantallas y sus respectivos *layouts*.
