@@ -29,6 +29,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initRecyclerView(){
-        binding.myRecyclerView.layoutManager = LinearLayoutManager(this)
+        binding.myRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
     }
 }

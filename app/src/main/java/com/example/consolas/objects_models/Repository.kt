@@ -12,7 +12,7 @@ object Repository {
             "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/NES-Console-Set.png/2560px-NES-Console-Set.png"
         ),
         Console(
-            "Super Nintendo Entertainment System (SNES)",
+            "Super NES (SNES)",
             "1990",
             "Nintendo",
             "Consola de 16 bits famosa por sus títulos legendarios y avances en sonido y gráficos.",

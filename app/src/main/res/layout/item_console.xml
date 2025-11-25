@@ -12,17 +12,18 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@color/black"
         android:orientation="vertical"
         android:padding="8dp">
 
         <!-- Imagen de la consola -->
         <ImageView
             android:id="@+id/ivConsole"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_width="379dp"
+            android:layout_height="213dp"
+            android:contentDescription="@string/imagen_de_la_consola"
             android:scaleType="fitCenter"
-            android:contentDescription="Imagen de la consola"
             tools:background="@color/blue" />
 
         <!-- Nombre de la consola -->
@@ -31,7 +32,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="16sp"
             android:textStyle="bold"
             tools:text="Console Name" />
@@ -42,7 +43,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:textColor="@color/purple_700"
+            android:textColor="@color/white"
             android:textSize="14sp"
             tools:text="Company Name" />
 
@@ -52,7 +53,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
-            android:textColor="@color/purple_500"
+            android:textColor="@color/white"
             android:textSize="14sp"
             tools:text="Release Date" />
 
@@ -62,7 +63,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:textColor="@color/purple_500"
+            android:textColor="@color/white"
             android:textSize="14sp"
             tools:text="Description" />
 
@@ -84,6 +85,7 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_marginStart="16dp"
+                android:background="@color/white"
                 android:src="@drawable/deletebutton" />
         </LinearLayout>
 
