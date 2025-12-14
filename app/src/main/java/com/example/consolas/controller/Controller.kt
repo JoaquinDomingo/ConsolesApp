@@ -29,13 +29,13 @@ class Controller (val context: Context) {
     }
 
     fun setAdapter(){
-    adapterConsole = AdapterConsolas(
+        adapterConsole = AdapterConsolas(
             listConsoles,
             {
-                pos -> delConsole(pos)
+                    pos -> delConsole(pos)
             },
             {
-                pos -> editConsole(pos)
+                    pos -> startEditConsole(pos)
             }
         )
         val myActivity = context as MainActivity
@@ -48,8 +48,28 @@ class Controller (val context: Context) {
         listConsoles.removeAt(pos)
         adapterConsole.notifyItemRemoved(pos)
     }
-    fun editConsole(pos: Int){
+
+    fun startEditConsole(pos: Int){
         Toast.makeText(context, "Editar la consola en la posicion $pos", Toast.LENGTH_SHORT)
             .show()
+        val myActivity = context as MainActivity
+        myActivity.mostrarEditConsola(pos, listConsoles[pos])
     }
+
+    fun editConsole(pos: Int, updatedConsole: Console){
+        if (pos >= 0 && pos < listConsoles.size) {
+            listConsoles[pos] = updatedConsole
+            adapterConsole.notifyItemChanged(pos)
+            Toast.makeText(context, "Consola '${updatedConsole.name}' editada con éxito.", Toast.LENGTH_SHORT)
+                .show()
+        }
+    }
+
+    fun addConsole(newConsole: Console){
+        listConsoles.add(newConsole)
+        adapterConsole.notifyItemInserted(listConsoles.size - 1)
+        Toast.makeText(context, "Consola '${newConsole.name}' añadida con éxito.", Toast.LENGTH_SHORT)
+            .show()
+    }
+
 }
