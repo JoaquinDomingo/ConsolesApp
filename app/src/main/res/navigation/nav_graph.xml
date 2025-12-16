@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/FragmentJoaquin">
+    <fragment
+        android:id="@+id/FragmentJoaquin"
+        android:name="com.example.consolas.FragmentJoaquin"
+        android:label="Fragmento Home (Joaquin)"
+        tools:layout="@layout/fragment_joaquin" />
+
+    <fragment
+        android:id="@+id/crudFragment"
+        android:name="com.example.consolas.CrudFragment"
+        android:label="Mi CRUD de Consolas"
+        tools:layout="@layout/fragment_crud" />
+
+</navigation>

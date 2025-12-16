@@ -76,14 +76,14 @@
 
             <ImageView
                 android:id="@+id/btn_edit"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
                 android:src="@drawable/editbutton" />
 
             <ImageView
                 android:id="@+id/btn_delete"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
                 android:layout_marginStart="16dp"
                 android:background="@color/white"
                 android:src="@drawable/deletebutton" />
