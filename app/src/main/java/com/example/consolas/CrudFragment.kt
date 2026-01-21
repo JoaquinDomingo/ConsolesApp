@@ -16,6 +16,7 @@ import com.example.consolas.controller.Controller
 import com.example.consolas.interfaces.CrudInteractionListener
 import com.example.consolas.databinding.FragmentCrudBinding
 import com.example.consolas.models.Console
+import androidx.navigation.fragment.findNavController
 
 class CrudFragment : Fragment(), CrudInteractionListener {
 
@@ -71,6 +72,11 @@ class CrudFragment : Fragment(), CrudInteractionListener {
         mostrarEditConsola(pos, console)
     }
 
+    override fun onShowDetail(pos: Int) {
+
+        val action = CrudFragmentDirections.actionCrudFragmentToDetailFragment(pos)
+        findNavController().navigate(action)
+    }
 
     fun mostrarAddConsola() {
         val layout = add(name = "", date = "", company = "", description = "")

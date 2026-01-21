@@ -7,10 +7,11 @@ import com.example.consolas.R
 import com.example.consolas.models.Console
 
 class AdapterConsolas (
-    var listConsoles : MutableList<Console>,
+    var listConsoles: MutableList<Console>,
     var deleteOnClick: (Int) -> Unit,
-    var editOnClick: (Int) ->Unit
-    ): RecyclerView.Adapter<ViewHConsolas>(){
+    var editOnClick: (Int) -> Unit,
+    var detailOnClick: (Int) -> Unit
+): RecyclerView.Adapter<ViewHConsolas>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHConsolas {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -18,7 +19,8 @@ class AdapterConsolas (
         return ViewHConsolas(
             layoutInflater.inflate(layoutItemConsole, parent, false),
             deleteOnClick,
-            editOnClick
+            editOnClick,
+            detailOnClick
         )
     }
 

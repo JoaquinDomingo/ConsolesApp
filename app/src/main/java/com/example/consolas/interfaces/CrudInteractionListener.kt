@@ -7,4 +7,6 @@ interface CrudInteractionListener {
     fun onStartEditConsole(pos: Int, console: Console)
 
     fun getRecyclerView(): RecyclerView
+
+    fun onShowDetail(pos: Int)
 }

@@ -2,7 +2,6 @@ package com.example.consolas.controller
 
 import android.content.Context
 import android.widget.Toast
-import androidx.recyclerview.widget.RecyclerView
 import com.example.consolas.adapter.AdapterConsolas
 import com.example.consolas.dao.DaoConsolas
 import com.example.consolas.interfaces.CrudInteractionListener
@@ -24,7 +23,8 @@ class Controller(private val context: Context, private val listener: CrudInterac
         adapterConsole = AdapterConsolas(
             listConsoles,
             { pos -> delConsole(pos) },
-            { pos -> startEditConsole(pos) }
+            { pos -> startEditConsole(pos) },
+                        { pos -> detailOnClick(pos) }
         )
         val recyclerView = listener.getRecyclerView()
         recyclerView.adapter = adapterConsole
@@ -39,6 +39,11 @@ class Controller(private val context: Context, private val listener: CrudInterac
     fun startEditConsole(pos: Int){
         Toast.makeText(context, "Editar la consola en la posicion $pos", Toast.LENGTH_SHORT).show()
         listener.onStartEditConsole(pos, listConsoles[pos])
+    }
+
+    fun detailOnClick(pos: Int){
+        Toast.makeText(context, "Detalle de la consola en la posicion $pos", Toast.LENGTH_SHORT).show()
+        listener.onShowDetail(pos)
     }
 
     fun editConsole(pos: Int, updatedConsole: Console){

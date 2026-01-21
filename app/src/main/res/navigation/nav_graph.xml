@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/FragmentJoaquin">
+
     <fragment
         android:id="@+id/FragmentJoaquin"
         android:name="com.example.consolas.FragmentJoaquin"
@@ -14,6 +15,32 @@
         android:id="@+id/crudFragment"
         android:name="com.example.consolas.CrudFragment"
         android:label="Mi CRUD de Consolas"
-        tools:layout="@layout/fragment_crud" />
+        tools:layout="@layout/fragment_crud">
+        <action
+            android:id="@+id/action_crudFragment_to_detailFragment"
+            app:destination="@id/detailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="com.example.consolas.DetailFragment"
+        android:label="Detalles de la Consola"
+        tools:layout="@layout/fragment_detail">
+        <argument
+            android:name="consolePosition"
+            app:argType="integer" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.consolas.SettingsFragment"
+        android:label="Ajustes"
+        tools:layout="@layout/fragment_settings" />
+
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.consolas.ProfileFragment"
+        android:label="Perfil de Usuario"
+        tools:layout="@layout/fragment_profile" />
 
 </navigation>

@@ -8,10 +8,11 @@ import com.example.consolas.models.Console
 
 
 class ViewHConsolas (
-    view : View,
+    view: View,
     var deleteOnClick: (Int) -> Unit,
-    var editOnClick: (Int) -> Unit
-    ) : RecyclerView.ViewHolder (view) {
+    var editOnClick: (Int) -> Unit,
+    var detailOnClick: (Int) -> Unit
+) : RecyclerView.ViewHolder (view) {
     lateinit var  binding : ItemConsoleBinding
 
     init{
@@ -38,6 +39,9 @@ class ViewHConsolas (
         }
         binding.btnEdit.setOnClickListener {
             editOnClick (adapterPosition)
+        }
+        binding.root.setOnClickListener {
+            detailOnClick (adapterPosition)
         }
     }
 }
