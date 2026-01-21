@@ -8,13 +8,22 @@
     <fragment
         android:id="@+id/FragmentJoaquin"
         android:name="com.example.consolas.FragmentJoaquin"
-        android:label="Fragmento Home (Joaquin)"
-        tools:layout="@layout/fragment_joaquin" />
+        android:label="Inicio"
+        tools:layout="@layout/fragment_joaquin">
+
+        <action
+            android:id="@+id/action_home_to_profile"
+            app:destination="@id/profileFragment" />
+
+        <action
+            android:id="@+id/action_home_to_settings"
+            app:destination="@id/settingsFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/crudFragment"
         android:name="com.example.consolas.CrudFragment"
-        android:label="Mi CRUD de Consolas"
+        android:label="Consolas"
         tools:layout="@layout/fragment_crud">
         <action
             android:id="@+id/action_crudFragment_to_detailFragment"
@@ -24,7 +33,7 @@
     <fragment
         android:id="@+id/detailFragment"
         android:name="com.example.consolas.DetailFragment"
-        android:label="Detalles de la Consola"
+        android:label="Detalle"
         tools:layout="@layout/fragment_detail">
         <argument
             android:name="consolePosition"
@@ -40,7 +49,7 @@
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.consolas.ProfileFragment"
-        android:label="Perfil de Usuario"
+        android:label="Perfil"
         tools:layout="@layout/fragment_profile" />
 
 </navigation>

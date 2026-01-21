@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/FragmentJoaquin"
+            android:icon="@android:drawable/ic_menu_today"
+            android:title="Inicio" />
+        <item
+            android:id="@+id/crudFragment"
+            android:icon="@android:drawable/ic_menu_agenda"
+            android:title="Consolas" />
+    </group>
+
+    <item android:title="Sesión">
+        <menu>
+            <item
+                android:id="@+id/logout"
+                android:icon="@android:drawable/ic_lock_power_off"
+                android:title="Cerrar Sesión" />
+        </menu>
+    </item>
+
+</menu>

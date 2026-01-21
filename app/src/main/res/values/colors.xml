@@ -5,4 +5,10 @@
     <color name="blue">#101FD9</color>
     <color name="purple_500">#3A186B</color>
     <color name="purple_700">#20073E</color>
+    <color name="azul_noche">#2C3E50</color>
+    <color name="gris_fondo">#F0F4F7</color>
+    <color name="gris_texto_secundario">#546E7A</color>
+    <color name="gris_suave">#D1D9E0</color>
+    <color name="rojo_borrar">#C0392B</color>
+    <color name="gris_divider">#BDC3C7</color>
 </resources>

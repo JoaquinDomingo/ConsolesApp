@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F0F4F7"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PREFERENCIAS"
+            android:textSize="14sp"
+            android:textColor="#2C3E50"
+            android:textStyle="bold"
+            android:layout_marginBottom="12dp"
+            android:layout_marginStart="4dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding="16dp"
+            android:background="@android:drawable/editbox_background"
+            android:layout_marginBottom="10dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@android:drawable/ic_lock_silent_mode"
+                app:tint="#2C3E50" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="16dp"
+                android:text="Notificaciones de la app"
+                android:textSize="16sp"
+                android:textColor="#333333"/>
+
+            <CheckBox
+                android:id="@+id/checkNotifications"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="#2C3E50"
+                android:checked="true"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding="16dp"
+            android:background="@android:drawable/editbox_background">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@android:drawable/ic_menu_month"
+                app:tint="#2C3E50" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="16dp"
+                android:text="Interfaz en modo oscuro"
+                android:textSize="16sp"
+                android:textColor="#333333"/>
+
+            <Switch
+                android:id="@+id/switchDarkMode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:thumbTint="#2C3E50"
+                android:trackTint="#BDC3C7"/>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SEGURIDAD Y SOPORTE"
+            android:textSize="14sp"
+            android:textColor="#2C3E50"
+            android:textStyle="bold"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="12dp"
+            android:layout_marginStart="4dp"/>
+
+        <Button
+            android:id="@+id/btnChangePassword"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:text="Cambiar mi contraseña"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="@color/azul_noche"
+            android:layout_marginBottom="10dp"
+            android:drawableStart="@android:drawable/ic_lock_idle_lock"
+            android:drawablePadding="16dp"
+            android:paddingStart="16dp"
+            android:gravity="start|center_vertical" />
+
+        <Button
+            android:id="@+id/btnHelp"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:text="Centro de ayuda técnica"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="@color/azul_noche"
+            android:drawableStart="@android:drawable/ic_menu_help"
+            android:drawablePadding="16dp"
+            android:paddingStart="16dp"
+            android:gravity="start|center_vertical" />
+
+
+    </LinearLayout>
+</ScrollView>
