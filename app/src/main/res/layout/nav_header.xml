@@ -19,9 +19,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            android:src="@android:drawable/ic_menu_gallery"
+            android:src="@drawable/images"
             android:background="@color/gris_fondo"
-            app:tint="@color/azul_noche" />
+             />
     </FrameLayout>
 
     <LinearLayout
