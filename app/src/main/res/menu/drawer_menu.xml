@@ -9,10 +9,10 @@
         <item
             android:id="@+id/crudFragment"
             android:icon="@android:drawable/ic_menu_agenda"
-            android:title="Consolas" />
+            android:title="Listado de Consolas" />
     </group>
 
-    <item android:title="Sesión">
+    <item android:title="Cuenta">
         <menu>
             <item
                 android:id="@+id/logout"

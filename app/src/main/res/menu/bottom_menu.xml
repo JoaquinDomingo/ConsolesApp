@@ -4,11 +4,11 @@
     <item
         android:id="@+id/FragmentJoaquin"
         android:icon="@android:drawable/ic_menu_today"
-        android:title="Inicio"/>
+        android:title="Inicio" />
 
     <item
         android:id="@+id/crudFragment"
         android:icon="@android:drawable/ic_menu_agenda"
-        android:title="Consolas"/>
+        android:title="Consolas" />
 
 </menu>

@@ -12,57 +12,90 @@
         android:orientation="vertical"
         android:padding="24dp">
 
-        <ImageView
-            android:id="@+id/tvDetailImage"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="250dp"
-            android:scaleType="centerCrop"
-            android:background="@color/gris_suave"
-            android:layout_marginBottom="20dp" />
+            android:background="@android:drawable/editbox_background"
+            android:padding="4dp"
+            android:layout_marginBottom="24dp">
+
+            <ImageView
+                android:id="@+id/tvDetailImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:background="@color/gris_suave"
+                tools:src="@android:drawable/ic_menu_gallery" />
+        </FrameLayout>
 
         <TextView
             android:id="@+id/tvDetailName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Nombre de la Consola"
-            android:textSize="30sp"
+            android:textSize="32sp"
             android:textStyle="bold"
-            android:textColor="@color/azul_noche" />
+            android:textColor="@color/azul_noche"
+            android:letterSpacing="-0.02" />
 
-        <TextView
-            android:id="@+id/tvDetailCompany"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Compañía Fabricante"
-            android:textSize="20sp"
-            android:textStyle="italic"
-            android:textColor="@color/gris_texto_secundario"
-            android:layout_marginTop="4dp" />
+            android:orientation="vertical"
+            android:layout_marginTop="12dp"
+            android:padding="16dp"
+            android:background="@android:drawable/editbox_background">
+
+            <TextView
+                android:id="@+id/tvDetailCompany"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Compañía Fabricante"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/azul_noche"
+                android:drawableTint="@color/azul_noche" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/gris_divider"
+                android:layout_marginVertical="12dp" />
+
+            <TextView
+                android:id="@+id/tvDetailDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Lanzamiento: 2026"
+                android:textSize="16sp"
+                android:textColor="@color/gris_texto_secundario"
+                android:drawableTint="@color/azul_noche" />
+        </LinearLayout>
 
         <TextView
-            android:id="@+id/tvDetailDate"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Lanzamiento: 01/01/2000"
-            android:textSize="16sp"
+            android:layout_marginTop="32dp"
+            android:text="SOBRE ESTA CONSOLA"
+            android:textSize="14sp"
             android:textStyle="bold"
-            android:textColor="@color/black" />
+            android:textColor="@color/azul_noche"
+            android:letterSpacing="0.1" />
 
         <View
-            android:layout_width="60dp"
+            android:layout_width="40dp"
             android:layout_height="4dp"
             android:background="@color/azul_noche"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:layout_marginBottom="16dp" />
 
         <TextView
             android:id="@+id/tvDetailDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Aquí va la descripción detallada de la consola y sus características principales."
+            android:text="Descripción detallada de la consola..."
             android:textSize="17sp"
-            android:lineSpacingExtra="4dp"
+            android:lineSpacingExtra="6dp"
             android:textColor="@color/gris_texto_secundario" />
 
     </LinearLayout>

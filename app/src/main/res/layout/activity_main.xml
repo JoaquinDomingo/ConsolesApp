@@ -20,7 +20,15 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/azul_noche"
-            app:titleTextColor="@color/white" />
+            android:elevation="4dp"
+            app:titleTextColor="@color/white"
+            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/white"
+            android:alpha="0.1" />
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/nav_host_fragment"
@@ -34,10 +42,13 @@
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNav"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="64dp"
             android:background="@color/white"
+            android:elevation="16dp"
+            app:itemIconSize="26dp"
             app:itemIconTint="@color/azul_noche"
             app:itemTextColor="@color/azul_noche"
+            app:labelVisibilityMode="labeled"
             app:menu="@menu/bottom_menu" />
     </LinearLayout>
 
@@ -50,6 +61,8 @@
         app:headerLayout="@layout/nav_header"
         app:menu="@menu/drawer_menu"
         app:itemIconTint="@color/azul_noche"
-        app:itemTextColor="@color/azul_noche" />
+        app:itemTextColor="@color/black"
+        app:itemHorizontalPadding="20dp"
+        app:itemIconPadding="16dp" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

@@ -1,126 +1,142 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F0F4F7"
+    android:background="@color/gris_fondo"
     android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="20dp">
+        android:padding="32dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="PREFERENCIAS"
-            android:textSize="14sp"
-            android:textColor="#2C3E50"
+            android:text="Ajustes"
+            android:textColor="@color/azul_noche"
+            android:textSize="34sp"
             android:textStyle="bold"
-            android:layout_marginBottom="12dp"
+            android:letterSpacing="-0.02"
+            android:layout_marginBottom="40dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SISTEMA (PRÓXIMAMENTE)"
+            android:textSize="12sp"
+            android:textColor="@color/gris_texto_secundario"
+            android:textStyle="bold"
+            android:letterSpacing="0.15"
+            android:layout_marginBottom="16dp"
             android:layout_marginStart="4dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:padding="16dp"
+            android:orientation="vertical"
             android:background="@android:drawable/editbox_background"
-            android:layout_marginBottom="10dp">
+            android:paddingHorizontal="20dp"
+            android:layout_marginBottom="32dp">
 
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@android:drawable/ic_lock_silent_mode"
-                app:tint="#2C3E50" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginStart="16dp"
-                android:text="Notificaciones de la app"
-                android:textSize="16sp"
-                android:textColor="#333333"/>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Notificaciones"
+                    android:textSize="17sp"
+                    android:textColor="@color/azul_noche"/>
 
-            <CheckBox
-                android:id="@+id/checkNotifications"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:buttonTint="#2C3E50"
-                android:checked="true"/>
-        </LinearLayout>
+                <CheckBox
+                    android:id="@+id/checkNotifications"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="@color/azul_noche"
+                    android:checked="true"/>
+            </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:padding="16dp"
-            android:background="@android:drawable/editbox_background">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1.5dp"
+                android:background="@color/gris_fondo" />
 
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@android:drawable/ic_menu_month"
-                app:tint="#2C3E50" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginStart="16dp"
-                android:text="Interfaz en modo oscuro"
-                android:textSize="16sp"
-                android:textColor="#333333"/>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Modo oscuro"
+                    android:textSize="17sp"
+                    android:textColor="@color/azul_noche"/>
 
-            <Switch
-                android:id="@+id/switchDarkMode"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:thumbTint="#2C3E50"
-                android:trackTint="#BDC3C7"/>
+                <Switch
+                    android:id="@+id/switchDarkMode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:thumbTint="@color/azul_noche"
+                    android:trackTint="@color/gris_divider"/>
+            </LinearLayout>
         </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="SEGURIDAD Y SOPORTE"
-            android:textSize="14sp"
-            android:textColor="#2C3E50"
+            android:text="SEGURIDAD (Proximamente)"
+            android:textSize="12sp"
+            android:textColor="@color/gris_texto_secundario"
             android:textStyle="bold"
-            android:layout_marginTop="30dp"
-            android:layout_marginBottom="12dp"
+            android:letterSpacing="0.15"
+            android:layout_marginBottom="16dp"
             android:layout_marginStart="4dp"/>
 
-        <Button
-            android:id="@+id/btnChangePassword"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:text="Cambiar mi contraseña"
-            android:textColor="#FFFFFF"
-            android:backgroundTint="@color/azul_noche"
-            android:layout_marginBottom="10dp"
-            android:drawableStart="@android:drawable/ic_lock_idle_lock"
-            android:drawablePadding="16dp"
-            android:paddingStart="16dp"
-            android:gravity="start|center_vertical" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@android:drawable/editbox_background"
+            android:paddingHorizontal="20dp">
 
-        <Button
-            android:id="@+id/btnHelp"
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:text="Centro de ayuda técnica"
-            android:textColor="#FFFFFF"
-            android:backgroundTint="@color/azul_noche"
-            android:drawableStart="@android:drawable/ic_menu_help"
-            android:drawablePadding="16dp"
-            android:paddingStart="16dp"
-            android:gravity="start|center_vertical" />
+            <TextView
+                android:id="@+id/btnChangePassword"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:gravity="center_vertical"
+                android:text="Cambiar contraseña"
+                android:textSize="17sp"
+                android:textColor="@color/azul_noche"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true" />
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1.5dp"
+                android:background="@color/gris_fondo" />
+
+            <TextView
+                android:id="@+id/btnHelp"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:gravity="center_vertical"
+                android:text="Soporte técnico"
+                android:textSize="17sp"
+                android:textColor="@color/azul_noche"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true" />
+        </LinearLayout>
 
     </LinearLayout>
 </ScrollView>
