@@ -1,9 +1,13 @@
-package com.example.consolas.objects_models
+package com.example.consolas.data
 
 import com.example.consolas.models.Console
+import javax.inject.Inject
+import javax.inject.Singleton
 
-object Repository {
-    val listConsoles: List<Console> = listOf(
+@Singleton
+class Repository @Inject constructor() {
+
+    private val listConsoles: MutableList<Console> = mutableListOf(
         Console(
             "Nintendo Entertainment System (NES)",
             "1983",
@@ -75,4 +79,19 @@ object Repository {
             "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Nintendo-GameCube-Console-FL.jpg/250px-Nintendo-GameCube-Console-FL.jpg"
         )
     )
+
+
+    fun getConsoles(): List<Console> {
+        return listConsoles
+    }
+
+
+    fun addConsole(console: Console) {
+        listConsoles.add(console)
+    }
+
+
+    fun deleteConsole(console: Console) {
+        listConsoles.remove(console)
+    }
 }
