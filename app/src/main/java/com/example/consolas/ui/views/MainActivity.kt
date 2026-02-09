@@ -1,4 +1,4 @@
-package com.example.consolas
+package com.example.consolas.ui.views
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,6 +10,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.*
+import com.example.consolas.R
 import com.example.consolas.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {

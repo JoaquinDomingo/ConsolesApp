@@ -1,4 +1,4 @@
-package com.example.consolas
+package com.example.consolas.ui.views
 
 import android.content.Intent
 import android.os.Bundle
