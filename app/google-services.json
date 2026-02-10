@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "824533159444",
+    "project_id": "consolesapp-52c53",
+    "storage_bucket": "consolesapp-52c53.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:824533159444:android:51d4947dfbb21ebaac6101",
+        "android_client_info": {
+          "package_name": "com.example.consolas"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCTdIBKS4-HsW06EiqDsjRipgPi9ABwaq0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
