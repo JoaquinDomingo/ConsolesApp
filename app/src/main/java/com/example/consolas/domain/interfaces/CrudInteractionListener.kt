@@ -1,7 +1,7 @@
-package com.example.consolas.interfaces
+package com.example.consolas.domain.interfaces
 
 import androidx.recyclerview.widget.RecyclerView
-import com.example.consolas.models.Console
+import com.example.consolas.domain.model.Console
 
 interface CrudInteractionListener {
     fun onStartEditConsole(pos: Int, console: Console)
