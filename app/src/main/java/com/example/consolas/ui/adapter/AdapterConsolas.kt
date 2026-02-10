@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.consolas.R
 import com.example.consolas.ui.viewHolder.ViewHConsolas
-import com.example.consolas.models.Console
+import com.example.consolas.domain.model.Console
 
 class AdapterConsolas(
     private val deleteOnClick: (Int) -> Unit,
