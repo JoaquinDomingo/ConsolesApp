@@ -4,6 +4,7 @@ plugins {
     id("androidx.navigation.safeargs.kotlin")
     id("com.google.dagger.hilt.android")
     id("kotlin-kapt")
+    id("com.google.gms.google-services")
 
 }
 
@@ -52,14 +53,19 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
     testImplementation(libs.junit)
+    implementation(platform("com.google.firebase:firebase-bom:34.9.0"))
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.5")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.5")
     implementation("com.google.android.material:material:1.10.0")
     androidTestImplementation(libs.androidx.junit)
+    implementation("com.google.firebase:firebase-analytics")
     androidTestImplementation(libs.androidx.espresso.core)
     implementation("com.google.dagger:hilt-android:2.50")
     kapt("com.google.dagger:hilt-compiler:2.50")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
     implementation("androidx.fragment:fragment-ktx:1.6.2")
+    implementation("com.google.firebase:firebase-auth")
+    implementation("com.google.firebase:firebase-firestore")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3")
 }

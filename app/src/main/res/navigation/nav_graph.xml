@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/FragmentJoaquin"
-        android:name="com.example.consolas.FragmentJoaquin"
+        android:name="com.example.consolas.ui.fragments.FragmentJoaquin"
         android:label="Inicio"
         tools:layout="@layout/fragment_joaquin">
 
@@ -22,7 +22,7 @@
 
     <fragment
         android:id="@+id/crudFragment"
-        android:name="com.example.consolas.CrudFragment"
+        android:name="com.example.consolas.ui.fragments.CrudFragment"
         android:label="Consolas"
         tools:layout="@layout/fragment_crud">
         <action
@@ -32,7 +32,7 @@
 
     <fragment
         android:id="@+id/detailFragment"
-        android:name="com.example.consolas.DetailFragment"
+        android:name="com.example.consolas.ui.fragments.DetailFragment"
         android:label="Detalle"
         tools:layout="@layout/fragment_detail">
         <argument
@@ -42,13 +42,13 @@
 
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.example.consolas.SettingsFragment"
+        android:name="com.example.consolas.ui.fragments.SettingsFragment"
         android:label="Ajustes"
         tools:layout="@layout/fragment_settings" />
 
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.example.consolas.ProfileFragment"
+        android:name="com.example.consolas.ui.fragments.ProfileFragment"
         android:label="Perfil"
         tools:layout="@layout/fragment_profile" />
 
