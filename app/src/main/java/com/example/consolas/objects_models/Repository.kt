@@ -94,4 +94,10 @@ class Repository @Inject constructor() {
     fun deleteConsole(console: Console) {
         listConsoles.remove(console)
     }
+
+    fun editConsole(position: Int, console: Console) {
+        if (position in listConsoles.indices) {
+            listConsoles[position] = console
+        }
+    }
 }
