@@ -1,6 +1,6 @@
-package com.example.consolas.data
+package com.example.consolas.data.repository
 
-import com.example.consolas.models.Console
+import com.example.consolas.domain.model.Console
 import javax.inject.Inject
 import javax.inject.Singleton
 

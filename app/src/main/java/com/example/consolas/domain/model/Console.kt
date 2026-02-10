@@ -1,4 +1,4 @@
-package com.example.consolas.models
+package com.example.consolas.domain.model
 
 class Console (
     var name: String,
