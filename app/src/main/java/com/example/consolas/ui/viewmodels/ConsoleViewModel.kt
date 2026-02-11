@@ -27,17 +27,16 @@ class ConsoleViewModel @Inject constructor(
     init { loadConsoles() }
 
     fun loadConsoles() {
-        // Lanzamos la corrutina en el contexto del ViewModel
         viewModelScope.launch {
             val result = getConsolesUseCase()
-            _consoles.value = result // Se actualiza en el hilo principal automáticamente
+            _consoles.value = result
         }
     }
 
     fun addConsole(console: Console) {
         viewModelScope.launch {
             addConsoleUseCase(console)
-            loadConsoles() // Refresca después de la operación
+            loadConsoles()
         }
     }
 
