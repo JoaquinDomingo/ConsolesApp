@@ -9,6 +9,7 @@
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@drawable/images"
         android:label="@string/app_name"
+        android:usesCleartextTraffic="true"
         android:name=".ui.views.ConsolesHiltApp"
         android:roundIcon="@drawable/images"
         android:supportsRtl="true"

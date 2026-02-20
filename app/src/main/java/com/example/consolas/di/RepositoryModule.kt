@@ -1,7 +1,6 @@
 package com.example.consolas.di
 
 import com.example.consolas.data.repository.ConsoleRepositoryImpl
-import com.example.consolas.data.repository.Repository
 import com.example.consolas.domain.repository.ConsoleRepository
 import dagger.Binds
 import dagger.Module
