@@ -10,6 +10,11 @@
             android:id="@+id/crudFragment"
             android:icon="@android:drawable/ic_menu_agenda"
             android:title="Listado de Consolas" />
+        <item
+            android:id="@+id/mensajesFragment"
+            android:icon="@android:drawable/ic_dialog_email"
+            android:title="Mensajes"
+            />
     </group>
 
     <item android:title="Cuenta">
