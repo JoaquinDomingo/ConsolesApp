@@ -1,0 +1,11 @@
+package com.example.consolas.domain.model
+
+data class UpdateConsole(
+    var name: String? = null,
+    var releasedate: String? = null,
+    var company: String? = null,
+    var description: String? = null,
+    var image: String? = null,
+    var nativeGames: List<Game>? = null,
+    var adaptedGames: List<Game>? = null
+)

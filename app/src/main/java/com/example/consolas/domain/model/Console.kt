@@ -1,11 +1,13 @@
 package com.example.consolas.domain.model
 
-class Console (
+data class Console (
     var name: String,
     var releasedate: String,
     var company: String,
     var description: String,
-    var image: String
+    var image: String,
+    val nativeGames: List<Game> = emptyList(),
+    val adaptedGames: List<Game> = emptyList(),
 ) {
     override fun toString(): String {
         return  "Console(name= '${name}, " +
