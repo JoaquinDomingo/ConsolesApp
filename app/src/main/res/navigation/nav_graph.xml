@@ -10,11 +10,9 @@
         android:name="com.example.consolas.ui.fragments.FragmentJoaquin"
         android:label="Inicio"
         tools:layout="@layout/fragment_joaquin">
-
         <action
             android:id="@+id/action_home_to_profile"
             app:destination="@id/profileFragment" />
-
         <action
             android:id="@+id/action_home_to_settings"
             app:destination="@id/settingsFragment" />
@@ -28,6 +26,12 @@
         <action
             android:id="@+id/action_crudFragment_to_detailFragment"
             app:destination="@id/detailFragment" />
+        <action
+            android:id="@+id/action_crudFragment_to_addConsoleFragment"
+            app:destination="@id/addConsoleFragment" />
+        <action
+            android:id="@+id/action_crudFragment_to_editConsoleFragment"
+            app:destination="@id/editConsoleFragment" />
     </fragment>
 
     <fragment
@@ -35,6 +39,92 @@
         android:name="com.example.consolas.ui.fragments.DetailFragment"
         android:label="Detalle"
         tools:layout="@layout/fragment_detail">
+        <argument
+            android:name="consolePosition"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_detailFragment_to_nativeGamesFragment"
+            app:destination="@id/nativeGamesFragment" />
+        <action
+            android:id="@+id/action_detailFragment_to_adaptedGamesFragment"
+            app:destination="@id/adaptedGamesFragment" />
+        <action
+            android:id="@+id/action_detailFragment_to_editConsoleFragment"
+            app:destination="@id/editConsoleFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nativeGamesFragment"
+        android:name="com.example.consolas.ui.fragments.NativeGamesFragment"
+        android:label="Juegos Nativos"
+        tools:layout="@layout/fragment_native_games">
+        <argument
+            android:name="consolePosition"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_nativeGamesFragment_to_addGameFragment"
+            app:destination="@id/addGameFragment" />
+        <action
+            android:id="@+id/action_nativeGamesFragment_to_gameDetailFragment"
+            app:destination="@id/gameDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/adaptedGamesFragment"
+        android:name="com.example.consolas.ui.fragments.AdaptedGamesFragment"
+        android:label="Juegos Adaptados"
+        tools:layout="@layout/fragment_adapted_games">
+        <argument
+            android:name="consolePosition"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_adaptedGamesFragment_to_addGameFragment"
+            app:destination="@id/addGameFragment" />
+        <action
+            android:id="@+id/action_adaptedGamesFragment_to_gameDetailFragment"
+            app:destination="@id/gameDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/gameDetailFragment"
+        android:name="com.example.consolas.ui.fragments.GameDetailFragment"
+        android:label="Detalle del Juego"
+        tools:layout="@layout/fragment_game_detail">
+        <argument
+            android:name="consolePosition"
+            app:argType="integer" />
+        <argument
+            android:name="gamePosition"
+            app:argType="integer" />
+        <argument
+            android:name="isNative"
+            app:argType="boolean" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/addGameFragment"
+        android:name="com.example.consolas.ui.fragments.AddGameFragment"
+        android:label="Gestionar Juego"
+        tools:layout="@layout/fragment_add_game">
+        <argument
+            android:name="consolePosition"
+            app:argType="integer" />
+        <argument
+            android:name="isNative"
+            app:argType="boolean" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/addConsoleFragment"
+        android:name="com.example.consolas.ui.fragments.AddConsoleFragment"
+        android:label="Añadir Consola"
+        tools:layout="@layout/fragment_add_console" />
+
+    <fragment
+        android:id="@+id/editConsoleFragment"
+        android:name="com.example.consolas.ui.fragments.EditConsoleFragment"
+        android:label="Editar Consola"
+        tools:layout="@layout/fragment_edit_console">
         <argument
             android:name="consolePosition"
             app:argType="integer" />

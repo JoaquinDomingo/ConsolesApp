@@ -20,15 +20,16 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/azul_noche"
-            android:elevation="4dp"
+            android:elevation="8dp"
             app:titleTextColor="@color/white"
-            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="2dp"
+            android:layout_height="1dp"
             android:background="@color/white"
-            android:alpha="0.1" />
+            android:alpha="0.05" />
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/nav_host_fragment"
@@ -42,10 +43,12 @@
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNav"
             android:layout_width="match_parent"
-            android:layout_height="64dp"
+            android:layout_height="72dp"
             android:background="@color/white"
-            android:elevation="16dp"
-            app:itemIconSize="26dp"
+            app:elevation="16dp"
+            app:itemIconSize="24dp"
+            app:itemRippleColor="@color/gris_suave"
+            app:itemActiveIndicatorStyle="@style/Widget.Material3.BottomNavigationView.ActiveIndicator"
             app:itemIconTint="@color/azul_noche"
             app:itemTextColor="@color/azul_noche"
             app:labelVisibilityMode="labeled"
@@ -60,9 +63,12 @@
         android:background="@color/white"
         app:headerLayout="@layout/nav_header"
         app:menu="@menu/drawer_menu"
+        app:itemShapeFillColor="@color/gris_suave"
+        app:itemShapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium"
         app:itemIconTint="@color/azul_noche"
         app:itemTextColor="@color/black"
-        app:itemHorizontalPadding="20dp"
-        app:itemIconPadding="16dp" />
+        app:itemHorizontalPadding="24dp"
+        app:itemIconPadding="16dp"
+        app:itemVerticalPadding="8dp" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

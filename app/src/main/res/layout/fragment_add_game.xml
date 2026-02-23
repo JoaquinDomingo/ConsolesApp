@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gris_fondo"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="NUEVO JUEGO"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@color/azul_noche"
+            android:layout_marginBottom="24dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TÍTULO"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="@color/azul_noche" />
+
+        <EditText
+            android:id="@+id/etGameTitle"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
+            android:background="@android:drawable/edit_text"
+            android:hint="Ej: The Legend of Zelda"
+            android:paddingHorizontal="12dp"
+            android:inputType="textCapWords" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="FECHA DE LANZAMIENTO"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="@color/azul_noche" />
+
+        <EditText
+            android:id="@+id/etGameDate"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
+            android:background="@android:drawable/edit_text"
+            android:hint="Seleccionar fecha"
+            android:paddingHorizontal="12dp"
+            android:focusable="false"
+            android:clickable="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="URL DE LA IMAGEN"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="@color/azul_noche" />
+
+        <EditText
+            android:id="@+id/etGameImage"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
+            android:background="@android:drawable/edit_text"
+            android:hint="https://link-a-la-portada.jpg"
+            android:paddingHorizontal="12dp"
+            android:inputType="textUri" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="DESCRIPCIÓN"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="@color/azul_noche" />
+
+        <EditText
+            android:id="@+id/etGameDesc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="32dp"
+            android:background="@android:drawable/edit_text"
+            android:hint="Breve historia o detalles..."
+            android:padding="12dp"
+            android:gravity="top"
+            android:minLines="4"
+            android:inputType="textMultiLine" />
+
+        <Button
+            android:id="@+id/btnSaveGame"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:text="GUARDAR JUEGO"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/azul_noche" />
+
+    </LinearLayout>
+</ScrollView>
