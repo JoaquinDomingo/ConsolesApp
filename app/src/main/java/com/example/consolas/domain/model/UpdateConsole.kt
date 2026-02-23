@@ -6,6 +6,10 @@ data class UpdateConsole(
     var company: String? = null,
     var description: String? = null,
     var image: String? = null,
+
+    var price: Double? = null,
+    var favorite: Boolean? = null,
+    
     var nativeGames: List<Game>? = null,
     var adaptedGames: List<Game>? = null
 )

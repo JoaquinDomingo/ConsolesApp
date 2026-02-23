@@ -9,6 +9,9 @@ import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.consolas.R
 import com.example.consolas.databinding.FragmentDetailBinding
+
+import com.example.consolas.domain.model.Console
+
 import com.example.consolas.ui.viewmodels.ConsoleViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -18,6 +21,8 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
     private lateinit var binding: FragmentDetailBinding
     private val viewModel: ConsoleViewModel by viewModels()
     private val args: DetailFragmentArgs by navArgs()
+
+    private var current: Console? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -32,12 +37,18 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
 
         viewModel.consoles.observe(viewLifecycleOwner) { listaConsolas ->
             val console = listaConsolas?.getOrNull(position)
+            current = console
 
             console?.let { item ->
                 binding.tvDetailName.text = item.name
                 binding.tvDetailCompany.text = item.company
                 binding.tvDetailDate.text = "Lanzamiento: ${item.releasedate}"
+                
+                binding.tvDetailPrice.text = "Precio: ${String.format("%.2f", item.price)} €"
+
                 binding.tvDetailDescription.text = item.description
+
+                binding.btnFavorite.text = if (item.favorite) "En favoritos" else "Marcar favorito"
 
                 Glide.with(this)
                     .load(item.image)
@@ -63,5 +74,15 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
             )
             findNavController().navigate(action)
         }
+
+        
+        binding.btnFavorite.setOnClickListener {
+            val item = current ?: return@setOnClickListener
+            val newValue = !item.favorite
+            item.favorite = newValue
+            binding.btnFavorite.text = if (newValue) "En favoritos" else "Marcar favorito"
+            viewModel.setFavorite(item.name, newValue)
+        }
+
     }
 }

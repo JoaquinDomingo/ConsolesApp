@@ -102,6 +102,25 @@
                         android:textSize="15sp" />
 
                     <TextView
+                        android:id="@+id/tvFavCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:text="Favoritos: 0"
+                        android:textColor="@color/gris_texto_secundario"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/tvAvgPrice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="Precio medio: 0.00 €"
+                        android:textColor="@color/gris_texto_secundario"
+                        android:textSize="14sp" /> 
+
+                        
+                    <TextView
                         android:id="@+id/tvStatsCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

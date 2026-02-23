@@ -15,5 +15,7 @@ data class Console (
                 "company='${company}, " +
                 "description='${description}', " +
                 "image='${image}'"
+                "price='{$price}'",+
+                "favorite='{$favorite}'"
     }
 }

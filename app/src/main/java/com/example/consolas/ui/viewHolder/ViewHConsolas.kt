@@ -18,11 +18,21 @@ class ViewHConsolas(
 
     private val ivConsole: ImageView = view.findViewById(R.id.ivConsole)
     private val tvName: TextView = view.findViewById(R.id.tvConsoleName)
+
+    private val tvCompany: TextView = view.findViewById(R.id.tvConsoleCompany)
+    private val tvPrice: TextView = view.findViewById(R.id.tvConsolePrice)
+    private val ivFavorite: ImageView = view.findViewById(R.id.ivFavorite)
+
     private val btnEdit: ImageButton = view.findViewById(R.id.btnEdit)
     private val btnDelete: ImageButton = view.findViewById(R.id.btnDelete)
 
     fun renderize(console: Console) {
         tvName.text = console.name
+
+        tvCompany.text = console.company
+        tvPrice.text = "${String.format("%.2f", console.price)} €"
+        ivFavorite.visibility = if (console.favorite) View.VISIBLE else View.GONE
+
 
         Glide.with(ivConsole.context)
             .load(console.image)

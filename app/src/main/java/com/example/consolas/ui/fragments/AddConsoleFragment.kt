@@ -53,6 +53,9 @@ class AddConsoleFragment : Fragment(R.layout.fragment_add_console) {
             val date = binding.etDate.text.toString()
             val company = binding.etCompany.text.toString()
             val desc = binding.etDescription.text.toString()
+            
+            val price = binding.etPrice.text?.toString()?.replace(",", ".")?.toDoubleOrNull() ?: 0.0
+            val favorite = binding.swFavorite.isChecked
 
             if (name.isNotBlank() && date.isNotBlank()) {
                 val newConsole = Console(
@@ -61,6 +64,10 @@ class AddConsoleFragment : Fragment(R.layout.fragment_add_console) {
                     company = company,
                     description = desc,
                     image = "https://static.vecteezy.com/system/resources/previews/005/337/799/original/icon-image-not-found-free-vector.jpg",
+                    
+                    price = price,
+                    favorite = favorite,
+                    
                     nativeGames = emptyList(),
                     adaptedGames = emptyList()
                 )

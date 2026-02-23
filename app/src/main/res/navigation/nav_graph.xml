@@ -130,6 +130,13 @@
             app:argType="integer" />
     </fragment>
 
+
+    <fragment
+        android:id="@+id/mensajesFragment"
+        android:name="com.example.consolas.ui.fragments.MensajesFragment"
+        android:label="Mensajes"
+        tools:layout="@layout/fragment_mensajes" />
+
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.example.consolas.ui.fragments.SettingsFragment"

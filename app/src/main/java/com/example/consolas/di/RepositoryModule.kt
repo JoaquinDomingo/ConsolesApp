@@ -17,4 +17,17 @@ abstract class RepositoryModule {
     abstract fun bindConsoleRepository(
         repositoryImpl: ConsoleRepositoryImpl
     ): ConsoleRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindLocalRepository(
+        repositoryImpl: LocalRepositoryImpl
+    ): LocalRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindMessageRepository(
+        repositoryImpl: MessageRepositoryImpl
+    ): MessageRepository
+
 }

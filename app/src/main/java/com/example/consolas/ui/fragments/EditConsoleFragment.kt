@@ -25,6 +25,8 @@ class EditConsoleFragment : Fragment(R.layout.fragment_edit_console) {
     // Variable para guardar la consola original y comparar
     private var originalConsole: Console? = null
 
+    private var oldName: String = ""
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentEditConsoleBinding.bind(view)
@@ -41,13 +43,19 @@ class EditConsoleFragment : Fragment(R.layout.fragment_edit_console) {
             console?.let {
                 originalConsole = it // Guardamos la referencia original
 
+                oldName = it.name
+
                 binding.etEditName.setText(it.name)
                 binding.etEditCompany.setText(it.company)
                 binding.etEditDate.setText(it.releasedate)
                 binding.etEditDescription.setText(it.description)
                 binding.etEditImage.setText(it.image)
 
-                binding.etEditName.isEnabled = false
+                binding.etPrice.setText(it.price.toString())
+                binding.swFavorite.isChecked = it.favorite
+
+                //Permite editar el nombre(renombrando).
+                binding.etEditName.isEnabled = true
 
                 // Al cargar por primera vez, el botón debe estar desactivado
                 binding.btnUpdateConsole.isEnabled = false
@@ -72,6 +80,10 @@ class EditConsoleFragment : Fragment(R.layout.fragment_edit_console) {
         binding.etEditDescription.addTextChangedListener(watcher)
         binding.etEditImage.addTextChangedListener(watcher)
 
+        binding.etEditName.addTextChangedListener(watcher)
+        binding.etPrice.addTextChangedListener(watcher)
+        binding.swFavorite.setOnCheckedChangeListener { _, _ -> checkChanges() }
+
         binding.btnUpdateConsole.setOnClickListener {
             saveChanges()
         }
@@ -81,10 +93,15 @@ class EditConsoleFragment : Fragment(R.layout.fragment_edit_console) {
         val original = originalConsole ?: return
 
         // Comparamos el texto actual con el original
-        val hasChanged = binding.etEditCompany.text.toString() != original.company ||
+        val hasChanged = 
+            binding.etEditName.text.toString() != original.name ||
+            binding.etEditCompany.text.toString() != original.company ||
                 binding.etEditDate.text.toString() != original.releasedate ||
                 binding.etEditDescription.text.toString() != original.description ||
-                binding.etEditImage.text.toString() != original.image
+                binding.etEditImage.text.toString() != original.image ||
+
+                price != original.price ||
+                binding.swFavorite.isChecked != original.favorite
 
         // Activamos o desactivamos el botón según el resultado
         binding.btnUpdateConsole.isEnabled = hasChanged
@@ -92,15 +109,33 @@ class EditConsoleFragment : Fragment(R.layout.fragment_edit_console) {
     }
 
     private fun saveChanges() {
-        val name = binding.etEditName.text.toString()
+        val name = binding.etEditName.text.toString().trim()
+
+        val price = binding.etPrice.text?.toString()?.replace(",", ".")?.toDoubleOrNull() ?: 0.0
+        if (newName.isBlank()) {
+            binding.etEditName.error = "El nombre no puede estar vacío"
+            return
+        }
+
         val updatedData = UpdateConsole(
+            name = newName,
+
             releasedate = binding.etEditDate.text.toString(),
             company = binding.etEditCompany.text.toString(),
             description = binding.etEditDescription.text.toString(),
             image = binding.etEditImage.text.toString()
+
+            price = price,
+            favorite = binding.swFavorite.isChecked
         )
 
-        viewModel.editConsole(name, updatedData)
+        //Permite renombrar
+        val identifier = oldName.ifBlank { newName }
+
+        viewModel.editConsole(identifier, updatedData)
+
+        //Despues de renombrar el nombre valido es el nuevo
+        viewModel.setFavorite(newName, binding.swFavorite.isChecked)
         findNavController().popBackStack()
     }
 }

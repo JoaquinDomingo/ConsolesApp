@@ -103,6 +103,17 @@
                         android:textSize="16sp"
                         android:textColor="@color/gris_texto_secundario"
                         tools:text="Lanzado en 2017" />
+
+
+                    <TextView
+                        android:id="@+id/tvDetailPrice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginTop="4dp"
+                        android:textSize="16sp"
+                        android:textColor="@color/gris_texto_secundario"
+                        tools:text="Precio: 299.99 €" />    
                 </LinearLayout>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -136,6 +147,15 @@
             android:textStyle="bold"
             android:letterSpacing="0.1"
             android:textColor="@color/gris_texto_secundario" />
+
+         <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnFavorite"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginTop="12dp"
+            android:text="Favorito"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnGoToNative"

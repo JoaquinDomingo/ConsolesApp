@@ -11,4 +11,18 @@ interface ApiService {
 
     @GET("console/{name}")
     suspend fun getConsole(@Path("name") name: String): Response<ResponseConsole>
+
+    @POST("console")
+    suspend fun addConsole(@Body console: ConsoleRequest): Response<ResponseConsole>
+
+    @PUT("console/{name}")
+    suspend fun updateConsole(
+        @Path("name") name: String,
+        @Body update: UpdateConsole
+    ): Response<ResponseConsole>
+
+    @DELETE("console/{name}")
+    suspend fun deleteConsole(@Path("name") name: String): Response<Unit>
+
+
 }

@@ -26,6 +26,12 @@ class ResponseConsole (){
 
     var image: String? = null
 
+    @SerializedName("price")
+    var price: Double? = null
+
+    @SerializedName("favorite")
+    var favorite: Boolean? = null
+
     @SerializedName("nativeGames")
     var nativeGames: List<ResponseGame>? = null
 

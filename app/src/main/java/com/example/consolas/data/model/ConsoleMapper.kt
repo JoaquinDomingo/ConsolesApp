@@ -10,6 +10,10 @@ fun ResponseConsole.toDomain(): Console {
         company = this.company ?: "",
         description = this.description ?: "",
         image = this.image ?: "",
+
+        price = this.price ?: 0.0,
+        favorite = this.favorite ?: false,
+
         nativeGames = this.nativeGames?.map { it.toDomain() } ?: emptyList(),
         adaptedGames = this.adaptedGames?.map { it.toDomain() } ?: emptyList()
     )
