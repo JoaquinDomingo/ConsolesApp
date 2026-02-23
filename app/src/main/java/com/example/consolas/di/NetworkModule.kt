@@ -17,7 +17,7 @@ object NetworkModule {
     @Singleton
     fun provideRetrofit(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("http://172.20.10.8:8081/")
+            .baseUrl("http://192.168.1.29:8081/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }

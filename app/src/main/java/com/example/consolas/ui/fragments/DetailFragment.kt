@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.consolas.R
@@ -23,23 +24,44 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
         binding = FragmentDetailBinding.bind(view)
 
         setupData()
+        setupButtons()
     }
 
     private fun setupData() {
         val position = args.consolePosition
-        // Obtenemos la consola directamente de la lista que observa el ViewModel
-        val console = viewModel.consoles.value?.getOrNull(position)
 
-        console?.let {
-            binding.tvDetailName.text = it.name
-            binding.tvDetailCompany.text = it.company
-            binding.tvDetailDate.text = "Lanzamiento: ${it.releasedate}"
-            binding.tvDetailDescription.text = it.description
+        viewModel.consoles.observe(viewLifecycleOwner) { listaConsolas ->
+            val console = listaConsolas?.getOrNull(position)
 
-            Glide.with(this)
-                .load(it.image)
-                .centerCrop()
-                .into(binding.tvDetailImage)
+            console?.let { item ->
+                binding.tvDetailName.text = item.name
+                binding.tvDetailCompany.text = item.company
+                binding.tvDetailDate.text = "Lanzamiento: ${item.releasedate}"
+                binding.tvDetailDescription.text = item.description
+
+                Glide.with(this)
+                    .load(item.image)
+                    .centerCrop()
+                    .into(binding.tvDetailImage)
+            }
+        }
+    }
+
+    private fun setupButtons() {
+        // Botón para ir a la lista de juegos nativos
+        binding.btnGoToNative.setOnClickListener {
+            val action = DetailFragmentDirections.actionDetailFragmentToNativeGamesFragment(
+                consolePosition = args.consolePosition
+            )
+            findNavController().navigate(action)
+        }
+
+        // Botón para ir a la lista de juegos adaptados
+        binding.btnGoToAdapted.setOnClickListener {
+            val action = DetailFragmentDirections.actionDetailFragmentToAdaptedGamesFragment(
+                consolePosition = args.consolePosition
+            )
+            findNavController().navigate(action)
         }
     }
 }
