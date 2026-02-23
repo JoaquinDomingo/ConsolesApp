@@ -1,9 +1,12 @@
 package com.example.consolas.ui.viewHolder
 
 import android.view.View
+import android.widget.ImageButton // Cambiado de Button a ImageButton
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.consolas.databinding.ItemConsoleBinding
+import com.example.consolas.R
 import com.example.consolas.domain.model.Console
 
 class ViewHConsolas(
@@ -13,36 +16,21 @@ class ViewHConsolas(
     private val detailOnClick: (Int) -> Unit
 ) : RecyclerView.ViewHolder(view) {
 
-    private val binding = ItemConsoleBinding.bind(view)
-
-    init {
-        setOnClickListeners()
-    }
+    private val ivConsole: ImageView = view.findViewById(R.id.ivConsole)
+    private val tvName: TextView = view.findViewById(R.id.tvConsoleName)
+    private val btnEdit: ImageButton = view.findViewById(R.id.btnEdit)
+    private val btnDelete: ImageButton = view.findViewById(R.id.btnDelete)
 
     fun renderize(console: Console) {
-        binding.txtviewName.text = console.name
-        binding.txtviewReleaseDate.text = console.releasedate
-        binding.txtviewCompany.text = console.company
-        binding.txtviewDescription.text = console.description
+        tvName.text = console.name
 
-        Glide.with(itemView.context)
+        Glide.with(ivConsole.context)
             .load(console.image)
             .centerCrop()
-            .into(binding.ivConsole)
-    }
+            .into(ivConsole)
 
-    private fun setOnClickListeners() {
-        binding.btnDelete.setOnClickListener {
-            val position = adapterPosition
-            if (position != RecyclerView.NO_POSITION) deleteOnClick(position)
-        }
-        binding.btnEdit.setOnClickListener {
-            val position = adapterPosition
-            if (position != RecyclerView.NO_POSITION) editOnClick(position)
-        }
-        binding.root.setOnClickListener {
-            val position = adapterPosition
-            if (position != RecyclerView.NO_POSITION) detailOnClick(position)
-        }
+        btnEdit.setOnClickListener { editOnClick(adapterPosition) }
+        btnDelete.setOnClickListener { deleteOnClick(adapterPosition) }
+        itemView.setOnClickListener { detailOnClick(adapterPosition) }
     }
 }

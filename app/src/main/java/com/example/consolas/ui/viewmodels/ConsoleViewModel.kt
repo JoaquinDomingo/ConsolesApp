@@ -9,6 +9,7 @@ import com.example.consolas.domain.useCase.DeleteConsoleUseCase
 import com.example.consolas.domain.useCase.EditConsoleUseCase
 import com.example.consolas.domain.useCase.GetConsoleUseCase
 import com.example.consolas.domain.model.Console
+import com.example.consolas.domain.model.UpdateConsole // Asegúrate de tener este import
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -24,7 +25,9 @@ class ConsoleViewModel @Inject constructor(
     private val _consoles = MutableLiveData<List<Console>>()
     val consoles: LiveData<List<Console>> = _consoles
 
-    init { loadConsoles() }
+    init {
+        loadConsoles()
+    }
 
     fun loadConsoles() {
         viewModelScope.launch {
@@ -40,16 +43,17 @@ class ConsoleViewModel @Inject constructor(
         }
     }
 
-    fun deleteConsole(console: Console) {
+    fun deleteConsole(name: String) {
         viewModelScope.launch {
-            deleteConsoleUseCase(console)
+            deleteConsoleUseCase(name)
             loadConsoles()
         }
     }
 
-    fun editConsole(position: Int, console: Console) {
+
+    fun editConsole(name: String, updateConsole: UpdateConsole) {
         viewModelScope.launch {
-            editConsoleUseCase(position, console)
+            editConsoleUseCase(name, updateConsole)
             loadConsoles()
         }
     }

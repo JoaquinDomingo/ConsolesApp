@@ -1,5 +1,6 @@
 package com.example.consolas.data.model
 
+import com.example.consolas.domain.model.Game
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
@@ -24,4 +25,10 @@ class ResponseConsole (){
     @SerializedName("image")
 
     var image: String? = null
+
+    @SerializedName("nativeGames")
+    var nativeGames: List<ResponseGame>? = null
+
+    @SerializedName("adaptedGames")
+    var adaptedGames: List<ResponseGame>? = null
 }
