@@ -1,8 +1,14 @@
 package com.example.consolas.data.service
 
+import com.example.consolas.data.model.ConsoleRequest
 import com.example.consolas.data.model.ResponseConsole
+import com.example.consolas.domain.model.UpdateConsole
 import retrofit2.Response
+import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 
 interface ApiService {

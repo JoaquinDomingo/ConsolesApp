@@ -8,6 +8,8 @@ data class Console (
     var image: String,
     val nativeGames: List<Game> = emptyList(),
     val adaptedGames: List<Game> = emptyList(),
+    var price: Double,
+    var favorite: Boolean
 ) {
     override fun toString(): String {
         return  "Console(name= '${name}, " +
@@ -15,7 +17,7 @@ data class Console (
                 "company='${company}, " +
                 "description='${description}', " +
                 "image='${image}'"
-                "price='{$price}'",+
+                "price='{$price}'"+
                 "favorite='{$favorite}'"
     }
 }

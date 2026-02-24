@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/gris_fondo"
@@ -23,10 +22,12 @@
             app:strokeColor="@color/white"
             app:strokeWidth="4dp">
 
-            <View
+            <ImageView
                 android:id="@+id/ivProfilePicture"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@android:drawable/ic_menu_report_image"
                 android:background="@color/gris_suave" />
         </com.google.android.material.card.MaterialCardView>
 
@@ -36,8 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:fontFamily="sans-serif-black"
-            android:letterSpacing="-0.01"
-            android:text="NOMBRE COMPLETO"
+            android:text="JOAQUÍN"
             android:textColor="@color/azul_noche"
             android:textSize="26sp" />
 
@@ -76,7 +76,7 @@
                     android:layout_marginBottom="24dp"
                     android:fontFamily="sans-serif-black"
                     android:letterSpacing="0.1"
-                    android:text="INFORMACIÓN DE CUENTA"
+                    android:text="ESTADÍSTICAS DE COLECCIÓN"
                     android:textColor="@color/azul_noche"
                     android:textSize="12sp" />
 
@@ -87,47 +87,35 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@android:drawable/ic_menu_gallery"
-                        app:tint="@color/gris_texto_secundario" />
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@android:drawable/btn_star_big_on"
+                        app:tint="@color/azul_noche" />
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
+                        android:layout_marginStart="16dp"
                         android:layout_weight="1"
-                        android:text="Colección"
-                        android:textColor="@color/gris_texto_secundario"
-                        android:textSize="15sp" />
+                        android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/tvFavCount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
-                        android:text="Favoritos: 0"
-                        android:textColor="@color/gris_texto_secundario"
-                        android:textSize="14sp" />
+                        <TextView
+                            android:id="@+id/tvFavCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif-bold"
+                            android:text="Favoritos: 0"
+                            android:textColor="@color/azul_noche"
+                            android:textSize="16sp" />
 
-                    <TextView
-                        android:id="@+id/tvAvgPrice"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:text="Precio medio: 0.00 €"
-                        android:textColor="@color/gris_texto_secundario"
-                        android:textSize="14sp" /> 
-
-                        
-                    <TextView
-                        android:id="@+id/tvStatsCount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-bold"
-                        android:text="Proximamente"
-                        android:textColor="@color/azul_noche"
-                        android:textSize="15sp" />
+                        <TextView
+                            android:id="@+id/tvAvgPrice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Precio medio: 0.00 €"
+                            android:textColor="@color/gris_texto_secundario"
+                            android:textSize="14sp" />
+                    </LinearLayout>
                 </LinearLayout>
 
                 <View
@@ -143,17 +131,17 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
                         android:src="@android:drawable/ic_menu_my_calendar"
                         app:tint="@color/gris_texto_secundario" />
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
+                        android:layout_marginStart="16dp"
                         android:layout_weight="1"
-                        android:text="Antigüedad"
+                        android:text="Estado de cuenta"
                         android:textColor="@color/gris_texto_secundario"
                         android:textSize="15sp" />
 
@@ -161,27 +149,24 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-bold"
-                        android:text="Proximamente"
+                        android:text="Activa"
                         android:textColor="@color/azul_noche"
-                        android:textSize="15sp" />
+                        android:textSize="14sp" />
                 </LinearLayout>
 
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnEditProfile"
+            android:id="@+id/btnLogout"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_marginTop="40dp"
             android:fontFamily="sans-serif-bold"
-            android:letterSpacing="0.02"
-            android:text="EDITAR PERFIL (Proximamente)"
+            android:text="CERRAR SESIÓN"
             android:textColor="@color/white"
-            app:backgroundTint="@color/azul_noche"
+            app:backgroundTint="#D32F2F"
             app:cornerRadius="16dp"
-            app:elevation="4dp"
-            app:icon="@android:drawable/ic_menu_edit"
             app:iconGravity="textStart" />
 
     </LinearLayout>

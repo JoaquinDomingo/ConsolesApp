@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.consolas.R
@@ -17,7 +17,9 @@ import dagger.hilt.android.AndroidEntryPoint
 class CrudFragment : Fragment(R.layout.fragment_crud) {
 
     private lateinit var binding: FragmentCrudBinding
-    private val viewModel: ConsoleViewModel by viewModels()
+
+    // 1. CAMBIO VITAL: Usar activityViewModels para compartir la lista con DetailFragment
+    private val viewModel: ConsoleViewModel by activityViewModels()
     private lateinit var adapter: AdapterConsolas
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -31,8 +33,10 @@ class CrudFragment : Fragment(R.layout.fragment_crud) {
             findNavController().navigate(action)
         }
 
+        // 2. Observador actualizado para el nuevo ListAdapter
         viewModel.consoles.observe(viewLifecycleOwner) { lista ->
-            adapter.updateList(lista)
+            // Usamos submitList y .toList() para asegurar que DiffUtil detecte los cambios de favoritos
+            adapter.submitList(lista?.toList())
         }
     }
 
@@ -53,7 +57,8 @@ class CrudFragment : Fragment(R.layout.fragment_crud) {
     }
 
     private fun confirmDelete(position: Int) {
-        val console = viewModel.consoles.value?.get(position) ?: return
+        // Obtenemos la consola de la lista actual del adaptador de forma segura
+        val console = adapter.currentList.getOrNull(position) ?: return
 
         AlertDialog.Builder(requireContext())
             .setTitle("Eliminar Consola")
@@ -65,7 +70,6 @@ class CrudFragment : Fragment(R.layout.fragment_crud) {
             .create()
             .apply {
                 show()
-                // Opcional: Cambiar color del botón borrar a rojo
                 getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(resources.getColor(R.color.rojo_borrar, null))
             }
     }

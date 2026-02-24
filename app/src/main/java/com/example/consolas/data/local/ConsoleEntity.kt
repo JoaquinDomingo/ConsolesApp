@@ -1,16 +1,18 @@
 package com.example.consolas.data.local
 
 import androidx.room.Entity
-import androidx.room.PrimaryKey
+import com.example.consolas.domain.model.Game
 
-@Entity(tableName = "consoles")
+// Definimos una clave primaria compuesta para que cada usuario tenga su propia copia de la consola
+@Entity(tableName = "consoles", primaryKeys = ["name", "userEmail"])
 data class ConsoleEntity(
-    @PrimaryKey val name: String,
+    val name: String,
+    val userEmail: String,
     val releasedate: String,
     val company: String,
     val description: String,
     val image: String,
     val price: Double,
-    val favorite: Boolean,
-    val userEmail: String
+    val favorite: Boolean
+    // AQUÍ NO VAN LAS LISTAS DE JUEGOS
 )

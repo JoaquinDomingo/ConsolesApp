@@ -22,9 +22,7 @@ class EditConsoleFragment : Fragment(R.layout.fragment_edit_console) {
     private val viewModel: ConsoleViewModel by viewModels()
     private val args: EditConsoleFragmentArgs by navArgs()
 
-    // Variable para guardar la consola original y comparar
     private var originalConsole: Console? = null
-
     private var oldName: String = ""
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -39,33 +37,30 @@ class EditConsoleFragment : Fragment(R.layout.fragment_edit_console) {
         val position = args.consolePosition
 
         viewModel.consoles.observe(viewLifecycleOwner) { lista ->
-            val console = lista?.getOrNull(position)
-            console?.let {
-                originalConsole = it // Guardamos la referencia original
+            val console = lista?.getOrNull(position) ?: return@observe
 
-                oldName = it.name
+            // Guardamos referencia original para comparar cambios
+            originalConsole = console
+            oldName = console.name
 
-                binding.etEditName.setText(it.name)
-                binding.etEditCompany.setText(it.company)
-                binding.etEditDate.setText(it.releasedate)
-                binding.etEditDescription.setText(it.description)
-                binding.etEditImage.setText(it.image)
+            binding.apply {
+                etEditName.setText(console.name)
+                etEditCompany.setText(console.company)
+                etEditDate.setText(console.releasedate)
+                binding.etPrice.setText(console.price.toString())
+                etEditDescription.setText(console.description)
+                etEditImage.setText(console.image)
+                swFavorite.isChecked = console.favorite
 
-                binding.etPrice.setText(it.price.toString())
-                binding.swFavorite.isChecked = it.favorite
-
-                //Permite editar el nombre(renombrando).
-                binding.etEditName.isEnabled = true
-
-                // Al cargar por primera vez, el botón debe estar desactivado
-                binding.btnUpdateConsole.isEnabled = false
-                binding.btnUpdateConsole.alpha = 0.5f
+                // Habilitamos edición y configuramos estado inicial del botón
+                etEditName.isEnabled = true
+                btnUpdateConsole.isEnabled = false
+                btnUpdateConsole.alpha = 0.5f
             }
         }
     }
 
     private fun setupListeners() {
-        // Creamos un vigilante de texto común
         val watcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -74,44 +69,43 @@ class EditConsoleFragment : Fragment(R.layout.fragment_edit_console) {
             override fun afterTextChanged(s: Editable?) {}
         }
 
-        // Lo añadimos a todos los campos editables
-        binding.etEditCompany.addTextChangedListener(watcher)
-        binding.etEditDate.addTextChangedListener(watcher)
-        binding.etEditDescription.addTextChangedListener(watcher)
-        binding.etEditImage.addTextChangedListener(watcher)
+        binding.apply {
+            etEditName.addTextChangedListener(watcher)
+            etEditCompany.addTextChangedListener(watcher)
+            etEditDate.addTextChangedListener(watcher)
+            etPrice.addTextChangedListener(watcher)
+            etEditDescription.addTextChangedListener(watcher)
+            etEditImage.addTextChangedListener(watcher)
+            swFavorite.setOnCheckedChangeListener { _, _ -> checkChanges() }
 
-        binding.etEditName.addTextChangedListener(watcher)
-        binding.etPrice.addTextChangedListener(watcher)
-        binding.swFavorite.setOnCheckedChangeListener { _, _ -> checkChanges() }
-
-        binding.btnUpdateConsole.setOnClickListener {
-            saveChanges()
+            btnUpdateConsole.setOnClickListener {
+                saveChanges()
+            }
         }
     }
 
     private fun checkChanges() {
         val original = originalConsole ?: return
 
-        // Comparamos el texto actual con el original
-        val hasChanged = 
+        val currentPrice = binding.etPrice.text.toString().toDoubleOrNull() ?: 0.0
+
+        val hasChanged =
             binding.etEditName.text.toString() != original.name ||
-            binding.etEditCompany.text.toString() != original.company ||
-                binding.etEditDate.text.toString() != original.releasedate ||
-                binding.etEditDescription.text.toString() != original.description ||
-                binding.etEditImage.text.toString() != original.image ||
+                    binding.etEditCompany.text.toString() != original.company ||
+                    binding.etEditDate.text.toString() != original.releasedate ||
+                    binding.etEditDescription.text.toString() != original.description ||
+                    binding.etEditImage.text.toString() != original.image ||
+                    currentPrice != original.price ||
+                    binding.swFavorite.isChecked != original.favorite
 
-                price != original.price ||
-                binding.swFavorite.isChecked != original.favorite
-
-        // Activamos o desactivamos el botón según el resultado
         binding.btnUpdateConsole.isEnabled = hasChanged
         binding.btnUpdateConsole.alpha = if (hasChanged) 1.0f else 0.5f
     }
 
     private fun saveChanges() {
-        val name = binding.etEditName.text.toString().trim()
+        val newName = binding.etEditName.text.toString().trim()
+        val price = binding.etPrice.text.toString().replace(",", ".").toDoubleOrNull() ?: 0.0
 
-        val price = binding.etPrice.text?.toString()?.replace(",", ".")?.toDoubleOrNull() ?: 0.0
         if (newName.isBlank()) {
             binding.etEditName.error = "El nombre no puede estar vacío"
             return
@@ -119,23 +113,21 @@ class EditConsoleFragment : Fragment(R.layout.fragment_edit_console) {
 
         val updatedData = UpdateConsole(
             name = newName,
-
             releasedate = binding.etEditDate.text.toString(),
             company = binding.etEditCompany.text.toString(),
             description = binding.etEditDescription.text.toString(),
-            image = binding.etEditImage.text.toString()
-
+            image = binding.etEditImage.text.toString(),
             price = price,
             favorite = binding.swFavorite.isChecked
         )
 
-        //Permite renombrar
-        val identifier = oldName.ifBlank { newName }
+        // Enviamos el antiguo nombre como identificador para que el ViewModel
+        // pueda gestionar el borrado de la entidad antigua en Room si el nombre cambió
+        viewModel.editConsole(oldName, updatedData)
 
-        viewModel.editConsole(identifier, updatedData)
-
-        //Despues de renombrar el nombre valido es el nuevo
+        // Sincronizamos el estado de favorito por seguridad
         viewModel.setFavorite(newName, binding.swFavorite.isChecked)
+
         findNavController().popBackStack()
     }
 }

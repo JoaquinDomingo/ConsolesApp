@@ -3,24 +3,25 @@ package com.example.consolas.data.local
 import com.example.consolas.domain.model.Console
 
 fun ConsoleEntity.toDomain(): Console = Console(
-    name = name,
-    releasedate = releasedate,
-    company = company,
-    description = description,
-    image = image,
-    price = price,
-    favorite = favorite,
+    name = this.name,
+    releasedate = this.releasedate,
+    company = this.company,
+    description = this.description,
+    image = this.image,
+    price = this.price,
+    favorite = this.favorite,
     nativeGames = emptyList(),
     adaptedGames = emptyList()
 )
 
 fun Console.toEntity(userEmail: String): ConsoleEntity = ConsoleEntity(
-    name = name,
-    releasedate = releasedate,
-    company = company,
-    description = description,
-    image = image,
-    price = price,
-    favorite = favorite,
-    userEmail = userEmail
+    name = this.name,
+    userEmail = userEmail, // VITAL: Sin esto no hay Primary Key válida
+    releasedate = this.releasedate,
+    company = this.company,
+    description = this.description,
+    image = this.image,
+    price = this.price,
+    favorite = this.favorite,
+
 )
