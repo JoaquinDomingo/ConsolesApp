@@ -5,10 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.consolas.data.local.SessionManager
-import com.example.consolas.domain.useCase.AddNewConsoleUseCase
-import com.example.consolas.domain.useCase.DeleteConsoleUseCase
-import com.example.consolas.domain.useCase.EditConsoleUseCase
-import com.example.consolas.domain.useCase.GetConsoleUseCase
+import com.example.consolas.domain.useCase.*
 import com.example.consolas.domain.model.Console
 import com.example.consolas.domain.model.UpdateConsole
 import com.example.consolas.domain.repository.LocalRepository
@@ -42,28 +39,26 @@ class ConsoleViewModel @Inject constructor(
         loadConsoles()
     }
 
-    // En ConsoleViewModel.kt
     fun loadConsoles() {
         val email = sessionManager.userEmail()
         observeJob?.cancel()
 
         observeJob = viewModelScope.launch {
             try {
-                // 1. Traemos los datos COMPLETOS de la API (con sus juegos)
                 val apiResult = getConsolesUseCase()
-
-                if (email.isNotBlank()) {
-                    // 2. Guardamos en Room solo para favoritos
-                    localRepository.upsertConsoles(email, apiResult)
-
-                    // 3. ¡IMPORTANTE! Asignamos el resultado de la API directamente.
-                    // Así, los objetos Console mantienen sus listas de juegos intactas.
+                if (apiResult.isNotEmpty()) {
+                    if (email.isNotBlank()) {
+                        localRepository.upsertConsoles(email, apiResult)
+                    }
+                    // Mantenemos los datos de la API como prioridad para no perder las listas de juegos
                     _consoles.value = apiResult
                 }
             } catch (e: Exception) {
-                // Solo si no hay internet usamos Room como plan B
-                localRepository.observeLocalConsoles(email).collect { listaRoom ->
-                    _consoles.value = listaRoom
+                // Si falla la red, usamos Room como respaldo
+                if (email.isNotBlank()) {
+                    localRepository.observeLocalConsoles(email).collect { listaRoom ->
+                        if (listaRoom.isNotEmpty()) _consoles.value = listaRoom
+                    }
                 }
             }
         }
@@ -74,26 +69,14 @@ class ConsoleViewModel @Inject constructor(
             val email = sessionManager.userEmail()
             if (email.isNotBlank()) {
                 localRepository.setFavorite(email, name, favorite)
-                val updatedList = _consoles.value?.map {
-                    if (it.name == name) it.copy(favorite = favorite) else it
+
+                // CORRECCIÓN: Usamos .let o una comprobación de nulabilidad segura
+                _consoles.value?.let { currentList ->
+                    val updatedList = currentList.map {
+                        if (it.name == name) it.copy(favorite = favorite) else it
+                    }
+                    _consoles.value = updatedList
                 }
-                _consoles.value = updatedList
-            }
-        }
-    }
-
-    fun addConsole(console: Console) {
-        viewModelScope.launch {
-            addConsoleUseCase(console)
-        }
-    }
-
-    fun deleteConsole(name: String) {
-        viewModelScope.launch {
-            val email = sessionManager.userEmail()
-            deleteConsoleUseCase(name)
-            if (email.isNotBlank()) {
-                localRepository.deleteLocalConsole(email, name)
             }
         }
     }
@@ -102,11 +85,29 @@ class ConsoleViewModel @Inject constructor(
         viewModelScope.launch {
             editConsoleUseCase(oldName, updateConsole)
             val email = sessionManager.userEmail()
-            // CORRECCIÓN: Usamos el operador elvis ?: "" para asegurar que no sea null
-            val newName = updateConsole.name ?: ""
+            // SOLUCIÓN: Usamos el nombre actualizado o, si es null, mantenemos el antiguo
+            val newName = updateConsole.name ?: oldName
 
-            if (email.isNotBlank() && newName.isNotBlank() && newName != oldName) {
+            if (email.isNotBlank() && newName != oldName) {
                 localRepository.deleteLocalConsole(email, oldName)
+            }
+            loadConsoles()
+        }
+    }
+
+    fun addConsole(console: Console) {
+        viewModelScope.launch {
+            addConsoleUseCase(console)
+            loadConsoles()
+        }
+    }
+
+    fun deleteConsole(name: String) {
+        viewModelScope.launch {
+            deleteConsoleUseCase(name)
+            val email = sessionManager.userEmail()
+            if (email.isNotBlank()) {
+                localRepository.deleteLocalConsole(email, name)
             }
             loadConsoles()
         }

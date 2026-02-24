@@ -1,59 +1,79 @@
 package com.example.consolas.ui.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.example.consolas.R
+import com.example.consolas.data.local.SessionManager
 import com.example.consolas.databinding.FragmentProfileBinding
-import com.example.consolas.ui.viewmodels.ProfileViewModel
+import com.example.consolas.ui.viewmodels.ConsoleViewModel
+import com.example.consolas.ui.views.LoginActivity
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
-import java.util.Locale
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
-    private var _binding: FragmentProfileBinding? = null
-    private val binding get() = _binding!!
-    private val vm: ProfileViewModel by viewModels()
+    private lateinit var binding: FragmentProfileBinding
+
+    // Usamos activityViewModels para compartir los datos con el resto de la app
+    private val viewModel: ConsoleViewModel by activityViewModels()
+
+    @Inject
+    lateinit var sessionManager: SessionManager
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentProfileBinding.bind(view)
+        binding = FragmentProfileBinding.bind(view)
 
-        setupUI()
-        observeStats()
+        setupUserUI()
+        observeStatistics()
+        setupButtons()
     }
 
-    private fun setupUI() {
-        // Usamos safe access para evitar crash si el binding es null
-        binding.tvProfileName.text = vm.userName.ifBlank { "Usuario" }.uppercase()
-        binding.tvProfileEmail.text = vm.userEmail.ifBlank { "Sin sesión activa" }
+    private fun setupUserUI() {
+        // Mostramos los datos del usuario actual
+        val email = sessionManager.userEmail()
+        binding.tvProfileEmail.text = email
+
+        // Si el nombre viene del email (antes de la @), lo extraemos para el título
+        val name = email.substringBefore("@").uppercase()
+        binding.tvProfileName.text = name
     }
 
-    private fun observeStats() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                vm.stats.collect { stats ->
-                    // Verificamos que el binding siga existiendo antes de actualizar
-                    _binding?.let { b ->
-                        b.tvFavCount.text = "Favoritos: ${stats.favoritesCount}"
+    private fun observeStatistics() {
+        // Observamos el LiveData de consolas para actualizar contadores en tiempo real
+        viewModel.consoles.observe(viewLifecycleOwner) { lista ->
+            if (lista != null) {
+                val total = lista.size
+                val favoritos = lista.count { it.favorite }
+                val precioTotal = lista.sumOf { it.price }
+                val precioMedio = if (total > 0) precioTotal / total else 0.0
 
-                        // Formateo seguro para evitar crashes con valores extraños
-                        val price = if (stats.averagePrice.isNaN()) 0.0 else stats.averagePrice
-                        b.tvAvgPrice.text = String.format(Locale.getDefault(), "Precio medio: %.2f €", price)
-                    }
-                }
+                // Actualizamos los TextViews del XML
+                binding.tvTotalConsoles.text = "Total consolas: $total"
+                binding.tvFavCount.text = "Favoritos: $favoritos"
+                binding.tvAvgPrice.text = "Precio medio: ${String.format("%.2f", precioMedio)} €"
             }
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null // CRUCIAL para evitar que el Flow intente tocar una vista destruida
+    private fun setupButtons() {
+        binding.btnLogout.setOnClickListener {
+            // 1. Limpiamos los SharedPreferences
+            sessionManager.clear()
+
+            // 2. Creamos el Intent para ir a LoginActivity
+            val intent = Intent(requireContext(), LoginActivity::class.java)
+
+            // 3. Limpiamos el historial de pantallas para que no pueda volver atrás
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+
+            startActivity(intent)
+            requireActivity().finish() // Cerramos la Activity actual (MainActivity)
+        }
     }
 }
