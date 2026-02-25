@@ -18,10 +18,11 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="64dp"
             android:background="@color/azul_noche"
-            android:elevation="8dp"
+            android:elevation="10dp"
             app:titleTextColor="@color/white"
+            app:contentInsetStartWithNavigation="0dp"
             app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
@@ -29,7 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/white"
-            android:alpha="0.05" />
+            android:alpha="0.08" />
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/nav_host_fragment"
@@ -43,11 +44,11 @@
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNav"
             android:layout_width="match_parent"
-            android:layout_height="72dp"
+            android:layout_height="80dp"
             android:background="@color/white"
-            app:elevation="16dp"
-            app:itemIconSize="24dp"
-            app:itemRippleColor="@color/gris_suave"
+            app:elevation="24dp"
+            app:itemIconSize="26dp"
+            app:itemRippleColor="#151A1C2E"
             app:itemActiveIndicatorStyle="@style/Widget.Material3.BottomNavigationView.ActiveIndicator"
             app:itemIconTint="@color/azul_noche"
             app:itemTextColor="@color/azul_noche"
@@ -57,18 +58,20 @@
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigationView"
-        android:layout_width="wrap_content"
+        android:layout_width="320dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:background="@color/white"
         app:headerLayout="@layout/nav_header"
         app:menu="@menu/drawer_menu"
-        app:itemShapeFillColor="@color/gris_suave"
-        app:itemShapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium"
+        app:itemShapeFillColor="#151A1C2E"
+        app:itemShapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Large"
         app:itemIconTint="@color/azul_noche"
-        app:itemTextColor="@color/black"
-        app:itemHorizontalPadding="24dp"
-        app:itemIconPadding="16dp"
-        app:itemVerticalPadding="8dp" />
+        app:itemTextColor="@color/azul_noche"
+        app:itemHorizontalPadding="20dp"
+        app:itemIconPadding="18dp"
+        app:itemVerticalPadding="12dp"
+        app:itemTextAppearanceActive="?attr/textAppearanceSubtitle1"
+        app:subheaderColor="@color/gris_texto_secundario" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

@@ -5,23 +5,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="16dp"
-    android:layout_marginVertical="8dp"
-    app:cardCornerRadius="20dp"
-    app:cardElevation="4dp"
-    app:strokeWidth="0dp">
+    android:layout_marginHorizontal="20dp"
+    android:layout_marginVertical="10dp"
+    app:cardCornerRadius="28dp"
+    app:cardElevation="6dp"
+    app:strokeWidth="1dp"
+    app:strokeColor="#101A1C2E">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="12dp">
+        android:padding="14dp">
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cvImageContainer"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            app:cardCornerRadius="16dp"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            app:cardCornerRadius="22dp"
             app:cardElevation="0dp"
+            app:cardBackgroundColor="@color/gris_suave"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -34,31 +36,10 @@
                 tools:src="@android:drawable/ic_menu_gallery" />
         </com.google.android.material.card.MaterialCardView>
 
-        <ImageButton
-            android:id="@+id/btnDelete"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@android:drawable/ic_menu_delete"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:tint="@color/rojo_borrar" />
-
-        <ImageButton
-            android:id="@+id/btnEdit"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@android:drawable/ic_menu_edit"
-            app:layout_constraintBottom_toBottomOf="@id/btnDelete"
-            app:layout_constraintEnd_toStartOf="@id/btnDelete"
-            app:layout_constraintTop_toTopOf="@id/btnDelete"
-            app:tint="@color/azul_noche" />
-
         <ImageView
             android:id="@+id/ivFavorite"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:src="@android:drawable/btn_star_big_on"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
@@ -70,17 +51,18 @@
             android:id="@+id/tvConsoleName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="18dp"
             android:layout_marginEnd="8dp"
-            android:fontFamily="sans-serif-black"
+            android:textStyle="bold"
             android:textColor="@color/azul_noche"
-            android:textSize="17sp"
+            android:textSize="19sp"
             android:maxLines="2"
             android:ellipsize="end"
+            android:letterSpacing="-0.02"
             app:layout_constraintEnd_toStartOf="@+id/ivFavorite"
             app:layout_constraintStart_toEndOf="@id/cvImageContainer"
             app:layout_constraintTop_toTopOf="@id/cvImageContainer"
-            tools:text="Nintendo Switch OLED Model Special Edition" />
+            tools:text="Nintendo Switch OLED" />
 
         <TextView
             android:id="@+id/tvConsoleCompany"
@@ -88,7 +70,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
             android:textColor="@color/gris_texto_secundario"
-            android:textSize="14sp"
+            android:textSize="15sp"
+            android:alpha="0.8"
             app:layout_constraintEnd_toEndOf="@id/tvConsoleName"
             app:layout_constraintStart_toStartOf="@id/tvConsoleName"
             app:layout_constraintTop_toBottomOf="@id/tvConsoleName"
@@ -98,16 +81,44 @@
             android:id="@+id/tvConsolePrice"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="6dp"
             android:textColor="@color/azul_noche"
             android:textStyle="bold"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toTopOf="@+id/btnEdit"
-            app:layout_constraintEnd_toEndOf="@id/tvConsoleName"
+            android:textSize="16sp"
             app:layout_constraintStart_toStartOf="@id/tvConsoleName"
             app:layout_constraintTop_toBottomOf="@id/tvConsoleCompany"
-            app:layout_constraintVertical_bias="0"
             tools:text="299.99 €" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <ImageButton
+                android:id="@+id/btnEdit"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@android:drawable/ic_menu_edit"
+                android:padding="10dp"
+                android:scaleType="fitCenter"
+                app:tint="@color/azul_noche"
+                android:alpha="0.8" />
+
+            <ImageButton
+                android:id="@+id/btnDelete"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_marginStart="4dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@android:drawable/ic_menu_delete"
+                android:padding="10dp"
+                android:scaleType="fitCenter"
+                app:tint="@color/rojo_borrar"
+                android:alpha="0.8" />
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

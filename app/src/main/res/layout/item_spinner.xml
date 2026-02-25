@@ -2,8 +2,13 @@
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/tvSpinnerItem"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="12dp"
-    android:textSize="16sp"
+    android:layout_height="60dp"
+    android:paddingHorizontal="20dp"
+    android:gravity="center_vertical"
+    android:textSize="17sp"
     android:textColor="@color/azul_noche"
-    android:textStyle="bold" />
+    android:textStyle="bold"
+    android:letterSpacing="-0.02"
+    android:background="?attr/selectableItemBackground"
+    android:ellipsize="end"
+    android:maxLines="1" />

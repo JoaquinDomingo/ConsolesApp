@@ -11,38 +11,40 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="24dp">
+        android:padding="28dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Ajustes"
             android:textColor="@color/azul_noche"
-            android:textSize="34sp"
-            android:fontFamily="sans-serif-black"
-            android:letterSpacing="-0.02"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="32dp"/>
+            android:textSize="38sp"
+            android:textStyle="bold"
+            android:letterSpacing="-0.04"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="36dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="SISTEMA (PRÓXIMAMENTE)"
-            android:textSize="12sp"
-            android:textColor="@color/gris_texto_secundario"
-            android:fontFamily="sans-serif-black"
-            android:letterSpacing="0.1"
+            android:text="SISTEMA"
+            android:textSize="13sp"
+            android:textColor="@color/azul_noche"
+            android:textStyle="bold"
+            android:letterSpacing="0.15"
+            android:alpha="0.6"
             android:layout_marginBottom="12dp"
-            android:layout_marginStart="8dp"/>
+            android:layout_marginStart="12dp"/>
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="20dp"
-            app:cardElevation="2dp"
-            android:layout_marginBottom="32dp"
+            app:cardCornerRadius="28dp"
+            app:cardElevation="6dp"
+            android:layout_marginBottom="36dp"
             app:cardBackgroundColor="@color/white"
-            app:strokeWidth="0dp">
+            app:strokeColor="#101A1C2E"
+            app:strokeWidth="1dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -51,18 +53,18 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="72dp"
+                    android:layout_height="80dp"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
-                    android:paddingHorizontal="20dp">
+                    android:paddingHorizontal="24dp">
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Notificaciones"
-                        android:textSize="17sp"
-                        android:fontFamily="sans-serif-medium"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
                         android:textColor="@color/azul_noche"/>
 
                     <CheckBox
@@ -70,29 +72,31 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:buttonTint="@color/azul_noche"
-                        android:checked="true"/>
+                        android:checked="true"
+                        android:scaleX="1.1"
+                        android:scaleY="1.1"/>
                 </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginHorizontal="24dp"
                     android:background="@color/gris_fondo" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="72dp"
+                    android:layout_height="80dp"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
-                    android:paddingHorizontal="20dp">
+                    android:paddingHorizontal="24dp">
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Modo oscuro"
-                        android:textSize="17sp"
-                        android:fontFamily="sans-serif-medium"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
                         android:textColor="@color/azul_noche"/>
 
                     <com.google.android.material.switchmaterial.SwitchMaterial
@@ -100,7 +104,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:thumbTint="@color/azul_noche"
-                        app:trackTint="@color/gris_divider"/>
+                        app:trackTint="@color/gris_suave"
+                        android:scaleX="1.1"
+                        android:scaleY="1.1"/>
                 </LinearLayout>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -108,21 +114,23 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="SEGURIDAD (Proximamente)"
-            android:textSize="12sp"
-            android:textColor="@color/gris_texto_secundario"
-            android:fontFamily="sans-serif-black"
-            android:letterSpacing="0.1"
+            android:text="SEGURIDAD Y SOPORTE"
+            android:textSize="13sp"
+            android:textColor="@color/azul_noche"
+            android:textStyle="bold"
+            android:letterSpacing="0.15"
+            android:alpha="0.6"
             android:layout_marginBottom="12dp"
-            android:layout_marginStart="8dp"/>
+            android:layout_marginStart="12dp"/>
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="20dp"
-            app:cardElevation="2dp"
+            app:cardCornerRadius="28dp"
+            app:cardElevation="6dp"
             app:cardBackgroundColor="@color/white"
-            app:strokeWidth="0dp">
+            app:strokeColor="#101A1C2E"
+            app:strokeWidth="1dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -132,12 +140,12 @@
                 <TextView
                     android:id="@+id/btnChangePassword"
                     android:layout_width="match_parent"
-                    android:layout_height="72dp"
+                    android:layout_height="80dp"
                     android:gravity="center_vertical"
-                    android:paddingHorizontal="20dp"
+                    android:paddingHorizontal="24dp"
                     android:text="Cambiar contraseña"
-                    android:textSize="17sp"
-                    android:fontFamily="sans-serif-medium"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
                     android:textColor="@color/azul_noche"
                     android:background="?attr/selectableItemBackground"
                     android:clickable="true"
@@ -146,18 +154,18 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginHorizontal="24dp"
                     android:background="@color/gris_fondo" />
 
                 <TextView
                     android:id="@+id/btnHelp"
                     android:layout_width="match_parent"
-                    android:layout_height="72dp"
+                    android:layout_height="80dp"
                     android:gravity="center_vertical"
-                    android:paddingHorizontal="20dp"
+                    android:paddingHorizontal="24dp"
                     android:text="Soporte técnico"
-                    android:textSize="17sp"
-                    android:fontFamily="sans-serif-medium"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
                     android:textColor="@color/azul_noche"
                     android:background="?attr/selectableItemBackground"
                     android:clickable="true"
@@ -168,12 +176,14 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="56dp"
             android:gravity="center"
             android:text="Versión de la app 2.0.26"
-            android:textSize="12sp"
+            android:textSize="14sp"
+            android:textStyle="bold"
             android:textColor="@color/gris_texto_secundario"
-            android:fontFamily="sans-serif-medium"/>
+            android:alpha="0.5"
+            android:layout_marginBottom="40dp"/>
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
