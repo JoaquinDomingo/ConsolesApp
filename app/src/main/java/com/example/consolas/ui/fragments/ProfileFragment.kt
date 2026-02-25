@@ -5,7 +5,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.bumptech.glide.Glide
@@ -42,7 +41,8 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         }
 
         binding.btnLogout.setOnClickListener {
-            sessionManager.clear()
+            // USAMOS LOGOUT() EN LUGAR DE CLEAR() PARA NO BORRAR LA FOTO
+            sessionManager.logout()
             val intent = Intent(requireContext(), LoginActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
@@ -51,26 +51,32 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     }
 
     private fun saveAndSyncImage(uri: Uri) {
-        // 1. Guardamos la URI en SharedPreferences para persistencia
+        try {
+            // SOLICITAR PERMISO PERSISTENTE (Vital para que no se borre al cerrar la app)
+            val takeFlags: Int = Intent.FLAG_GRANT_READ_URI_PERMISSION
+            requireContext().contentResolver.takePersistableUriPermission(uri, takeFlags)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
         sessionManager.saveProfileImage(uri.toString())
 
-        // 2. Actualizamos la imagen en este Fragment
         Glide.with(this)
             .load(uri)
             .circleCrop()
             .into(binding.ivProfilePicture)
 
-        // 3. ¡SINCRONIZACIÓN! Avisamos a la MainActivity para que actualice el Nav Header
         (activity as? MainActivity)?.updateNavHeaderImage(uri)
     }
 
     private fun loadSavedProfileImage() {
-        // Recuperamos la imagen del gestor de sesión
         val savedUri = sessionManager.getProfileImage()
         if (savedUri != null) {
             Glide.with(this)
                 .load(Uri.parse(savedUri))
                 .circleCrop()
+                .placeholder(R.drawable.images)
+                .error(R.drawable.images)
                 .into(binding.ivProfilePicture)
         }
     }

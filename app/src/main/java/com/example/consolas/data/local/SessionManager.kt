@@ -14,51 +14,31 @@ class SessionManager @Inject constructor(
     companion object {
         private const val KEY_EMAIL = "user_email"
         private const val KEY_NAME = "user_name"
-        private const val KEY_PROFILE_IMAGE = "profile_image"
+        private const val KEY_IMAGE_PREFIX = "profile_image_" // Prefijo dinámico
     }
 
-    /**
-     * Guarda los datos del usuario tras un login exitoso.
-     * Es vital llamar a esta función en LoginActivity para que el resto
-     * de la app pueda identificar al usuario en Room.
-     */
     fun setUser(email: String, name: String) {
-        prefs.edit()
-            .putString(KEY_EMAIL, email)
-            .putString(KEY_NAME, name)
-            .apply()
+        prefs.edit().putString(KEY_EMAIL, email).putString(KEY_NAME, name).apply()
     }
 
-    /**
-     * Guarda la URI de la imagen de perfil seleccionada por el usuario.
-     * Esto permite que la foto persista aunque se cierre la aplicación.
-     */
+    // Guarda la imagen usando el email como identificador único
     fun saveProfileImage(uri: String) {
-        prefs.edit()
-            .putString(KEY_PROFILE_IMAGE, uri)
-            .apply()
+        val email = userEmail()
+        if (email.isNotEmpty()) {
+            prefs.edit().putString(KEY_IMAGE_PREFIX + email, uri).apply()
+        }
     }
 
-    /**
-     * Recupera la URI de la imagen de perfil guardada.
-     * Devuelve null si el usuario aún no ha establecido ninguna foto.
-     */
-    fun getProfileImage(): String? = prefs.getString(KEY_PROFILE_IMAGE, null)
+    // Recupera la imagen específica del usuario que tiene la sesión activa
+    fun getProfileImage(): String? {
+        val email = userEmail()
+        return if (email.isNotEmpty()) prefs.getString(KEY_IMAGE_PREFIX + email, null) else null
+    }
 
-    /**
-     * Recupera el email del usuario actual.
-     * Si devuelve "", las consultas de Room fallarán al no encontrar al usuario.
-     */
     fun userEmail(): String = prefs.getString(KEY_EMAIL, "") ?: ""
-
-    /**
-     * Recupera el nombre del usuario actual.
-     */
     fun userName(): String = prefs.getString(KEY_NAME, "") ?: ""
 
-    /**
-     * Limpia la sesión actual (Logout).
-     * Borra todos los datos almacenados, incluyendo email, nombre y foto de perfil.
-     */
-    fun clear() = prefs.edit().clear().apply()
+    fun logout() {
+        prefs.edit().remove(KEY_EMAIL).remove(KEY_NAME).apply()
+    }
 }

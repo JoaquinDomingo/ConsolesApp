@@ -40,29 +40,40 @@ class MainActivity : AppCompatActivity() {
         navController = navHostFragment.navController
 
         setupNavigationUI()
-        loadUserDataInHeader() // Carga los datos al iniciar
     }
 
-    // Esta función carga los datos guardados en SessionManager al abrir la app
+    // Usamos onResume o llamamos a loadUserDataInHeader para asegurar
+    // que al volver de un Login/Perfil los datos se refresquen.
+    override fun onResume() {
+        super.onResume()
+        loadUserDataInHeader()
+    }
+
     private fun loadUserDataInHeader() {
         val headerView = binding.navigationView.getHeaderView(0)
         val tvName = headerView.findViewById<TextView>(R.id.tvUserName)
         val tvEmail = headerView.findViewById<TextView>(R.id.tvUserEmail)
         val imgUser = headerView.findViewById<ImageView>(R.id.imgUser)
 
+        // Obtenemos el email actual para que el Manager busque la foto correcta
+        val currentEmail = sessionManager.userEmail()
         tvName.text = sessionManager.userName()
-        tvEmail.text = sessionManager.userEmail()
+        tvEmail.text = currentEmail
 
-        // Si hay una imagen guardada, la cargamos con Glide
+        // El Manager ahora devolverá la URI vinculada a este email específico
         sessionManager.getProfileImage()?.let { uriString ->
             Glide.with(this)
                 .load(Uri.parse(uriString))
                 .circleCrop()
+                .placeholder(R.drawable.images)
+                .error(R.drawable.images)
                 .into(imgUser)
+        } ?: run {
+            // Si el usuario no tiene foto guardada, reseteamos a la imagen por defecto
+            imgUser.setImageResource(R.drawable.images)
         }
     }
 
-    // FUNCIÓN CLAVE: Llama a esta función desde el fragmento para actualizar la foto al instante
     fun updateNavHeaderImage(newUri: Uri) {
         val headerView = binding.navigationView.getHeaderView(0)
         val imgUser = headerView.findViewById<ImageView>(R.id.imgUser)
@@ -84,7 +95,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.navigationView.setNavigationItemSelectedListener { item ->
             if (item.itemId == R.id.logout) {
-                sessionManager.clear()
+                sessionManager.logout()
                 startActivity(Intent(this, LoginActivity::class.java))
                 finish()
                 true
