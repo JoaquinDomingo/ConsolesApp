@@ -29,12 +29,13 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
     }
 
     private fun setupData() {
-        val position = args.consolePosition
-        viewModel.consoles.observe(viewLifecycleOwner) { lista ->
-            // Si la lista es nula o la posición no existe, no hacemos nada
-            val console = lista?.getOrNull(position) ?: return@observe
+        // CAMBIO: Ahora usamos consoleName en lugar de position
+        val nameToFind = args.consoleName
 
-            // PINTAMOS SIEMPRE (Quitamos el if (current == null))
+        viewModel.consoles.observe(viewLifecycleOwner) { lista ->
+            // Buscamos la consola por su nombre único en la lista
+            val console = lista?.find { it.name == nameToFind } ?: return@observe
+
             binding.tvDetailName.text = console.name
             binding.tvDetailCompany.text = console.company
             binding.tvDetailDate.text = "Lanzamiento: ${console.releasedate}"
@@ -43,7 +44,7 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
 
             Glide.with(this)
                 .load(console.image)
-                .placeholder(R.drawable.placeholder) // Añade un placeholder por si acaso
+                .placeholder(android.R.drawable.ic_menu_gallery)
                 .centerCrop()
                 .into(binding.tvDetailImage)
 
@@ -59,21 +60,20 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
     }
 
     private fun setupButtons() {
-        // Favorito
         binding.btnFavorite.setOnClickListener {
             val item = current ?: return@setOnClickListener
             viewModel.setFavorite(item.name, !item.favorite)
         }
 
-        // Navegación a Nativos
         binding.btnGoToNative.setOnClickListener {
-            val action = DetailFragmentDirections.actionDetailFragmentToNativeGamesFragment(args.consolePosition)
+            // CAMBIO: Pasamos el nombre para que NativeGamesFragment sepa qué consola cargar
+            val action = DetailFragmentDirections.actionDetailFragmentToNativeGamesFragment(args.consoleName)
             findNavController().navigate(action)
         }
 
-        // Navegación a Adaptados
         binding.btnGoToAdapted.setOnClickListener {
-            val action = DetailFragmentDirections.actionDetailFragmentToAdaptedGamesFragment(args.consolePosition)
+            // CAMBIO: Pasamos el nombre para que AdaptedGamesFragment sepa qué consola cargar
+            val action = DetailFragmentDirections.actionDetailFragmentToAdaptedGamesFragment(args.consoleName)
             findNavController().navigate(action)
         }
     }

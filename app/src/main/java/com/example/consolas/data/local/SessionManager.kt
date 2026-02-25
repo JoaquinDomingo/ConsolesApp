@@ -14,6 +14,7 @@ class SessionManager @Inject constructor(
     companion object {
         private const val KEY_EMAIL = "user_email"
         private const val KEY_NAME = "user_name"
+        private const val KEY_PROFILE_IMAGE = "profile_image"
     }
 
     /**
@@ -29,6 +30,22 @@ class SessionManager @Inject constructor(
     }
 
     /**
+     * Guarda la URI de la imagen de perfil seleccionada por el usuario.
+     * Esto permite que la foto persista aunque se cierre la aplicación.
+     */
+    fun saveProfileImage(uri: String) {
+        prefs.edit()
+            .putString(KEY_PROFILE_IMAGE, uri)
+            .apply()
+    }
+
+    /**
+     * Recupera la URI de la imagen de perfil guardada.
+     * Devuelve null si el usuario aún no ha establecido ninguna foto.
+     */
+    fun getProfileImage(): String? = prefs.getString(KEY_PROFILE_IMAGE, null)
+
+    /**
      * Recupera el email del usuario actual.
      * Si devuelve "", las consultas de Room fallarán al no encontrar al usuario.
      */
@@ -41,6 +58,7 @@ class SessionManager @Inject constructor(
 
     /**
      * Limpia la sesión actual (Logout).
+     * Borra todos los datos almacenados, incluyendo email, nombre y foto de perfil.
      */
     fun clear() = prefs.edit().clear().apply()
 }

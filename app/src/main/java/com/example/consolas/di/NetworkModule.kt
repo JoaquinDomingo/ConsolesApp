@@ -17,7 +17,7 @@ object NetworkModule {
     @Singleton
     fun provideRetrofit(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("https://prothalloid-unsceptically-spencer.ngrok-free.dev/")
+            .baseUrl("http://192.168.19.95:8081/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }

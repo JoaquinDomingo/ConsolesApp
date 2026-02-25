@@ -4,49 +4,45 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.example.consolas.R
-import com.example.consolas.ui.viewHolder.ViewHConsolas
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.consolas.databinding.ItemConsoleBinding
 import com.example.consolas.domain.model.Console
 
-/**
- * Usamos ListAdapter en lugar de RecyclerView.Adapter para que las actualizaciones
- * de favoritos sean automáticas, fluidas y eficientes gracias a DiffUtil.
- */
 class AdapterConsolas(
-    private val deleteOnClick: (Int) -> Unit,
-    private val editOnClick: (Int) -> Unit,
-    private val detailOnClick: (Int) -> Unit
-) : ListAdapter<Console, ViewHConsolas>(ConsoleDiffCallback()) {
+    private val deleteOnClick: (Console) -> Unit, // Cambiado de Int a Console
+    private val editOnClick: (Console) -> Unit,   // Cambiado de Int a Console
+    private val detailOnClick: (Console) -> Unit  // Cambiado de Int a Console
+) : ListAdapter<Console, AdapterConsolas.ViewHolder>(DiffCallback) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHConsolas {
-        val layoutInflater = LayoutInflater.from(parent.context)
-        return ViewHConsolas(
-            layoutInflater.inflate(R.layout.item_console, parent, false),
-            deleteOnClick,
-            editOnClick,
-            detailOnClick
-        )
+    inner class ViewHolder(private val binding: ItemConsoleBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(console: Console) {
+            binding.tvConsoleName.text = console.name
+            binding.tvConsoleCompany.text = console.company
+            binding.tvConsolePrice.text = "${console.price} €"
+
+            Glide.with(binding.root.context)
+                .load(console.image)
+                .circleCrop()
+                .into(binding.ivConsole)
+
+            // Configuración de clics enviando el OBJETO
+            binding.btnDelete.setOnClickListener { deleteOnClick(console) }
+            binding.btnEdit.setOnClickListener { editOnClick(console) }
+            binding.root.setOnClickListener { detailOnClick(console) }
+        }
     }
 
-    override fun onBindViewHolder(holder: ViewHConsolas, position: Int) {
-        // ListAdapter usa getItem(position) para acceder a la lista interna
-        holder.renderize(getItem(position))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        return ViewHolder(ItemConsoleBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
-    /**
-     * Lógica para comparar elementos. Esto es lo que permite que la estrella
-     * cambie al instante cuando el ViewModel emite una nueva lista.
-     */
-    class ConsoleDiffCallback : DiffUtil.ItemCallback<Console>() {
-        override fun areItemsTheSame(oldItem: Console, newItem: Console): Boolean {
-            // Se comparan por el nombre (identificador único de la consola)
-            return oldItem.name == newItem.name
-        }
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bind(getItem(position))
+    }
 
-        override fun areContentsTheSame(oldItem: Console, newItem: Console): Boolean {
-            // Se comparan los objetos enteros. Si el favorito cambió, esto devuelve false
-            // y ListAdapter refresca automáticamente ese item.
-            return oldItem == newItem
-        }
+    companion object DiffCallback : DiffUtil.ItemCallback<Console>() {
+        override fun areItemsTheSame(oldItem: Console, newItem: Console) = oldItem.name == newItem.name
+        override fun areContentsTheSame(oldItem: Console, newItem: Console) = oldItem == newItem
     }
 }

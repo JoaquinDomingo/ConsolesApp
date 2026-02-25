@@ -5,10 +5,10 @@ import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels // Cambiado a activityViewModels para compartir datos
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.consolas.R
 import com.example.consolas.databinding.FragmentAdaptedGamesBinding
 import com.example.consolas.domain.model.Console
@@ -22,11 +22,12 @@ import dagger.hilt.android.AndroidEntryPoint
 class AdaptedGamesFragment : Fragment(R.layout.fragment_adapted_games) {
 
     private lateinit var binding: FragmentAdaptedGamesBinding
-    private val viewModel: ConsoleViewModel by viewModels()
+    // Usamos activityViewModels para que todos los fragmentos vean la misma lista de consolas
+    private val viewModel: ConsoleViewModel by activityViewModels()
     private val args: AdaptedGamesFragmentArgs by navArgs()
 
-    // Lista de referencia para el filtrado
     private var allGames: List<Game> = emptyList()
+    private var gameAdapter: GameAdapter? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -36,68 +37,66 @@ class AdaptedGamesFragment : Fragment(R.layout.fragment_adapted_games) {
         setupSearch()
 
         binding.btnAddGameFloating.setOnClickListener {
+            // Ahora pasamos consoleName (String)
             val action = AdaptedGamesFragmentDirections.actionAdaptedGamesFragmentToAddGameFragment(
-                args.consolePosition, false
+                args.consoleName, false
             )
             findNavController().navigate(action)
         }
     }
 
     private fun setupRecyclerView() {
-        binding.rvGames.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvGames.layoutManager = GridLayoutManager(requireContext(), 3)
 
         viewModel.consoles.observe(viewLifecycleOwner) { lista ->
-            val console = lista?.getOrNull(args.consolePosition)
+            // Buscamos la consola por NOMBRE en lugar de posición
+            val console = lista?.find { it.name == args.consoleName }
             console?.let { item ->
                 allGames = item.adaptedGames
-                // Si no hay texto en el buscador, mostramos la lista completa
                 if (binding.etSearchGame.text.isNullOrEmpty()) {
-                    updateAdapter(allGames, item)
+                    initOrUpdateAdapter(allGames, item)
                 }
             }
         }
     }
 
     private fun setupSearch() {
-        // Escuchamos los cambios en el EditText de búsqueda
         binding.etSearchGame.addTextChangedListener { editable ->
             val query = editable.toString().lowercase().trim()
             val filteredList = allGames.filter { it.title.lowercase().contains(query) }
 
-            val currentConsole = viewModel.consoles.value?.getOrNull(args.consolePosition)
-            currentConsole?.let { updateAdapter(filteredList, it) }
+            val currentConsole = viewModel.consoles.value?.find { it.name == args.consoleName }
+            currentConsole?.let { initOrUpdateAdapter(filteredList, it) }
         }
     }
 
-    private fun updateAdapter(displayList: List<Game>, console: Console) {
-        binding.rvGames.adapter = GameAdapter(
+    private fun initOrUpdateAdapter(displayList: List<Game>, console: Console) {
+        gameAdapter = GameAdapter(
             list = displayList,
             onClick = { pos ->
-                // Obtenemos el índice real para que el detalle no muestre el juego equivocado
-                val realIndex = console.adaptedGames.indexOf(displayList[pos])
+                // Obtenemos el título del juego seleccionado
+                val gameSelected = displayList[pos]
                 val action = AdaptedGamesFragmentDirections.actionAdaptedGamesFragmentToGameDetailFragment(
-                    consolePosition = args.consolePosition,
-                    gamePosition = realIndex,
-                    isNative = false
+                    args.consoleName, gameSelected.title, false // Enviamos Título (String)
                 )
                 findNavController().navigate(action)
             },
             onDeleteClick = { pos ->
-                val realIndex = console.adaptedGames.indexOf(displayList[pos])
-                showDeleteConfirmation(console, realIndex)
+                showDeleteConfirmation(console, displayList[pos])
             }
         )
+        binding.rvGames.adapter = gameAdapter
     }
 
-    private fun showDeleteConfirmation(console: Console, position: Int) {
-        val gameName = console.adaptedGames[position].title
-
+    private fun showDeleteConfirmation(console: Console, game: Game) {
         AlertDialog.Builder(requireContext())
-            .setTitle("Eliminar juego")
-            .setMessage("¿Estás seguro de que quieres eliminar \"$gameName\"?")
+            .setTitle("Eliminar juego adaptado")
+            .setMessage("¿Estás seguro de que quieres eliminar \"${game.title}\"?")
             .setPositiveButton("ELIMINAR") { _, _ ->
                 val newList = console.adaptedGames.toMutableList()
-                newList.removeAt(position)
+                // Borramos comparando por el objeto/título, no por índice
+                newList.removeAll { it.title == game.title }
+
                 val update = UpdateConsole(nativeGames = console.nativeGames, adaptedGames = newList)
                 viewModel.editConsole(console.name, update)
             }

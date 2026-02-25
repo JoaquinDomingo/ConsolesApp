@@ -5,7 +5,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels // Cambiado a activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.consolas.R
@@ -19,7 +19,8 @@ import dagger.hilt.android.AndroidEntryPoint
 class EditConsoleFragment : Fragment(R.layout.fragment_edit_console) {
 
     private lateinit var binding: FragmentEditConsoleBinding
-    private val viewModel: ConsoleViewModel by viewModels()
+    // Usamos activityViewModels para compartir la instancia del ViewModel con CrudFragment
+    private val viewModel: ConsoleViewModel by activityViewModels()
     private val args: EditConsoleFragmentArgs by navArgs()
 
     private var originalConsole: Console? = null
@@ -34,10 +35,12 @@ class EditConsoleFragment : Fragment(R.layout.fragment_edit_console) {
     }
 
     private fun setupInitialData() {
-        val position = args.consolePosition
+        // CORRECCIÓN: Ahora recibimos consoleName (String) desde el NavGraph
+        val nameToFind = args.consoleName
 
         viewModel.consoles.observe(viewLifecycleOwner) { lista ->
-            val console = lista?.getOrNull(position) ?: return@observe
+            // Buscamos el objeto consola por su nombre en lugar de por posición
+            val console = lista?.find { it.name == nameToFind } ?: return@observe
 
             // Guardamos referencia original para comparar cambios
             originalConsole = console
@@ -47,13 +50,11 @@ class EditConsoleFragment : Fragment(R.layout.fragment_edit_console) {
                 etEditName.setText(console.name)
                 etEditCompany.setText(console.company)
                 etEditDate.setText(console.releasedate)
-                binding.etPrice.setText(console.price.toString())
+                etPrice.setText(console.price.toString())
                 etEditDescription.setText(console.description)
                 etEditImage.setText(console.image)
                 swFavorite.isChecked = console.favorite
 
-                // Habilitamos edición y configuramos estado inicial del botón
-                etEditName.isEnabled = true
                 btnUpdateConsole.isEnabled = false
                 btnUpdateConsole.alpha = 0.5f
             }
@@ -86,7 +87,6 @@ class EditConsoleFragment : Fragment(R.layout.fragment_edit_console) {
 
     private fun checkChanges() {
         val original = originalConsole ?: return
-
         val currentPrice = binding.etPrice.text.toString().toDoubleOrNull() ?: 0.0
 
         val hasChanged =
@@ -121,13 +121,8 @@ class EditConsoleFragment : Fragment(R.layout.fragment_edit_console) {
             favorite = binding.swFavorite.isChecked
         )
 
-        // Enviamos el antiguo nombre como identificador para que el ViewModel
-        // pueda gestionar el borrado de la entidad antigua en Room si el nombre cambió
+        // IMPORTANTE: oldName se usa como ID para actualizar en la base de datos
         viewModel.editConsole(oldName, updatedData)
-
-        // Sincronizamos el estado de favorito por seguridad
-        viewModel.setFavorite(newName, binding.swFavorite.isChecked)
-
         findNavController().popBackStack()
     }
 }
