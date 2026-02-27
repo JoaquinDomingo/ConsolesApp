@@ -1,12 +1,15 @@
 package com.example.consolas.ui.fragments
 
+import android.Manifest
 import android.app.AlertDialog
 import android.app.DatePickerDialog
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -25,10 +28,16 @@ class AddConsoleFragment : Fragment(R.layout.fragment_add_console) {
     private lateinit var binding: FragmentAddConsoleBinding
     private val viewModel: ConsoleViewModel by viewModels()
 
-
     private var currentPhotoUri: Uri? = null
     private var finalImageUriStr: String? = null
 
+    private val permissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+        if (isGranted) {
+            openCamera()
+        } else {
+            Toast.makeText(requireContext(), "Permiso de cámara necesario", Toast.LENGTH_SHORT).show()
+        }
+    }
 
     private val galleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         uri?.let {
@@ -67,18 +76,35 @@ class AddConsoleFragment : Fragment(R.layout.fragment_add_console) {
             AlertDialog.Builder(requireContext())
                 .setTitle("Seleccionar Imagen")
                 .setItems(options) { _, which ->
-                    if (which == 0) openCamera() else galleryLauncher.launch("image/*")
+                    if (which == 0) checkPermissionAndCamera() else galleryLauncher.launch("image/*")
                 }.show()
         }
     }
 
-    private fun openCamera() {
-        val file = File.createTempFile("console_${System.currentTimeMillis()}", ".jpg", requireContext().cacheDir).apply {
-            createNewFile()
-            deleteOnExit()
+    private fun checkPermissionAndCamera() {
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+            openCamera()
+        } else {
+            permissionLauncher.launch(Manifest.permission.CAMERA)
         }
-        currentPhotoUri = FileProvider.getUriForFile(requireContext(), "${requireContext().packageName}.provider", file)
-        cameraLauncher.launch(currentPhotoUri)
+    }
+
+    private fun openCamera() {
+        try {
+            val directory = File(requireContext().cacheDir, "console_images")
+            if (!directory.exists()) directory.mkdirs()
+
+            val file = File(directory, "console_${System.currentTimeMillis()}.jpg")
+
+            currentPhotoUri = FileProvider.getUriForFile(
+                requireContext(),
+                "${requireContext().packageName}.provider",
+                file
+            )
+            cameraLauncher.launch(currentPhotoUri)
+        } catch (e: Exception) {
+            Toast.makeText(requireContext(), "Error al preparar la cámara", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun setupListeners() {
@@ -86,7 +112,8 @@ class AddConsoleFragment : Fragment(R.layout.fragment_add_console) {
             val name = binding.etName.text.toString().trim()
             val date = binding.etDate.text.toString().trim()
             val company = binding.etCompany.text.toString().trim()
-            val price = binding.etPrice.text?.toString()?.replace(",", ".")?.toDoubleOrNull() ?: 0.0
+            val priceStr = binding.etPrice.text.toString().replace(",", ".")
+            val price = priceStr.toDoubleOrNull() ?: 0.0
 
             val imageToSave = finalImageUriStr ?: "https://static.vecteezy.com/system/resources/previews/005/337/799/original/icon-image-not-found-free-vector.jpg"
 

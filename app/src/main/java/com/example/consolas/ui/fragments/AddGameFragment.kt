@@ -1,10 +1,18 @@
 package com.example.consolas.ui.fragments
 
+import android.Manifest
+import android.app.AlertDialog
 import android.app.DatePickerDialog
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels // Cambiado para compartir el estado del ViewModel
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.consolas.R
@@ -13,37 +21,94 @@ import com.example.consolas.domain.model.Game
 import com.example.consolas.domain.model.UpdateConsole
 import com.example.consolas.ui.viewmodels.ConsoleViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import java.io.File
 import java.util.Calendar
 
 @AndroidEntryPoint
 class AddGameFragment : Fragment(R.layout.fragment_add_game) {
 
     private lateinit var binding: FragmentAddGameBinding
-    // Usamos activityViewModels para asegurar que accedemos a la misma lista de consolas que el resto de la app
     private val viewModel: ConsoleViewModel by activityViewModels()
     private val args: AddGameFragmentArgs by navArgs()
+
+    private var currentPhotoUri: Uri? = null
+    private var finalImageUriStr: String? = null
+
+    private val permissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+        if (isGranted) openCamera() else Toast.makeText(requireContext(), "Permiso denegado", Toast.LENGTH_SHORT).show()
+    }
+
+    private val galleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        uri?.let {
+            finalImageUriStr = it.toString()
+            binding.ivGamePreview.setImageURI(it)
+            binding.ivGamePreview.imageTintList = null
+        }
+    }
+
+    private val cameraLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+        if (success) {
+            currentPhotoUri?.let {
+                finalImageUriStr = it.toString()
+                binding.ivGamePreview.setImageURI(it)
+                binding.ivGamePreview.imageTintList = null
+            }
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentAddGameBinding.bind(view)
 
         setupDatePicker()
+        setupImageSelection()
 
         binding.btnSaveGame.setOnClickListener {
             val title = binding.etGameTitle.text.toString()
             val date = binding.etGameDate.text.toString()
             val desc = binding.etGameDesc.text.toString()
-            val imageUrl = binding.etGameImage.text.toString()
+            val image = finalImageUriStr ?: "https://static.vecteezy.com/system/resources/previews/005/337/799/original/icon-image-not-found-free-vector.jpg"
 
             if (title.isNotBlank() && date.isNotBlank()) {
                 val newGame = Game(
                     title = title,
                     releaseDate = date,
                     description = desc,
-                    image = imageUrl
+                    image = image
                 )
                 saveGameToConsole(newGame)
             }
+        }
+    }
+
+    private fun setupImageSelection() {
+        binding.btnSelectGameImage.setOnClickListener {
+            val options = arrayOf("Cámara", "Galería")
+            AlertDialog.Builder(requireContext())
+                .setTitle("Seleccionar Imagen")
+                .setItems(options) { _, which ->
+                    if (which == 0) checkPermissionAndCamera() else galleryLauncher.launch("image/*")
+                }.show()
+        }
+    }
+
+    private fun checkPermissionAndCamera() {
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+            openCamera()
+        } else {
+            permissionLauncher.launch(Manifest.permission.CAMERA)
+        }
+    }
+
+    private fun openCamera() {
+        try {
+            val directory = File(requireContext().cacheDir, "game_images")
+            if (!directory.exists()) directory.mkdirs()
+            val file = File(directory, "game_${System.currentTimeMillis()}.jpg")
+            currentPhotoUri = FileProvider.getUriForFile(requireContext(), "${requireContext().packageName}.provider", file)
+            cameraLauncher.launch(currentPhotoUri)
+        } catch (e: Exception) {
+            Toast.makeText(requireContext(), "Error al abrir cámara", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -57,7 +122,6 @@ class AddGameFragment : Fragment(R.layout.fragment_add_game) {
     }
 
     private fun saveGameToConsole(game: Game) {
-        // CAMBIO: Ahora buscamos por nombre (consoleName) en lugar de posición
         val consoleName = args.consoleName
         val console = viewModel.consoles.value?.find { it.name == consoleName }
 
@@ -65,20 +129,13 @@ class AddGameFragment : Fragment(R.layout.fragment_add_game) {
             val newNative = currentConsole.nativeGames.toMutableList()
             val newAdapted = currentConsole.adaptedGames.toMutableList()
 
-            if (args.isNative) {
-                newNative.add(game)
-            } else {
-                newAdapted.add(game)
-            }
+            if (args.isNative) newNative.add(game) else newAdapted.add(game)
 
             val updateData = UpdateConsole(
                 nativeGames = newNative,
                 adaptedGames = newAdapted
             )
-
-            // Usamos el nombre como ID único para la actualización
             viewModel.editConsole(currentConsole.name, updateData)
-
             findNavController().popBackStack()
         }
     }
