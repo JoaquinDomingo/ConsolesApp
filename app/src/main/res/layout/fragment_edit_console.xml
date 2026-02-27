@@ -29,7 +29,37 @@
             android:textSize="15sp"
             android:textColor="@color/gris_texto_secundario"
             android:alpha="0.8"
-            android:layout_marginBottom="36dp" />
+            android:layout_marginBottom="24dp" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cvEditImageContainer"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="12dp"
+            app:cardCornerRadius="60dp"
+            app:cardElevation="4dp"
+            app:strokeWidth="2dp"
+            app:strokeColor="@color/azul_noche">
+
+            <ImageView
+                android:id="@+id/ivEditConsolePreview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                tools:src="@android:drawable/ic_menu_gallery" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnEditSelectImage"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="CAMBIAR FOTOGRAFÍA"
+            android:textColor="@color/azul_noche"
+            android:layout_marginBottom="24dp"
+            app:icon="@android:drawable/ic_menu_camera" />
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
@@ -147,7 +177,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:hint="URL de la imagen"
+                    android:hint="URL de la imagen (opcional)"
                     app:startIconDrawable="@android:drawable/ic_menu_gallery"
                     app:startIconTint="@color/azul_noche"
                     app:boxCornerRadiusTopStart="18dp"

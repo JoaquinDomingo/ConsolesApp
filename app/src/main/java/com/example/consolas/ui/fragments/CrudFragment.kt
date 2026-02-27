@@ -1,6 +1,7 @@
 package com.example.consolas.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.addTextChangedListener
@@ -21,7 +22,6 @@ class CrudFragment : Fragment(R.layout.fragment_crud) {
     private lateinit var binding: FragmentCrudBinding
     private val viewModel: ConsoleViewModel by activityViewModels()
     private lateinit var adapter: AdapterConsolas
-    private var fullList: List<Console> = emptyList()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -29,39 +29,34 @@ class CrudFragment : Fragment(R.layout.fragment_crud) {
 
         setupRecyclerView()
         setupSearch()
+        setupButtons()
 
         viewModel.consoles.observe(viewLifecycleOwner) { lista ->
-            fullList = lista ?: emptyList()
-            filterList(binding.etSearchConsole.text.toString())
+            adapter.submitList(lista)
+            Log.d("DEBUG_UI", "Lista actualizada en Adapter: ${lista.size}")
         }
 
-        binding.btnAdd.setOnClickListener {
-            findNavController().navigate(CrudFragmentDirections.actionCrudFragmentToAddConsoleFragment())
-        }
-    }
+        viewModel.isLoading.observe(viewLifecycleOwner) { loading ->
+            if (loading) {
+                binding.progressBar.visibility = View.VISIBLE
+                binding.rvConsoles.visibility = View.GONE
+            } else {
+                binding.progressBar.visibility = View.GONE
 
-    private fun setupSearch() {
-        binding.etSearchConsole.addTextChangedListener { filterList(it.toString()) }
-    }
-
-    private fun filterList(query: String) {
-        val q = query.lowercase().trim()
-        val filtered = if (q.isEmpty()) fullList else fullList.filter {
-            it.name.lowercase().contains(q) || it.company.lowercase().contains(q)
+                val tieneDatos = (viewModel.consoles.value?.isNotEmpty() == true)
+                binding.rvConsoles.visibility = if (tieneDatos) View.VISIBLE else View.GONE
+            }
         }
-        adapter.submitList(filtered)
     }
 
     private fun setupRecyclerView() {
         adapter = AdapterConsolas(
             deleteOnClick = { console -> confirmDelete(console) },
             editOnClick = { console ->
-                // Pasamos el NOMBRE como argumento String
                 val action = CrudFragmentDirections.actionCrudFragmentToEditConsoleFragment(console.name)
                 findNavController().navigate(action)
             },
             detailOnClick = { console ->
-                // Pasamos el NOMBRE como argumento String
                 val action = CrudFragmentDirections.actionCrudFragmentToDetailFragment(console.name)
                 findNavController().navigate(action)
             }
@@ -70,11 +65,36 @@ class CrudFragment : Fragment(R.layout.fragment_crud) {
         binding.rvConsoles.adapter = adapter
     }
 
+    private fun setupSearch() {
+        binding.etSearchConsole.addTextChangedListener { editable ->
+            val query = editable.toString().lowercase().trim()
+            val currentList = viewModel.consoles.value ?: emptyList()
+
+            val filtered = if (query.isEmpty()) {
+                currentList
+            } else {
+                currentList.filter {
+                    it.name.lowercase().contains(query) ||
+                            it.company.lowercase().contains(query)
+                }
+            }
+            adapter.submitList(filtered)
+        }
+    }
+
+    private fun setupButtons() {
+        binding.btnAdd.setOnClickListener {
+            findNavController().navigate(R.id.action_crudFragment_to_addConsoleFragment)
+        }
+    }
+
     private fun confirmDelete(console: Console) {
         AlertDialog.Builder(requireContext())
             .setTitle("Eliminar Consola")
-            .setMessage("¿Borrar ${console.name}?")
-            .setPositiveButton("BORRAR") { _, _ -> viewModel.deleteConsole(console.name) }
+            .setMessage("¿Estás seguro de que quieres borrar \"${console.name}\"?")
+            .setPositiveButton("BORRAR") { _, _ ->
+                viewModel.deleteConsole(console.name)
+            }
             .setNegativeButton("CANCELAR", null)
             .show()
     }

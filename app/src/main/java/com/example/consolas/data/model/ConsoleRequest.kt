@@ -12,7 +12,7 @@ data class ConsoleRequest(
     @SerializedName("price") val price: Double,
     @SerializedName("favorite") val favorite: Boolean,
     @SerializedName("nativeGames") val nativeGames: List<ResponseGame> = emptyList(),
-    @SerializedName("adaptedGames") val adaptedGames: List<ResponseGame> = emptyList(),
+    @SerializedName("adaptedGames") val adaptedGames: List<ResponseGame> = emptyList()
 )
 
 fun Console.toRequest(): ConsoleRequest = ConsoleRequest(
@@ -24,7 +24,7 @@ fun Console.toRequest(): ConsoleRequest = ConsoleRequest(
     price = price,
     favorite = favorite,
     nativeGames = nativeGames.map { it.toResponse() },
-    adaptedGames = adaptedGames.map { it.toResponse() },
+    adaptedGames = adaptedGames.map { it.toResponse() }
 )
 
 fun com.example.consolas.domain.model.Game.toResponse(): ResponseGame = ResponseGame().apply {

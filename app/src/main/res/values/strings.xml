@@ -2,4 +2,5 @@
     <string name="app_name">Consolas</string>
     <string name="imagen_de_la_consola">Imagen de la consola</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

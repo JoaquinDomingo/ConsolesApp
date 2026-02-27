@@ -10,18 +10,20 @@ fun ConsoleEntity.toDomain(): Console = Console(
     image = this.image,
     price = this.price,
     favorite = this.favorite,
-    nativeGames = emptyList(),
-    adaptedGames = emptyList()
+    nativeGames = this.nativeGames,
+    adaptedGames = this.adaptedGames
 )
 
 fun Console.toEntity(userEmail: String): ConsoleEntity = ConsoleEntity(
     name = this.name,
-    userEmail = userEmail, // VITAL: Sin esto no hay Primary Key válida
+    userEmail = userEmail,
     releasedate = this.releasedate,
     company = this.company,
     description = this.description,
     image = this.image,
     price = this.price,
     favorite = this.favorite,
+    nativeGames = this.nativeGames,
+    adaptedGames = this.adaptedGames
 
 )

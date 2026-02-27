@@ -13,6 +13,7 @@ data class ConsoleEntity(
     val description: String,
     val image: String,
     val price: Double,
-    val favorite: Boolean
-    // AQUÍ NO VAN LAS LISTAS DE JUEGOS
+    val favorite: Boolean,
+    val nativeGames: List<Game>,
+    val adaptedGames: List<Game>
 )

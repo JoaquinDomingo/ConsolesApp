@@ -9,7 +9,8 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ConsoleDao {
-
+    @Query("SELECT * FROM consoles WHERE userEmail = :email")
+    fun observeConsoles(email: String): Flow<List<ConsoleEntity>> // Cambiado a Flow
     // Inserta o reemplaza una lista de consolas (Útil para la carga inicial de API)
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsertAll(items: List<ConsoleEntity>)

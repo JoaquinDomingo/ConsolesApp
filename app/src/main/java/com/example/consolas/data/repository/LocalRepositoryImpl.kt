@@ -19,7 +19,6 @@ class LocalRepositoryImpl @Inject constructor(
 
     override fun observeLocalConsoles(userEmail: String): Flow<List<Console>> =
         consoleDao.observeAll(userEmail).map { list ->
-            android.util.Log.d("DEBUG_ROOM", "Email: '$userEmail' - Consolas en BD: ${list.size}")
             list.map { it.toDomain() }
         }
 

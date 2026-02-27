@@ -1,6 +1,7 @@
 package com.example.consolas.ui.adapter
 
 import android.view.LayoutInflater
+import android.view.View // Importante añadir esta importación
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -10,9 +11,9 @@ import com.example.consolas.databinding.ItemConsoleBinding
 import com.example.consolas.domain.model.Console
 
 class AdapterConsolas(
-    private val deleteOnClick: (Console) -> Unit, // Cambiado de Int a Console
-    private val editOnClick: (Console) -> Unit,   // Cambiado de Int a Console
-    private val detailOnClick: (Console) -> Unit  // Cambiado de Int a Console
+    private val deleteOnClick: (Console) -> Unit,
+    private val editOnClick: (Console) -> Unit,
+    private val detailOnClick: (Console) -> Unit
 ) : ListAdapter<Console, AdapterConsolas.ViewHolder>(DiffCallback) {
 
     inner class ViewHolder(private val binding: ItemConsoleBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -21,12 +22,14 @@ class AdapterConsolas(
             binding.tvConsoleCompany.text = console.company
             binding.tvConsolePrice.text = "${console.price} €"
 
+            binding.ivFavorite.visibility = if (console.favorite) View.VISIBLE else View.GONE
+
             Glide.with(binding.root.context)
                 .load(console.image)
                 .circleCrop()
                 .into(binding.ivConsole)
 
-            // Configuración de clics enviando el OBJETO
+            // Configuración de clics
             binding.btnDelete.setOnClickListener { deleteOnClick(console) }
             binding.btnEdit.setOnClickListener { editOnClick(console) }
             binding.root.setOnClickListener { detailOnClick(console) }
