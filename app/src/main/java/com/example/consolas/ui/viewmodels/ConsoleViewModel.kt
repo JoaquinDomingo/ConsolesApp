@@ -4,6 +4,7 @@ import androidx.lifecycle.*
 import com.example.consolas.data.local.SessionManager
 import com.example.consolas.domain.useCase.*
 import com.example.consolas.domain.model.Console
+import com.example.consolas.domain.model.Game
 import com.example.consolas.domain.model.UpdateConsole
 import com.example.consolas.domain.repository.LocalRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -40,45 +41,75 @@ class ConsoleViewModel @Inject constructor(
         if (email.isBlank()) return
 
         viewModelScope.launch {
-            _isLoading.value = true
+            if (consoles.value.isNullOrEmpty()) _isLoading.value = true
+
             try {
                 val apiResult = getConsolesUseCase()
-                if (apiResult.isNotEmpty()) {
-                    localRepository.upsertConsoles(email, apiResult)
-                }
+                localRepository.upsertConsoles(email, apiResult)
             } catch (e: Exception) {
-                android.util.Log.e("DEBUG_API", "Fallo de red: ${e.message}")
+                android.util.Log.e("DEBUG_API", "Error: ${e.message}")
             } finally {
                 _isLoading.value = false
             }
         }
     }
 
+
+    fun addGameToConsole(consoleName: String, game: Game, isNative: Boolean) {
+        val email = sessionManager.userEmail()
+
+        viewModelScope.launch {
+            _isLoading.value = true
+            val success = localRepository.addGameToConsole(consoleName, game, isNative, email)
+
+            if (success) {
+                android.util.Log.d("DEBUG_VM", "Actualización completada para $email")
+            }
+            _isLoading.value = false
+        }
+    }
+
     fun addConsole(console: Console) {
         viewModelScope.launch {
             _isLoading.value = true
-            addConsoleUseCase(console)
-            _isLoading.value = false
+            try {
+                addConsoleUseCase(console)
+                refreshFromApi()
+            } catch (e: Exception) {
+                android.util.Log.e("DEBUG_ADD", "Error al añadir consola: ${e.message}")
+            } finally {
+                _isLoading.value = false
+            }
         }
     }
 
     fun deleteConsole(name: String) {
         viewModelScope.launch {
-            deleteConsoleUseCase(name)
-            val email = sessionManager.userEmail()
-            localRepository.deleteLocalConsole(email, name)
+            try {
+                deleteConsoleUseCase(name)
+                val email = sessionManager.userEmail()
+                localRepository.deleteLocalConsole(email, name)
+            } catch (e: Exception) {
+                android.util.Log.e("DEBUG_DELETE", "Error al borrar consola: ${e.message}")
+            }
         }
     }
 
     fun editConsole(oldName: String, updateConsole: UpdateConsole) {
         viewModelScope.launch {
             _isLoading.value = true
-            editConsoleUseCase(oldName, updateConsole)
-            val email = sessionManager.userEmail()
-            if (updateConsole.name != null && updateConsole.name != oldName) {
-                localRepository.deleteLocalConsole(email, oldName)
+            try {
+                editConsoleUseCase(oldName, updateConsole)
+                val email = sessionManager.userEmail()
+                if (updateConsole.name != null && updateConsole.name != oldName) {
+                    localRepository.deleteLocalConsole(email, oldName)
+                }
+                refreshFromApi()
+            } catch (e: Exception) {
+                android.util.Log.e("DEBUG_EDIT", "Error al editar consola: ${e.message}")
+            } finally {
+                _isLoading.value = false
             }
-            refreshFromApi()
         }
     }
 
@@ -86,5 +117,9 @@ class ConsoleViewModel @Inject constructor(
         viewModelScope.launch {
             localRepository.setFavorite(sessionManager.userEmail(), name, favorite)
         }
+    }
+
+    fun updateEmail() {
+        userEmailState.value = sessionManager.userEmail()
     }
 }
