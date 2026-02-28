@@ -12,16 +12,36 @@ class SessionManager @Inject constructor(
     private val prefs = context.getSharedPreferences("session_prefs", Context.MODE_PRIVATE)
 
     companion object {
+        private const val KEY_TOKEN = "user_token" // Nueva clave para JWT
         private const val KEY_EMAIL = "user_email"
         private const val KEY_NAME = "user_name"
-        private const val KEY_IMAGE_PREFIX = "profile_image_" // Prefijo dinámico
+        private const val KEY_IMAGE_PREFIX = "profile_image_"
+        private const val KEY_NOTIFICATIONS = "notifications_enabled"
     }
+
+
+    fun saveAuthData(token: String, email: String) {
+        prefs.edit()
+            .putString(KEY_TOKEN, token)
+            .putString(KEY_EMAIL, email)
+            .apply()
+    }
+
+    // --- Gestión del Token ---
+
+    fun getUserToken(): String? = prefs.getString(KEY_TOKEN, null)
+
+    fun isUserLoggedIn(): Boolean = getUserToken() != null
+
+    // --- Gestión de Perfil ---
 
     fun setUser(email: String, name: String) {
-        prefs.edit().putString(KEY_EMAIL, email).putString(KEY_NAME, name).apply()
+        prefs.edit()
+            .putString(KEY_EMAIL, email)
+            .putString(KEY_NAME, name)
+            .apply()
     }
 
-    // Guarda la imagen usando el email como identificador único
     fun saveProfileImage(uri: String) {
         val email = userEmail()
         if (email.isNotEmpty()) {
@@ -29,7 +49,6 @@ class SessionManager @Inject constructor(
         }
     }
 
-    // Recupera la imagen específica del usuario que tiene la sesión activa
     fun getProfileImage(): String? {
         val email = userEmail()
         return if (email.isNotEmpty()) prefs.getString(KEY_IMAGE_PREFIX + email, null) else null
@@ -38,15 +57,17 @@ class SessionManager @Inject constructor(
     fun userEmail(): String = prefs.getString(KEY_EMAIL, "") ?: ""
     fun userName(): String = prefs.getString(KEY_NAME, "") ?: ""
 
+    // --- Configuración y Logout ---
+
     fun logout() {
-        prefs.edit().remove(KEY_EMAIL).remove(KEY_NAME).apply()
+        prefs.edit().clear().apply()
     }
 
     fun setNotificationsEnabled(enabled: Boolean) {
-        prefs.edit().putBoolean("notifications_enabled", enabled).apply()
+        prefs.edit().putBoolean(KEY_NOTIFICATIONS, enabled).apply()
     }
 
     fun areNotificationsEnabled(): Boolean {
-        return prefs.getBoolean("notifications_enabled", true)
+        return prefs.getBoolean(KEY_NOTIFICATIONS, true)
     }
 }

@@ -37,6 +37,14 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // 1. VERIFICACIÓN DE SEGURIDAD: Si no hay token, no deberíamos estar aquí
+        if (!sessionManager.isUserLoggedIn()) {
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+            return
+        }
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -48,8 +56,6 @@ class MainActivity : AppCompatActivity() {
         navController = navHostFragment.navController
 
         setupNavigationUI()
-
-        // 1. CREAR EL CANAL DE NOTIFICACIONES AL INICIAR
         createNotificationChannel()
     }
 
@@ -64,7 +70,6 @@ class MainActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name = "Notificaciones de Consolas"
             val descriptionText = "Avisos de cambios en la colección"
-            // IMPORTANTE: IMPORTANCE_HIGH es lo que permite el Pop-up (Heads-up)
             val importance = NotificationManager.IMPORTANCE_HIGH
             val channel = NotificationChannel("CONSOLAS_CHANNEL", name, importance).apply {
                 description = descriptionText
@@ -76,20 +81,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun triggerNotification(titulo: String, mensaje: String) {
-        // Verificar si el usuario activó notificaciones en SettingsFragment
         if (!sessionManager.areNotificationsEnabled()) return
 
         val builder = NotificationCompat.Builder(this, "CONSOLAS_CHANNEL")
-            .setSmallIcon(R.drawable.images) // Asegúrate de tener este icono
+            .setSmallIcon(R.drawable.images)
             .setContentTitle(titulo)
             .setContentText(mensaje)
-            .setPriority(NotificationCompat.PRIORITY_HIGH) // Para versiones anteriores a Android 8.0
-            .setDefaults(NotificationCompat.DEFAULT_ALL)   // Sonido y vibración
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setDefaults(NotificationCompat.DEFAULT_ALL)
             .setAutoCancel(true)
 
         with(NotificationManagerCompat.from(this)) {
             if (ContextCompat.checkSelfPermission(this@MainActivity, android.Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
-                // Usamos el tiempo actual como ID para que no se pisen si llegan varias
                 notify(System.currentTimeMillis().toInt(), builder.build())
             }
         }
@@ -98,6 +101,7 @@ class MainActivity : AppCompatActivity() {
     // --- LÓGICA DE USUARIO Y UI ---
 
     fun loadUserDataInHeader() {
+        // Obtenemos el Header dinámicamente
         val headerView = binding.navigationView.getHeaderView(0)
         val tvName = headerView.findViewById<TextView>(R.id.tvUserName)
         val tvEmail = headerView.findViewById<TextView>(R.id.tvUserEmail)
@@ -106,9 +110,12 @@ class MainActivity : AppCompatActivity() {
         val currentEmail = sessionManager.userEmail()
         val currentName = sessionManager.userName()
 
-        tvName.text = currentName.ifEmpty { currentEmail.substringBefore("@") }.uppercase()
+        // Si el nombre está vacío (común tras el login solo con email), usamos el alias del email
+        tvName.text = if (currentName.isNotEmpty()) currentName.uppercase()
+        else currentEmail.substringBefore("@").uppercase()
         tvEmail.text = currentEmail
 
+        // Carga de imagen de perfil vinculada al email del usuario en MariaDB
         sessionManager.getProfileImage()?.let { uriString ->
             Glide.with(this)
                 .load(Uri.parse(uriString))
@@ -126,6 +133,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupNavigationUI() {
+        // Definimos los destinos de nivel superior (sin flecha de "atrás")
         appBarConfiguration = AppBarConfiguration(
             setOf(R.id.FragmentJoaquin, R.id.crudFragment, R.id.profileFragment),
             drawerLayout
@@ -134,19 +142,25 @@ class MainActivity : AppCompatActivity() {
         binding.navigationView.setupWithNavController(navController)
         binding.bottomNav.setupWithNavController(navController)
 
+        // Manejo manual del Logout en el Drawer
         binding.navigationView.setNavigationItemSelectedListener { item ->
-            if (item.itemId == R.id.logout) {
-                sessionManager.logout()
-                startActivity(Intent(this, LoginActivity::class.java))
-                finish()
-                true
-            } else {
-                val handled = NavigationUI.onNavDestinationSelected(item, navController)
-                if (handled) drawerLayout.closeDrawers()
-                handled
+            when (item.itemId) {
+                R.id.logout -> {
+                    sessionManager.logout() // Borra Token, Email y Preferencias
+                    startActivity(Intent(this, LoginActivity::class.java))
+                    finish()
+                    true
+                }
+                else -> {
+                    val handled = NavigationUI.onNavDestinationSelected(item, navController)
+                    if (handled) drawerLayout.closeDrawers()
+                    handled
+                }
             }
         }
     }
 
-    override fun onSupportNavigateUp() = navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
 }

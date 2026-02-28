@@ -16,20 +16,32 @@ class AuthViewModel @Inject constructor(
     private val registerUseCase: RegisterUseCase
 ) : ViewModel() {
 
-    private val _authState = MutableLiveData<Result<Boolean>>()
-    val authState: LiveData<Result<Boolean>> = _authState
+    private val _authState = MutableLiveData<Result<Boolean>?>()
+    val authState: LiveData<Result<Boolean>?> = _authState
+
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> = _isLoading
 
     fun login(email: String, pass: String) {
         viewModelScope.launch {
+            _isLoading.value = true
             val result = loginUseCase(email, pass)
             _authState.value = result
+            _isLoading.value = false
         }
     }
 
     fun register(email: String, pass: String) {
         viewModelScope.launch {
+            _isLoading.value = true
             val result = registerUseCase(email, pass)
             _authState.value = result
+            _isLoading.value = false
         }
+    }
+
+
+    fun clearState() {
+        _authState.value = null
     }
 }
