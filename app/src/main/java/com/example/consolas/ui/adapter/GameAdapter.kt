@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.consolas.R
@@ -36,17 +37,47 @@ class GameAdapter(
             .placeholder(android.R.drawable.ic_menu_gallery)
             .into(holder.image)
 
-        holder.itemView.setOnClickListener { onClick(position) }
+        holder.itemView.setOnClickListener {
+            val currentPos = holder.adapterPosition
+            if (currentPos != RecyclerView.NO_POSITION) {
+                onClick(currentPos)
+            }
+        }
+
         holder.itemView.setOnLongClickListener {
-            onDeleteClick(position)
+            val currentPos = holder.adapterPosition
+            if (currentPos != RecyclerView.NO_POSITION) {
+                onDeleteClick(currentPos)
+            }
             true
         }
     }
 
     override fun getItemCount() = list.size
 
+    fun getCurrentList(): List<Game> = list
+
     fun updateList(newList: List<Game>) {
+        val diffCallback = GameDiffCallback(this.list, newList)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
+
         this.list = newList
-        notifyDataSetChanged()
+        diffResult.dispatchUpdatesTo(this)
+    }
+
+    class GameDiffCallback(
+        private val oldList: List<Game>,
+        private val newList: List<Game>
+    ) : DiffUtil.Callback() {
+        override fun getOldListSize(): Int = oldList.size
+        override fun getNewListSize(): Int = newList.size
+
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return oldList[oldItemPosition].title == newList[newItemPosition].title
+        }
+
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return oldList[oldItemPosition] == newList[newItemPosition]
+        }
     }
 }

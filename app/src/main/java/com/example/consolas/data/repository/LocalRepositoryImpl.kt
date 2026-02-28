@@ -1,20 +1,24 @@
 package com.example.consolas.data.repository
 
 import com.example.consolas.data.local.ConsoleDao
-import com.example.consolas.data.local.ConsoleEntity
 import com.example.consolas.data.local.toDomain
 import com.example.consolas.data.local.toEntity
+import com.example.consolas.data.model.toRequest
+import com.example.consolas.data.service.ApiService
 import com.example.consolas.domain.model.Console
+import com.example.consolas.domain.model.Game
 import com.example.consolas.domain.repository.LocalRepository
 import com.example.consolas.domain.repository.UserStats
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import okhttp3.ResponseBody
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class LocalRepositoryImpl @Inject constructor(
-    private val consoleDao: ConsoleDao
+    private val consoleDao: ConsoleDao,
+    private val apiService: ApiService
 ) : LocalRepository {
 
     override fun observeLocalConsoles(userEmail: String): Flow<List<Console>> =
@@ -28,26 +32,25 @@ class LocalRepositoryImpl @Inject constructor(
         }
 
     override suspend fun upsertConsoles(userEmail: String, consoles: List<Console>) {
-        if (userEmail.isBlank()) {
-            android.util.Log.e("DEBUG_ROOM", "Upsert cancelado: Email vacío")
-            return
-        }
-
+        if (userEmail.isBlank()) return
         val local = consoleDao.getListSync(userEmail)
 
-        val entities = consoles.map { domain ->
-            // Si ya existe en Room, mantenemos su estado de favorito, si no, usamos el de la API
-            val isFav = local.find { it.name == domain.name }?.favorite ?: domain.favorite
+        val entities = consoles.map { apiConsole ->
+            val localMatch = local.find { it.name == apiConsole.name }
 
-            domain.toEntity(userEmail).copy(favorite = isFav)
+            // Solo dejamos que la API pise los datos si trae información nueva (más juegos)
+            // o si la consola no existía localmente.
+            if (localMatch != null && (localMatch.nativeGames.size + localMatch.adaptedGames.size) >
+                (apiConsole.nativeGames.size + apiConsole.adaptedGames.size)) {
+                localMatch // Mantenemos la local que tiene el juego 11
+            } else {
+                // Usamos la de la API pero mantenemos el favorito local
+                val isFav = localMatch?.favorite ?: apiConsole.favorite
+                apiConsole.toEntity(userEmail).copy(favorite = isFav)
+            }
         }
 
-        if (entities.isNotEmpty()) {
-            consoleDao.upsertAll(entities)
-            android.util.Log.d("DEBUG_ROOM", "Insertadas/Actualizadas ${entities.size} entidades en Room")
-        } else {
-            android.util.Log.w("DEBUG_ROOM", "No hay entidades para guardar")
-        }
+        if (entities.isNotEmpty()) consoleDao.upsertAll(entities)
     }
 
     override suspend fun setFavorite(userEmail: String, name: String, favorite: Boolean) {
@@ -63,11 +66,39 @@ class LocalRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getUserStats(userEmail: String): UserStats {
-        if (userEmail.isBlank()) return UserStats(favoritesCount = 0, averagePrice = 0.0)
-
+        if (userEmail.isBlank()) return UserStats(0, 0.0)
         val favs = consoleDao.favoritesCount(userEmail)
         val avg = consoleDao.averagePrice(userEmail) ?: 0.0
+        return UserStats(favs, avg)
+    }
 
-        return UserStats(favoritesCount = favs, averagePrice = avg)
+    override suspend fun addGameToConsole(
+        consoleName: String,
+        game: Game,
+        isNative: Boolean,
+        userEmail: String
+    ): Boolean {
+        return try {
+            val response = apiService.addGameToConsole(consoleName, isNative, game.toRequest())
+
+            if (response.isSuccessful) {
+                val entity = consoleDao.getConsoleByNameSync(userEmail, consoleName)
+
+                entity?.let { currentEntity ->
+                    val domain = currentEntity.toDomain()
+                    val newNative = domain.nativeGames.toMutableList()
+                    val newAdapted = domain.adaptedGames.toMutableList()
+
+                    if (isNative) newNative.add(game) else newAdapted.add(game)
+
+                    val updatedDomain = domain.copy(nativeGames = newNative, adaptedGames = newAdapted)
+
+                    consoleDao.upsertAll(listOf(updatedDomain.toEntity(userEmail)))
+
+                    android.util.Log.d("DEBUG_INSTANT", "Juego inyectado para el usuario ACTUAL: $userEmail")
+                }
+                true
+            } else false
+        } catch (e: Exception) { false }
     }
 }

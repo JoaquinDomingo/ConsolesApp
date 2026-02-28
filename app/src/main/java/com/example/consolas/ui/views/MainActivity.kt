@@ -1,11 +1,19 @@
 package com.example.consolas.ui.views
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -40,27 +48,67 @@ class MainActivity : AppCompatActivity() {
         navController = navHostFragment.navController
 
         setupNavigationUI()
+
+        // 1. CREAR EL CANAL DE NOTIFICACIONES AL INICIAR
+        createNotificationChannel()
     }
 
-    // Usamos onResume o llamamos a loadUserDataInHeader para asegurar
-    // que al volver de un Login/Perfil los datos se refresquen.
     override fun onResume() {
         super.onResume()
         loadUserDataInHeader()
     }
 
-    private fun loadUserDataInHeader() {
+    // --- LÓGICA DE NOTIFICACIONES ---
+
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = "Notificaciones de Consolas"
+            val descriptionText = "Avisos de cambios en la colección"
+            // IMPORTANTE: IMPORTANCE_HIGH es lo que permite el Pop-up (Heads-up)
+            val importance = NotificationManager.IMPORTANCE_HIGH
+            val channel = NotificationChannel("CONSOLAS_CHANNEL", name, importance).apply {
+                description = descriptionText
+            }
+            val notificationManager: NotificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+
+    fun triggerNotification(titulo: String, mensaje: String) {
+        // Verificar si el usuario activó notificaciones en SettingsFragment
+        if (!sessionManager.areNotificationsEnabled()) return
+
+        val builder = NotificationCompat.Builder(this, "CONSOLAS_CHANNEL")
+            .setSmallIcon(R.drawable.images) // Asegúrate de tener este icono
+            .setContentTitle(titulo)
+            .setContentText(mensaje)
+            .setPriority(NotificationCompat.PRIORITY_HIGH) // Para versiones anteriores a Android 8.0
+            .setDefaults(NotificationCompat.DEFAULT_ALL)   // Sonido y vibración
+            .setAutoCancel(true)
+
+        with(NotificationManagerCompat.from(this)) {
+            if (ContextCompat.checkSelfPermission(this@MainActivity, android.Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+                // Usamos el tiempo actual como ID para que no se pisen si llegan varias
+                notify(System.currentTimeMillis().toInt(), builder.build())
+            }
+        }
+    }
+
+    // --- LÓGICA DE USUARIO Y UI ---
+
+    fun loadUserDataInHeader() {
         val headerView = binding.navigationView.getHeaderView(0)
         val tvName = headerView.findViewById<TextView>(R.id.tvUserName)
         val tvEmail = headerView.findViewById<TextView>(R.id.tvUserEmail)
         val imgUser = headerView.findViewById<ImageView>(R.id.imgUser)
 
-        // Obtenemos el email actual para que el Manager busque la foto correcta
         val currentEmail = sessionManager.userEmail()
-        tvName.text = sessionManager.userName()
+        val currentName = sessionManager.userName()
+
+        tvName.text = currentName.ifEmpty { currentEmail.substringBefore("@") }.uppercase()
         tvEmail.text = currentEmail
 
-        // El Manager ahora devolverá la URI vinculada a este email específico
         sessionManager.getProfileImage()?.let { uriString ->
             Glide.with(this)
                 .load(Uri.parse(uriString))
@@ -69,24 +117,17 @@ class MainActivity : AppCompatActivity() {
                 .error(R.drawable.images)
                 .into(imgUser)
         } ?: run {
-            // Si el usuario no tiene foto guardada, reseteamos a la imagen por defecto
             imgUser.setImageResource(R.drawable.images)
         }
     }
 
-    fun updateNavHeaderImage(newUri: Uri) {
-        val headerView = binding.navigationView.getHeaderView(0)
-        val imgUser = headerView.findViewById<ImageView>(R.id.imgUser)
-
-        Glide.with(this)
-            .load(newUri)
-            .circleCrop()
-            .into(imgUser)
+    fun updateNavHeaderData() {
+        loadUserDataInHeader()
     }
 
     private fun setupNavigationUI() {
         appBarConfiguration = AppBarConfiguration(
-            setOf(R.id.FragmentJoaquin, R.id.crudFragment),
+            setOf(R.id.FragmentJoaquin, R.id.crudFragment, R.id.profileFragment),
             drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)

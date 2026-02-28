@@ -1,6 +1,8 @@
 package com.example.consolas.di
 
 import com.example.consolas.data.service.ApiService
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,10 +17,10 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideRetrofit(): Retrofit {
+    fun provideRetrofit(gson: Gson): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("http://192.168.19.78:8081/")
-            .addConverterFactory(GsonConverterFactory.create())
+            .baseUrl("https://prothalloid-unsceptically-spencer.ngrok-free.dev/")
+            .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
     }
 
@@ -26,5 +28,13 @@ object NetworkModule {
     @Singleton
     fun provideApiService(retrofit: Retrofit): ApiService {
         return retrofit.create(ApiService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGson(): Gson {
+        return GsonBuilder()
+            .setLenient()
+            .create()
     }
 }

@@ -41,4 +41,12 @@ class SessionManager @Inject constructor(
     fun logout() {
         prefs.edit().remove(KEY_EMAIL).remove(KEY_NAME).apply()
     }
+
+    fun setNotificationsEnabled(enabled: Boolean) {
+        prefs.edit().putBoolean("notifications_enabled", enabled).apply()
+    }
+
+    fun areNotificationsEnabled(): Boolean {
+        return prefs.getBoolean("notifications_enabled", true)
+    }
 }

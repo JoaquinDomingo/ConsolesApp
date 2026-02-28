@@ -1,6 +1,7 @@
 package com.example.consolas.domain.repository
 
 import com.example.consolas.domain.model.Console
+import com.example.consolas.domain.model.Game
 import kotlinx.coroutines.flow.Flow
 
 data class UserStats(
@@ -15,4 +16,5 @@ interface LocalRepository {
     suspend fun setFavorite(userEmail: String, name: String, favorite: Boolean)
     suspend fun deleteLocalConsole(userEmail: String, name: String)
     suspend fun getUserStats(userEmail: String): UserStats
-}
+
+    suspend fun addGameToConsole(consoleName: String, game: Game, isNative: Boolean, userEmail: String): Boolean}

@@ -46,4 +46,10 @@ interface ConsoleDao {
     // Obtiene la lista de forma síncrona (Usada en el Repositorio para buscar entidades antes de actualizar)
     @Query("SELECT * FROM consoles WHERE userEmail = :userEmail")
     suspend fun getListSync(userEmail: String): List<ConsoleEntity>
+
+    @Query("SELECT * FROM consoles WHERE userEmail = :email AND name = :name LIMIT 1")
+    suspend fun getConsoleByNameSync(email: String, name: String): ConsoleEntity?
+
+    @Query("SELECT userEmail FROM consoles WHERE name = :name LIMIT 1")
+    suspend fun getEmailByConsoleName(name: String): String?
 }

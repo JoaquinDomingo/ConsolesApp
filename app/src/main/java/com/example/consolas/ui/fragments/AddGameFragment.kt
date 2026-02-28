@@ -18,8 +18,8 @@ import androidx.navigation.fragment.navArgs
 import com.example.consolas.R
 import com.example.consolas.databinding.FragmentAddGameBinding
 import com.example.consolas.domain.model.Game
-import com.example.consolas.domain.model.UpdateConsole
 import com.example.consolas.ui.viewmodels.ConsoleViewModel
+import com.example.consolas.ui.views.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 import java.util.Calendar
@@ -64,9 +64,9 @@ class AddGameFragment : Fragment(R.layout.fragment_add_game) {
         setupImageSelection()
 
         binding.btnSaveGame.setOnClickListener {
-            val title = binding.etGameTitle.text.toString()
-            val date = binding.etGameDate.text.toString()
-            val desc = binding.etGameDesc.text.toString()
+            val title = binding.etGameTitle.text.toString().trim()
+            val date = binding.etGameDate.text.toString().trim()
+            val desc = binding.etGameDesc.text.toString().trim()
             val image = finalImageUriStr ?: "https://static.vecteezy.com/system/resources/previews/005/337/799/original/icon-image-not-found-free-vector.jpg"
 
             if (title.isNotBlank() && date.isNotBlank()) {
@@ -77,6 +77,8 @@ class AddGameFragment : Fragment(R.layout.fragment_add_game) {
                     image = image
                 )
                 saveGameToConsole(newGame)
+            } else {
+                Toast.makeText(requireContext(), "El título y la fecha son obligatorios", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -123,20 +125,19 @@ class AddGameFragment : Fragment(R.layout.fragment_add_game) {
 
     private fun saveGameToConsole(game: Game) {
         val consoleName = args.consoleName
-        val console = viewModel.consoles.value?.find { it.name == consoleName }
+        val isNative = args.isNative
 
-        console?.let { currentConsole ->
-            val newNative = currentConsole.nativeGames.toMutableList()
-            val newAdapted = currentConsole.adaptedGames.toMutableList()
+        viewModel.addGameToConsole(consoleName, game, isNative)
 
-            if (args.isNative) newNative.add(game) else newAdapted.add(game)
+        // Feedback al usuario mediante la notificación Pop-up que creamos en MainActivity
+        (activity as? MainActivity)?.triggerNotification(
+            "Guardando Juego",
+            "Añadiendo ${game.title} a la colección de $consoleName"
+        )
 
-            val updateData = UpdateConsole(
-                nativeGames = newNative,
-                adaptedGames = newAdapted
-            )
-            viewModel.editConsole(currentConsole.name, updateData)
-            findNavController().popBackStack()
-        }
+        Toast.makeText(requireContext(), "Enviando al servidor...", Toast.LENGTH_SHORT).show()
+
+        // Regresamos a la pantalla de detalle
+        findNavController().popBackStack()
     }
 }

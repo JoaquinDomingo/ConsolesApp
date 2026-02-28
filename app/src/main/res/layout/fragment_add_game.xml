@@ -44,6 +44,34 @@
                 android:orientation="vertical"
                 android:padding="20dp">
 
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="16dp"
+                    app:cardCornerRadius="20dp"
+                    app:strokeColor="@color/azul_noche"
+                    app:strokeWidth="2dp">
+
+                    <ImageView
+                        android:id="@+id/ivGamePreview"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@android:drawable/ic_menu_gallery"
+                        app:tint="@color/azul_noche" />
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnSelectGameImage"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:text="Seleccionar Imagen"
+                    app:cornerRadius="18dp"
+                    app:strokeColor="@color/azul_noche" />
+
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
@@ -55,16 +83,14 @@
                     app:boxCornerRadiusTopEnd="18dp"
                     app:boxCornerRadiusBottomStart="18dp"
                     app:boxCornerRadiusBottomEnd="18dp"
-                    app:boxStrokeColor="@color/azul_noche"
-                    app:hintTextColor="@color/azul_noche">
+                    app:boxStrokeColor="@color/azul_noche">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etGameTitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textCapWords"
-                        android:textColor="@color/azul_noche"
-                        android:textSize="16sp" />
+                        android:textColor="@color/azul_noche" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -87,28 +113,6 @@
                         android:layout_height="wrap_content"
                         android:focusable="false"
                         android:clickable="true"
-                        android:textColor="@color/azul_noche" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:hint="URL de la portada (.jpg / .png)"
-                    app:startIconDrawable="@android:drawable/ic_menu_gallery"
-                    app:startIconTint="@color/azul_noche"
-                    app:boxCornerRadiusTopStart="18dp"
-                    app:boxCornerRadiusTopEnd="18dp"
-                    app:boxCornerRadiusBottomStart="18dp"
-                    app:boxCornerRadiusBottomEnd="18dp"
-                    app:boxStrokeColor="@color/azul_noche">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etGameImage"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="textUri"
                         android:textColor="@color/azul_noche" />
                 </com.google.android.material.textfield.TextInputLayout>
 

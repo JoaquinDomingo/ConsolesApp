@@ -22,22 +22,43 @@ import dagger.hilt.android.AndroidEntryPoint
 class NativeGamesFragment : Fragment(R.layout.fragment_native_games) {
 
     private lateinit var binding: FragmentNativeGamesBinding
-    // Usamos activityViewModels para asegurar que compartimos la misma instancia de datos
     private val viewModel: ConsoleViewModel by activityViewModels()
     private val args: NativeGamesFragmentArgs by navArgs()
 
-    private var allGames: List<Game> = emptyList()
-    private var gameAdapter: GameAdapter? = null
+    private val gameAdapter: GameAdapter by lazy {
+        GameAdapter(
+            list = emptyList(),
+            onClick = { position ->
+                val game = gameAdapter.getCurrentList()[position]
+                val action = NativeGamesFragmentDirections.actionNativeGamesFragmentToGameDetailFragment(
+                    args.consoleName, game.title, true
+                )
+                findNavController().navigate(action)
+            },
+            onDeleteClick = { position ->
+                val game = gameAdapter.getCurrentList()[position]
+                viewModel.consoles.value?.find { it.name == args.consoleName }?.let {
+                    showDeleteConfirmation(it, game)
+                }
+            }
+        )
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentNativeGamesBinding.bind(view)
 
-        setupRecyclerView()
+        binding.rvGames.apply {
+            layoutManager = GridLayoutManager(requireContext(), 3)
+            adapter = gameAdapter
+            // Evita que el parpadeo de animaciones por defecto interfiera
+            itemAnimator = null
+        }
+
+        setupObservers()
         setupSearch()
 
         binding.btnAddGameFloating.setOnClickListener {
-            // CORRECCIÓN: Pasamos consoleName (String)
             val action = NativeGamesFragmentDirections.actionNativeGamesFragmentToAddGameFragment(
                 args.consoleName, true
             )
@@ -45,50 +66,35 @@ class NativeGamesFragment : Fragment(R.layout.fragment_native_games) {
         }
     }
 
-    private fun setupRecyclerView() {
-        binding.rvGames.layoutManager = GridLayoutManager(requireContext(), 3)
-
+    private fun setupObservers() {
+        // Al volver del AddGameFragment, este observer DEBE recibir la lista con 11 juegos
         viewModel.consoles.observe(viewLifecycleOwner) { lista ->
-            // Búsqueda por nombre único
             val console = lista?.find { it.name == args.consoleName }
             console?.let { item ->
-                allGames = item.nativeGames
-
-                if (binding.etSearchGame.text.isNullOrEmpty()) {
-                    initOrUpdateAdapter(allGames, item)
-                }
+                android.util.Log.d("DEBUG_UI", "Fragment recibió ${item.nativeGames.size} juegos")
+                renderList(item.nativeGames)
             }
         }
     }
 
     private fun setupSearch() {
-        binding.etSearchGame.addTextChangedListener { editable ->
-            val query = editable.toString().lowercase().trim()
-            val filteredList = allGames.filter { it.title.lowercase().contains(query) }
-
-            // Buscamos la consola actual para refrescar el adaptador con la lista filtrada
-            val currentConsole = viewModel.consoles.value?.find { it.name == args.consoleName }
-            currentConsole?.let { initOrUpdateAdapter(filteredList, it) }
+        binding.etSearchGame.addTextChangedListener {
+            viewModel.consoles.value?.find { it.name == args.consoleName }?.let {
+                renderList(it.nativeGames)
+            }
         }
     }
 
-    private fun initOrUpdateAdapter(displayList: List<Game>, console: Console) {
-        gameAdapter = GameAdapter(
-            list = displayList,
-            onClick = { pos ->
-                // Obtenemos el título del juego seleccionado (String)
-                val gameSelected = displayList[pos]
-                val action = NativeGamesFragmentDirections.actionNativeGamesFragmentToGameDetailFragment(
-                    args.consoleName, gameSelected.title, true
-                )
-                findNavController().navigate(action)
-            },
-            onDeleteClick = { pos ->
-                // Pasamos el objeto juego directamente para evitar errores de índice al filtrar
-                showDeleteConfirmation(console, displayList[pos])
-            }
-        )
-        binding.rvGames.adapter = gameAdapter
+    private fun renderList(games: List<Game>) {
+        val query = binding.etSearchGame.text.toString().lowercase().trim()
+        val filteredList = if (query.isEmpty()) {
+            games
+        } else {
+            games.filter { it.title.lowercase().contains(query) }
+        }
+
+        // El DiffUtil dentro de updateList es el que hace la magia
+        gameAdapter.updateList(filteredList)
     }
 
     private fun showDeleteConfirmation(console: Console, game: Game) {
@@ -97,9 +103,7 @@ class NativeGamesFragment : Fragment(R.layout.fragment_native_games) {
             .setMessage("¿Estás seguro de que quieres eliminar \"${game.title}\"?")
             .setPositiveButton("ELIMINAR") { _, _ ->
                 val newList = console.nativeGames.toMutableList()
-                // Borramos por título para asegurar que borramos el correcto incluso si hay filtro
                 newList.removeAll { it.title == game.title }
-
                 val update = UpdateConsole(nativeGames = newList, adaptedGames = console.adaptedGames)
                 viewModel.editConsole(console.name, update)
             }

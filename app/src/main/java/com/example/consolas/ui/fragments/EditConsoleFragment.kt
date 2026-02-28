@@ -6,10 +6,11 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels // Cambiado a activityViewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
@@ -18,6 +19,7 @@ import com.example.consolas.databinding.FragmentEditConsoleBinding
 import com.example.consolas.domain.model.Console
 import com.example.consolas.domain.model.UpdateConsole
 import com.example.consolas.ui.viewmodels.ConsoleViewModel
+import com.example.consolas.ui.views.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 
@@ -61,8 +63,11 @@ class EditConsoleFragment : Fragment(R.layout.fragment_edit_console) {
         val nameToFind = args.consoleName
 
         viewModel.consoles.observe(viewLifecycleOwner) { lista ->
+            // Buscamos la consola en la lista reactiva de Room
             val console = lista?.find { it.name == nameToFind } ?: return@observe
-            if (originalConsole == null) { // Solo cargar la primera vez
+
+            // Si es la primera carga (originalConsole es null), rellenamos los campos
+            if (originalConsole == null) {
                 originalConsole = console
                 oldName = console.name
                 currentImageUriStr = console.image
@@ -73,7 +78,7 @@ class EditConsoleFragment : Fragment(R.layout.fragment_edit_console) {
                     etEditDate.setText(console.releasedate)
                     etPrice.setText(console.price.toString())
                     etEditDescription.setText(console.description)
-                    etEditImage.setText(console.image) // Mantenemos el campo por si acaso
+                    etEditImage.setText(console.image)
                     swFavorite.isChecked = console.favorite
 
                     Glide.with(this@EditConsoleFragment)
@@ -85,6 +90,11 @@ class EditConsoleFragment : Fragment(R.layout.fragment_edit_console) {
                     btnUpdateConsole.isEnabled = false
                     btnUpdateConsole.alpha = 0.5f
                 }
+            } else {
+                // IMPORTANTE: Si originalConsole ya existe, es que Room ha mandado una actualización.
+                // Actualizamos originalConsole para que checkChanges() compare con los datos nuevos.
+                originalConsole = console
+                checkChanges()
             }
         }
     }
@@ -101,12 +111,16 @@ class EditConsoleFragment : Fragment(R.layout.fragment_edit_console) {
     }
 
     private fun openCamera() {
-        val file = File.createTempFile("edit_${System.currentTimeMillis()}", ".jpg", requireContext().cacheDir).apply {
-            createNewFile()
-            deleteOnExit()
+        try {
+            val file = File.createTempFile("edit_${System.currentTimeMillis()}", ".jpg", requireContext().cacheDir).apply {
+                createNewFile()
+                deleteOnExit()
+            }
+            currentPhotoUri = FileProvider.getUriForFile(requireContext(), "${requireContext().packageName}.provider", file)
+            cameraLauncher.launch(currentPhotoUri)
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
-        currentPhotoUri = FileProvider.getUriForFile(requireContext(), "${requireContext().packageName}.provider", file)
-        cameraLauncher.launch(currentPhotoUri)
     }
 
     private fun setupListeners() {
@@ -122,7 +136,7 @@ class EditConsoleFragment : Fragment(R.layout.fragment_edit_console) {
             etEditDate.addTextChangedListener(watcher)
             etPrice.addTextChangedListener(watcher)
             etEditDescription.addTextChangedListener(watcher)
-            etEditImage.addTextChangedListener(watcher) // Por si editan la URL a mano
+            etEditImage.addTextChangedListener(watcher)
             swFavorite.setOnCheckedChangeListener { _, _ -> checkChanges() }
 
             btnUpdateConsole.setOnClickListener { saveChanges() }
@@ -138,7 +152,7 @@ class EditConsoleFragment : Fragment(R.layout.fragment_edit_console) {
                     binding.etEditCompany.text.toString() != original.company ||
                     binding.etEditDate.text.toString() != original.releasedate ||
                     binding.etEditDescription.text.toString() != original.description ||
-                    currentImageUriStr != original.image || // CAMBIO DETECTADO EN IMAGEN
+                    currentImageUriStr != original.image ||
                     currentPrice != original.price ||
                     binding.swFavorite.isChecked != original.favorite
 
@@ -148,7 +162,8 @@ class EditConsoleFragment : Fragment(R.layout.fragment_edit_console) {
 
     private fun saveChanges() {
         val newName = binding.etEditName.text.toString().trim()
-        val price = binding.etPrice.text.toString().replace(",", ".").toDoubleOrNull() ?: 0.0
+        val priceStr = binding.etPrice.text.toString().replace(",", ".")
+        val price = priceStr.toDoubleOrNull() ?: 0.0
 
         if (newName.isBlank()) {
             binding.etEditName.error = "El nombre es obligatorio"
@@ -166,6 +181,13 @@ class EditConsoleFragment : Fragment(R.layout.fragment_edit_console) {
         )
 
         viewModel.editConsole(oldName, updatedData)
+
+        (activity as? MainActivity)?.triggerNotification(
+            "Consola Modificada",
+            "Has actualizado correctamente los datos de: $newName"
+        )
+
+        Toast.makeText(requireContext(), "Cambios guardados", Toast.LENGTH_SHORT).show()
         findNavController().popBackStack()
     }
 }

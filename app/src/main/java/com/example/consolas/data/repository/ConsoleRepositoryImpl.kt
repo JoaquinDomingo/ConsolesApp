@@ -8,6 +8,7 @@ import com.example.consolas.data.model.toDomain
 import com.example.consolas.data.model.toRequest
 import com.example.consolas.data.service.ApiService
 import com.example.consolas.domain.model.Console
+import com.example.consolas.domain.model.Game
 import com.example.consolas.domain.model.UpdateConsole
 import com.example.consolas.domain.repository.ConsoleRepository
 import javax.inject.Inject
@@ -26,43 +27,32 @@ class ConsoleRepositoryImpl @Inject constructor(
             val response = api.getConsoles()
             if (response.isSuccessful) {
                 val remoteList = response.body()?.map { it.toDomain() } ?: emptyList()
-
                 if (remoteList.isNotEmpty()) {
-                    // AQUÍ ES DONDE OCURRE EL MILAGRO:
-                    // Guardamos las 10 de la API en Room
                     dao.upsertAll(remoteList.map { it.toEntity(email) })
-                    android.util.Log.d("DEBUG_API", "Sincronización exitosa: ${remoteList.size} consolas guardadas.")
                 }
                 remoteList
             } else {
                 dao.getListSync(email).map { it.toDomain() }
             }
         } catch (e: Exception) {
-            android.util.Log.e("DEBUG_API", "Sigue fallando la red: ${e.message}")
-            // Mientras falle, Room seguirá vacío si es la primera vez
             dao.getListSync(email).map { it.toDomain() }
         }
     }
 
     override suspend fun addConsole(console: Console) {
         val email = sessionManager.userEmail()
-        val entity = console.toEntity(email)
-        dao.upsertAll(listOf(entity))
-
-        android.util.Log.d("DEBUG_ROOM", "Consola guardada: ${entity.name} para el email: $email")
-    }
-
-    override suspend fun deleteConsole(consoleName: String) {
-        val email = sessionManager.userEmail()
         try {
-            api.deleteConsole(consoleName)
-        } catch (_: Exception) {}
-        dao.deleteByName(email, consoleName)
+            api.addConsole(console.toRequest())
+        } catch (e: Exception) {
+            android.util.Log.e("API_ERROR", "Error al añadir: ${e.message}")
+        }
+        dao.upsertAll(listOf(console.toEntity(email)))
     }
 
     override suspend fun editConsole(position: Int, console: Console) {
         val email = sessionManager.userEmail()
         try {
+            // Convertimos la consola actual a un UpdateConsole para el PATCH
             val update = UpdateConsole(
                 name = console.name,
                 releasedate = console.releasedate,
@@ -70,12 +60,12 @@ class ConsoleRepositoryImpl @Inject constructor(
                 description = console.description,
                 image = console.image,
                 price = console.price,
-                favorite = console.favorite,
-                nativeGames = console.nativeGames,
-                adaptedGames = console.adaptedGames
+                favorite = console.favorite
             )
             api.updateConsole(console.name, update)
-        } catch (_: Exception) {}
+        } catch (e: Exception) {
+            android.util.Log.e("API_ERROR", "Error en editConsole: ${e.message}")
+        }
         dao.upsertAll(listOf(console.toEntity(email)))
     }
 
@@ -85,9 +75,38 @@ class ConsoleRepositoryImpl @Inject constructor(
             val response = api.updateConsole(name, update)
             if (response.isSuccessful) {
                 val updated = response.body()?.toDomain()
-                updated?.let { dao.upsertAll(listOf(it.toEntity(email))) }
+                updated?.let {
+                    if (update.name != null && update.name != name) {
+                        dao.deleteByName(email, name)
+                    }
+                    dao.upsertAll(listOf(it.toEntity(email)))
+                }
                 updated
             } else null
-        } catch (_: Exception) { null }
+        } catch (e: Exception) {
+            null
+        }
+    }
+
+    suspend fun addGameToConsole(consoleName: String, game: Game, isNative: Boolean): Boolean {
+        return try {
+            val response = api.addGameToConsole(consoleName, isNative, game.toRequest())
+            if (response.isSuccessful) {
+                getConsoles()
+                true
+            } else {
+                false
+            }
+        } catch (e: Exception) {
+            false
+        }
+    }
+
+    override suspend fun deleteConsole(consoleName: String) {
+        val email = sessionManager.userEmail()
+        try {
+            api.deleteConsole(consoleName)
+        } catch (_: Exception) {}
+        dao.deleteByName(email, consoleName)
     }
 }
