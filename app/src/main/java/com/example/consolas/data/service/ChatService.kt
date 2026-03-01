@@ -12,7 +12,7 @@ class ChatService @Inject constructor(
     private val sessionManager: SessionManager
 ) {
     private var webSocket: WebSocket? = null
-    private val URL = "ws://192.168.1.29:8081/chat"
+    private val URL = "wss://https://prothalloid-unsceptically-spencer.ngrok-free.dev//chat"
 
     fun connect(onMessageReceived: (String) -> Unit) {
         val email = sessionManager.userEmail()
@@ -25,7 +25,7 @@ class ChatService @Inject constructor(
 
         webSocket = client.newWebSocket(request, object : WebSocketListener() {
             override fun onOpen(webSocket: WebSocket, response: Response) {
-                Log.d("CHAT", "✅ Conectado")
+                Log.d("CHAT", " Conectado")
             }
 
             override fun onMessage(webSocket: WebSocket, text: String) {
@@ -33,7 +33,7 @@ class ChatService @Inject constructor(
             }
 
             override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
-                Log.e("CHAT", "❌ Error: ${t.message}")
+                Log.e("CHAT", " Error: ${t.message}")
             }
         })
     }
