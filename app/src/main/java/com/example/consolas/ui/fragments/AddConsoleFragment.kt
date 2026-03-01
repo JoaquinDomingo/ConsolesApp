@@ -32,20 +32,13 @@ class AddConsoleFragment : Fragment(R.layout.fragment_add_console) {
     private var finalImageUriStr: String? = null
 
     private val permissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-        if (isGranted) {
-            openCamera()
-        } else {
-            Toast.makeText(requireContext(), "Permiso de cámara necesario", Toast.LENGTH_SHORT).show()
-        }
+        if (isGranted) openCamera() else Toast.makeText(requireContext(), "Permiso denegado", Toast.LENGTH_SHORT).show()
     }
 
     private val galleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         uri?.let {
             finalImageUriStr = it.toString()
-            binding.ivConsolePreview.apply {
-                setImageURI(it)
-                clearColorFilter()
-            }
+            binding.ivConsolePreview.apply { setImageURI(it); clearColorFilter() }
         }
     }
 
@@ -53,10 +46,7 @@ class AddConsoleFragment : Fragment(R.layout.fragment_add_console) {
         if (success) {
             currentPhotoUri?.let {
                 finalImageUriStr = it.toString()
-                binding.ivConsolePreview.apply {
-                    setImageURI(it)
-                    clearColorFilter()
-                }
+                binding.ivConsolePreview.apply { setImageURI(it); clearColorFilter() }
             }
         }
     }
@@ -66,12 +56,49 @@ class AddConsoleFragment : Fragment(R.layout.fragment_add_console) {
         binding = FragmentAddConsoleBinding.bind(view)
 
         setupDatePicker()
-        setupImageSelection()
+        //setupImageSelection()
         setupListeners()
+
+        // Observamos el éxito para navegar hacia atrás sin cancelar el Job
+        viewModel.addSuccess.observe(viewLifecycleOwner) { success ->
+            if (success) {
+                viewModel.resetAddSuccess()
+                findNavController().popBackStack()
+            }
+        }
     }
 
-    private fun setupImageSelection() {
-        binding.btnSelectImage.setOnClickListener {
+    private fun setupListeners() {
+        binding.btnSaveConsole.setOnClickListener {
+            val name = binding.etConsoleName.text.toString().trim()
+            val date = binding.etConsoleDate.text.toString().trim()
+            val company = binding.etConsoleCompany.text.toString().trim()
+            val priceStr = binding.etConsolePrice.text.toString().replace(",", ".")
+            val price = priceStr.toDoubleOrNull() ?: 0.0
+
+            val imageToSave = finalImageUriStr ?: "https://static.vecteezy.com/system/resources/previews/005/337/799/original/icon-image-not-found-free-vector.jpg"
+
+            if (name.isNotEmpty() && date.isNotEmpty() && company.isNotEmpty()) {
+                val newConsole = Console(
+                    name = name,
+                    releasedate = date,
+                    company = company,
+                    description = binding.etConsoleDesc.text.toString(),
+                    image = imageToSave,
+                    price = price,
+                    favorite = binding.swConsoleFavorite.isChecked,
+                    nativeGames = emptyList(),
+                    adaptedGames = emptyList(),
+                    userEmail = viewModel.getCurrentUserEmail()
+                )
+                // Solo disparamos la acción, el observador de arriba se encarga de cerrar la pantalla
+                viewModel.addConsole(newConsole)
+            } else {
+                Toast.makeText(requireContext(), "Nombre, Compañía y Fecha son obligatorios", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        binding.btnSelectConsoleImage.setOnClickListener {
             val options = arrayOf("Cámara", "Galería")
             AlertDialog.Builder(requireContext())
                 .setTitle("Seleccionar Imagen")
@@ -91,58 +118,20 @@ class AddConsoleFragment : Fragment(R.layout.fragment_add_console) {
 
     private fun openCamera() {
         try {
-            val directory = File(requireContext().cacheDir, "console_images")
-            if (!directory.exists()) directory.mkdirs()
-
+            val directory = File(requireContext().cacheDir, "console_images").apply { if (!exists()) mkdirs() }
             val file = File(directory, "console_${System.currentTimeMillis()}.jpg")
-
-            currentPhotoUri = FileProvider.getUriForFile(
-                requireContext(),
-                "${requireContext().packageName}.provider",
-                file
-            )
+            currentPhotoUri = FileProvider.getUriForFile(requireContext(), "${requireContext().packageName}.provider", file)
             cameraLauncher.launch(currentPhotoUri)
         } catch (e: Exception) {
-            Toast.makeText(requireContext(), "Error al preparar la cámara", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private fun setupListeners() {
-        binding.btnSave.setOnClickListener {
-            val name = binding.etName.text.toString().trim()
-            val date = binding.etDate.text.toString().trim()
-            val company = binding.etCompany.text.toString().trim()
-            val priceStr = binding.etPrice.text.toString().replace(",", ".")
-            val price = priceStr.toDoubleOrNull() ?: 0.0
-
-            val imageToSave = finalImageUriStr ?: "https://static.vecteezy.com/system/resources/previews/005/337/799/original/icon-image-not-found-free-vector.jpg"
-
-            if (name.isNotEmpty() && date.isNotEmpty() && company.isNotEmpty()) {
-                val newConsole = Console(
-                    name = name,
-                    releasedate = date,
-                    company = company,
-                    description = binding.etDescription.text.toString(),
-                    image = imageToSave,
-                    price = price,
-                    favorite = binding.swFavorite.isChecked,
-                    nativeGames = emptyList(),
-                    adaptedGames = emptyList(),
-                    userEmail = viewModel.getCurrentUserEmail() ?: ""
-                )
-                viewModel.addConsole(newConsole)
-                findNavController().popBackStack()
-            } else {
-                Toast.makeText(requireContext(), "Nombre, Compañía y Fecha son obligatorios", Toast.LENGTH_SHORT).show()
-            }
+            Toast.makeText(requireContext(), "Error de cámara", Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun setupDatePicker() {
-        binding.etDate.setOnClickListener {
+        binding.etConsoleDate.setOnClickListener {
             val calendar = Calendar.getInstance()
             DatePickerDialog(requireContext(), { _, y, m, d ->
-                binding.etDate.setText(String.format("%02d/%02d/%d", d, m + 1, y))
+                binding.etConsoleDate.setText(String.format("%02d/%02d/%d", d, m + 1, y))
             }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show()
         }
     }

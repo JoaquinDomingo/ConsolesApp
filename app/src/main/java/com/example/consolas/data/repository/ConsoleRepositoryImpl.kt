@@ -49,12 +49,24 @@ class ConsoleRepositoryImpl @Inject constructor(
 
     override suspend fun addConsole(console: Console) {
         try {
-            api.addConsole(console.toRequest())
+            // 1. Intentamos guardar en MariaDB
+            val response = api.addConsole(console.toRequest())
+
+            if (response.isSuccessful) {
+                android.util.Log.d("API_CHECK", "Guardado en MariaDB con éxito")
+                // 2. SOLO si la API responde OK, guardamos en Room
+                dao.upsertAll(listOf(console.toEntity(console.userEmail)))
+            } else {
+                // Si aquí sale 401, el servidor te ha rechazado
+                android.util.Log.e("API_CHECK", "Error servidor: ${response.code()} - ${response.errorBody()?.string()}")
+                throw Exception("Error en el servidor: ${response.code()}")
+            }
         } catch (e: Exception) {
             android.util.Log.e("API_ERROR", "Error al añadir: ${e.message}")
+            // IMPORTANTE: Lanzamos la excepción para que el UseCase y el ViewModel
+            // sepan que NO se ha guardado nada y puedan avisar al usuario.
+            throw e
         }
-        // CORRECCIÓN: Usamos el email que ya trae la consola (que es el tuyo al crearla)
-        dao.upsertAll(listOf(console.toEntity(console.userEmail)))
     }
 
     override suspend fun editConsole(position: Int, console: Console) {

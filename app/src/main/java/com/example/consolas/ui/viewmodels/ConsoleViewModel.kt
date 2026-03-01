@@ -62,12 +62,27 @@ class ConsoleViewModel @Inject constructor(
             }
         }
     }
-
+    private val _addSuccess = MutableLiveData<Boolean>()
+    val addSuccess: LiveData<Boolean> = _addSuccess
     fun addConsole(console: Console) {
         viewModelScope.launch {
-            addConsoleUseCase(console)
-            refreshFromApi()
+            _isLoading.value = true
+            try {
+                addConsoleUseCase(console)
+
+                refreshFromApi()
+                _addSuccess.postValue(true)
+            } catch (e: Exception) {
+                android.util.Log.e("API_CHECK", "Error al añadir: ${e.message}")
+                _addSuccess.postValue(false)
+            } finally {
+                _isLoading.value = false
+            }
         }
+    }
+
+    fun resetAddSuccess() {
+        _addSuccess.value = false
     }
 
     fun deleteConsole(name: String) {

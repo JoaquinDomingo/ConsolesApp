@@ -11,6 +11,7 @@ data class ConsoleRequest(
     @SerializedName("image") val image: String,
     @SerializedName("price") val price: Double,
     @SerializedName("favorite") val favorite: Boolean,
+    @SerializedName("user_email") val userEmail: String,
     @SerializedName("nativeGames") val nativeGames: List<ResponseGame> = emptyList(),
     @SerializedName("adaptedGames") val adaptedGames: List<ResponseGame> = emptyList()
 )
@@ -23,6 +24,7 @@ fun Console.toRequest(): ConsoleRequest = ConsoleRequest(
     image = image,
     price = price,
     favorite = favorite,
+    userEmail = userEmail,
     nativeGames = nativeGames.map { it.toResponse() },
     adaptedGames = adaptedGames.map { it.toResponse() }
 )
