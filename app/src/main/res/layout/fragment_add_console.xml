@@ -1,220 +1,233 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gris_fondo"
-    android:fillViewport="true">
+    android:background="@color/gris_fondo">
 
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="28dp">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="NUEVA CONSOLA"
-            android:textSize="32sp"
-            android:textStyle="bold"
-            android:textColor="@color/azul_noche"
-            android:letterSpacing="-0.03" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Registra una nueva plataforma en tu catálogo"
-            android:textSize="15sp"
-            android:textColor="@color/gris_texto_secundario"
-            android:alpha="0.8"
-            android:layout_marginBottom="36dp" />
-
-        <com.google.android.material.card.MaterialCardView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="28dp"
-            app:cardElevation="8dp"
-            app:strokeWidth="0dp">
+            android:orientation="vertical"
+            android:paddingBottom="100dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="220dp"
+                android:background="@color/azul_noche">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="40dp"
+                    android:text="NUEVA CONSOLA"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.2" />
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="-50dp">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cardPreview"
+                        android:layout_width="140dp"
+                        android:layout_height="140dp"
+                        app:cardCornerRadius="32dp"
+                        app:cardElevation="16dp"
+                        app:strokeColor="@color/white"
+                        app:strokeWidth="4dp">
+
+                        <ImageView
+                            android:id="@+id/ivConsolePreview"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="centerCrop"
+                            android:background="#FAFAFA"
+                            android:src="@android:drawable/ic_menu_gallery"
+                            app:tint="@color/azul_noche" />
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/btnSelectConsoleImage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@id/cardPreview"
+                        android:layout_alignEnd="@id/cardPreview"
+                        android:layout_marginEnd="-12dp"
+                        android:layout_marginBottom="-12dp"
+                        app:fabCustomSize="48dp"
+                        app:maxImageSize="24dp"
+                        app:srcCompat="@android:drawable/ic_menu_camera"
+                        app:backgroundTint="@color/white"
+                        app:tint="@color/azul_noche"
+                        app:elevation="18dp" />
+                </RelativeLayout>
+            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="70dp"
                 android:orientation="vertical"
-                android:padding="20dp">
+                android:paddingHorizontal="24dp">
 
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
-                    android:layout_gravity="center"
-                    android:layout_marginBottom="16dp"
-                    app:cardCornerRadius="20dp"
-                    app:strokeColor="@color/azul_noche"
-                    app:strokeWidth="2dp">
-
-                    <ImageView
-                        android:id="@+id/ivConsolePreview"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scaleType="centerCrop"
-                        android:src="@android:drawable/ic_menu_gallery"
-                        app:tint="@color/azul_noche" />
-                </com.google.android.material.card.MaterialCardView>
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnSelectConsoleImage"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:text="Foto de la Consola"
-                    app:cornerRadius="18dp"
-                    app:strokeColor="@color/azul_noche" />
+                    android:text="IDENTIFICACIÓN"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/gris_texto_secundario"
+                    android:layout_marginBottom="8dp"
+                    android:letterSpacing="0.1" />
 
                 <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Nombre (ej: Nintendo 64)"
                     app:startIconDrawable="@android:drawable/ic_menu_edit"
                     app:startIconTint="@color/azul_noche"
-                    app:boxCornerRadiusTopStart="18dp"
-                    app:boxCornerRadiusTopEnd="18dp"
-                    app:boxCornerRadiusBottomStart="18dp"
-                    app:boxCornerRadiusBottomEnd="18dp"
-                    app:boxStrokeColor="@color/azul_noche">
+                    android:hint="Nombre de la consola">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etConsoleName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textCapWords"
-                        android:textColor="@color/azul_noche" />
+                        android:inputType="textCapWords" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:hint="Compañía (ej: SEGA)"
+                    android:layout_marginTop="12dp"
                     app:startIconDrawable="@android:drawable/btn_star"
                     app:startIconTint="@color/azul_noche"
-                    app:boxCornerRadiusTopStart="18dp"
-                    app:boxCornerRadiusTopEnd="18dp"
-                    app:boxCornerRadiusBottomStart="18dp"
-                    app:boxCornerRadiusBottomEnd="18dp"
-                    app:boxStrokeColor="@color/azul_noche">
+                    android:hint="Compañía Fabricante">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etConsoleCompany"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textCapWords"
-                        android:textColor="@color/azul_noche" />
+                        android:inputType="textCapWords" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ESPECIFICACIONES"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/gris_texto_secundario"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginBottom="8dp"
+                    android:letterSpacing="0.1" />
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:hint="Fecha de salida"
-                    app:startIconDrawable="@android:drawable/ic_menu_my_calendar"
-                    app:startIconTint="@color/azul_noche"
-                    app:boxCornerRadiusTopStart="18dp"
-                    app:boxCornerRadiusTopEnd="18dp"
-                    app:boxCornerRadiusBottomStart="18dp"
-                    app:boxCornerRadiusBottomEnd="18dp"
-                    app:boxStrokeColor="@color/azul_noche">
+                    android:orientation="horizontal">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etConsoleDate"
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.2"
+                        android:layout_marginEnd="8dp"
+                        app:startIconDrawable="@android:drawable/ic_menu_my_calendar"
+                        android:hint="Lanzamiento">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etConsoleDate"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:focusable="false"
+                            android:clickable="true" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.8"
+                        app:startIconDrawable="@android:drawable/ic_menu_save"
+                        android:hint="Precio (€)">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etConsolePrice"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberDecimal" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="#E0E0E0">
+
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:focusable="false"
-                        android:clickable="true"
-                        android:textColor="@color/azul_noche" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:orientation="vertical"
+                        android:padding="16dp">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        <com.google.android.material.switchmaterial.SwitchMaterial
+                            android:id="@+id/swConsoleFavorite"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Añadir a Colección VIP"
+                            android:textStyle="bold"
+                            android:textColor="@color/azul_noche" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:hint="Historia y detalles">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etConsoleDesc"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:minLines="3"
+                                android:gravity="top"
+                                android:inputType="textMultiLine" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnSaveConsole"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:hint="Precio estimado (€)"
-                    app:startIconDrawable="@android:drawable/ic_menu_save"
-                    app:startIconTint="@color/azul_noche"
-                    app:boxCornerRadiusTopStart="18dp"
-                    app:boxCornerRadiusTopEnd="18dp"
-                    app:boxCornerRadiusBottomStart="18dp"
-                    app:boxCornerRadiusBottomEnd="18dp"
-                    app:boxStrokeColor="@color/azul_noche">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etConsolePrice"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="numberDecimal"
-                        android:textColor="@color/azul_noche" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.switchmaterial.SwitchMaterial
-                    android:id="@+id/swConsoleFavorite"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="Marcar como favorita"
-                    android:textColor="@color/azul_noche"
-                    android:textSize="16sp"
-                    app:useMaterialThemeColors="true" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:hint="Historia / Descripción"
-                    app:boxCornerRadiusTopStart="18dp"
-                    app:boxCornerRadiusTopEnd="18dp"
-                    app:boxCornerRadiusBottomStart="18dp"
-                    app:boxCornerRadiusBottomEnd="18dp"
-                    app:boxStrokeColor="@color/azul_noche">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etConsoleDesc"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="top"
-                        android:minLines="4"
-                        android:inputType="textMultiLine"
-                        android:textColor="@color/azul_noche" />
-                </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_height="64dp"
+                    android:layout_marginTop="32dp"
+                    android:text="GUARDAR PLATAFORMA"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.1"
+                    app:cornerRadius="16dp"
+                    android:backgroundTint="@color/azul_noche"
+                    app:elevation="8dp" />
 
             </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnSaveConsole"
-            android:layout_width="match_parent"
-            android:layout_height="72dp"
-            android:layout_marginTop="40dp"
-            android:text="GUARDAR CONSOLA"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:letterSpacing="0.08"
-            app:cornerRadius="24dp"
-            android:backgroundTint="@color/azul_noche"
-            app:elevation="12dp"
-            app:icon="@android:drawable/ic_input_add"
-            app:iconGravity="textStart"
-            app:iconPadding="12dp"
-            app:iconTint="@color/white" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="60dp" />
-
-    </LinearLayout>
-</androidx.core.widget.NestedScrollView>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

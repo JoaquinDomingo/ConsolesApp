@@ -8,9 +8,9 @@
     android:layout_marginHorizontal="16dp"
     android:layout_marginVertical="8dp"
     app:cardCornerRadius="24dp"
-    app:cardElevation="4dp"
+    app:cardElevation="3dp"
     app:strokeWidth="1dp"
-    app:strokeColor="#0D1A1C2E">
+    app:strokeColor="#F0F0F0">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -19,47 +19,53 @@
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cvImageContainer"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
             app:cardCornerRadius="18dp"
             app:cardElevation="0dp"
-            app:cardBackgroundColor="@color/gris_suave"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
-                android:id="@+id/ivConsole"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                tools:src="@android:drawable/ic_menu_gallery" />
-        </com.google.android.material.card.MaterialCardView>
+                android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/ivFavorite"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:src="@android:drawable/btn_star_big_on"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/azul_noche"
-            tools:visibility="visible" />
+                <ImageView
+                    android:id="@+id/ivConsole"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:background="#F8F9FA"
+                    tools:src="@android:drawable/ic_menu_gallery" />
+
+                <ImageView
+                    android:id="@+id/ivFavorite"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_gravity="top|end"
+                    android:layout_margin="8dp"
+                    android:background="@drawable/shape_circle_white_alpha"
+                    android:padding="5dp"
+                    android:src="@android:drawable/btn_star_big_on"
+                    android:visibility="gone"
+                    app:tint="#FFB300"
+                    tools:visibility="visible" />
+            </FrameLayout>
+        </com.google.android.material.card.MaterialCardView>
 
         <TextView
             android:id="@+id/tvConsoleName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginEnd="8dp"
             android:ellipsize="end"
-            android:letterSpacing="-0.02"
             android:maxLines="1"
             android:textColor="@color/azul_noche"
             android:textSize="18sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@+id/ivFavorite"
+            android:letterSpacing="-0.02"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/cvImageContainer"
             app:layout_constraintTop_toTopOf="@id/cvImageContainer"
             tools:text="PlayStation 5 Pro" />
@@ -68,61 +74,70 @@
             android:id="@+id/tvConsoleCompany"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:alpha="0.7"
+            android:layout_marginTop="2dp"
             android:textColor="@color/gris_texto_secundario"
-            android:textSize="14sp"
+            android:textSize="13sp"
+            android:alpha="0.8"
             app:layout_constraintEnd_toEndOf="@id/tvConsoleName"
             app:layout_constraintStart_toStartOf="@id/tvConsoleName"
             app:layout_constraintTop_toBottomOf="@id/tvConsoleName"
             tools:text="Sony Interactive Ent." />
+
+        <TextView
+            android:id="@+id/tvConsolePrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/shape_tag_price"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="4dp"
+            android:textColor="@color/azul_noche"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/tvConsoleName"
+            app:layout_constraintTop_toBottomOf="@id/tvConsoleCompany"
+            tools:text="799.99 €" />
 
         <LinearLayout
             android:id="@+id/llActions"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:gravity="center_vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
-            <ImageButton
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnEdit"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:alpha="0.8"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:padding="8dp"
-                android:scaleType="fitCenter"
-                android:src="@android:drawable/ic_menu_edit"
-                app:tint="@color/azul_noche" />
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                app:icon="@android:drawable/ic_menu_edit"
+                app:iconSize="20dp"
+                app:iconTint="@color/azul_noche"
+                app:backgroundTint="#F0F2F8"
+                app:elevation="0dp"
+                app:cornerRadius="12dp"
+                android:insetLeft="0dp"
+                android:insetTop="0dp"
+                android:insetRight="0dp"
+                android:insetBottom="0dp" />
 
-            <ImageButton
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnDelete"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="2dp"
-                android:alpha="0.8"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:padding="8dp"
-                android:scaleType="fitCenter"
-                android:src="@android:drawable/ic_menu_delete"
-                app:tint="@color/rojo_borrar" />
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:layout_marginStart="8dp"
+                app:icon="@android:drawable/ic_menu_delete"
+                app:iconSize="20dp"
+                app:iconTint="@color/rojo_borrar"
+                app:backgroundTint="#FDF2F2"
+                app:elevation="0dp"
+                app:cornerRadius="12dp"
+                android:insetLeft="0dp"
+                android:insetTop="0dp"
+                android:insetRight="0dp"
+                android:insetBottom="0dp" />
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/tvConsolePrice"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="8dp"
-            android:textColor="@color/azul_noche"
-            android:textSize="17sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@id/llActions"
-            app:layout_constraintEnd_toStartOf="@id/llActions"
-            app:layout_constraintStart_toStartOf="@id/tvConsoleName"
-            app:layout_constraintTop_toBottomOf="@id/tvConsoleCompany"
-            app:layout_constraintVertical_bias="1.0"
-            tools:text="799.99 €" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

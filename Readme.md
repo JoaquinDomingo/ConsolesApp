@@ -1,74 +1,76 @@
-#  Aplicación Consolas
+# 🎮 Proyecto Consolas: Arquitectura Profesional Android
 
-##  Resumen del Proyecto
+## 📝 Descripción Técnica
+Este proyecto es una aplicación nativa para Android desarrollada en **Kotlin** que implementa una solución de catálogo de hardware y mensajería instantánea. La aplicación destaca por su robustez técnica, utilizando un patrón **Offline-First** donde los datos se sincronizan entre una base de datos local (Room) y un servidor remoto (MariaDB) a través de una API REST y WebSockets.
 
-Esta aplicación es una aplicación móvil construida usando **Kotlin** para dispositivos **Android**.
+---
 
-En las versiones iniciales, proporcionará a los usuarios un **catálogo completo de consolas de videojuegos**, permitiéndoles navegar a través de varias consolas, ver información básica (que se ampliará con un menú desplegable en versiones posteriores) y **gestionar sus consolas favoritas**.
+## 🏗️ Estructura del Software (Clases y Responsabilidades)
 
-Además, los usuarios pueden **añadir nuevas consolas** al catálogo, asegurando que la aplicación se mantenga actualizada. En futuras versiones, los usuarios también podrán **editar y eliminar** consolas. Además, se añadirán las funciones para ver **juegos relacionados** con cada consola, ya sean juegos compatibles con la consola o juegos que se lanzaron para ella.
+El proyecto está organizado siguiendo los principios de **Clean Architecture** y **MVVM**:
 
-##  Características
+### 🔹 Capa de Datos (Data Layer)
+Gestión de persistencia y comunicación con el servidor.
 
-* Navegar por un catálogo de consolas de videojuegos.
-* Ver información detallada sobre cada consola.
-* **Añadir nuevas consolas** al catálogo.
-* **Gestionar una lista de consolas favoritas**.
-* **Futuras actualizaciones** incluirán edición y eliminación de consolas.
-* **Futuras actualizaciones** incluirán la visualización de juegos relacionados para cada consola.
-* Autenticación de usuario y gestión de perfiles (planeado para futuras versiones).
-* Funciones para compartir en redes sociales (planeado para futuras versiones).
+* **`ConsoleRepositoryImpl` & `MessageRepositoryImpl`**: Actúan como Single Source of Truth. Coordinan cuándo pedir datos a la API y cuándo guardarlos en la base de datos local.
+* **`MessageDao` & `ConsoleDao`**: Interfaces de Room que gestionan las consultas SQL, utilizando `OnConflictStrategy.IGNORE` para evitar duplicados.
+* **`ApiService`**: Definición de endpoints de Retrofit para el CRUD de consolas y el historial de chat.
+* **`ChatService`**: Gestión de la conexión **WebSocket (WSS)** para el chat en tiempo real.
+* **`SessionManager`**: Encapsula el acceso a `SharedPreferences` para gestionar el email y token del usuario de forma persistente.
 
-##  Tecnologías Utilizadas
+### 🔹 Capa de Dominio (Domain Layer)
+Contiene la lógica de negocio pura, independiente de librerías de Android.
 
-* **Kotlin**
-* **Android SDK**
-* **SQLite** para almacenamiento de datos local (aún no implementado).
-* **Firebase** para autenticación de usuario (planeado para futuras versiones).
-* **Arquitectura MVC** que se migrará a **MVVM** en futuras versiones.
-* `Activities` para diferentes pantallas y sus respectivos *layouts*.
-* `RecyclerView` para mostrar listas de consolas.
-* `Intents` para la navegación entre *activities* (aún no implementado).
+* **`Console` / `Message` / `Game`**: Modelos de datos (Data Classes) que representan las entidades del negocio.
+* **`AddNewConsoleUseCase`**: Interactor que valida y procesa la creación de una nueva consola sincronizando ambos repositorios.
+* **`Mappers.kt`**: Funciones de extensión para transformar objetos entre capas (Entity ↔ Domain ↔ DTO).
 
-## ️ Arquitectura
+### 🔹 Capa de Presentación (UI Layer)
+Implementación de la interfaz de usuario reactiva.
 
-La aplicación sigue el patrón de arquitectura **Modelo-Vista-Controlador (MVC)**, que separa la lógica de la aplicación en tres componentes interconectados:
+* **`ConsoleViewModel` & `MessagesViewModel`**: Gestionan el estado de la pantalla mediante `StateFlow`. Exponen la lógica de negocio a la vista y sobreviven a cambios de configuración.
+* **`MessageAdapter`**: Adaptador avanzado de RecyclerView que gestiona:
+    * **Alineación Dinámica**: Uso de `Gravity.START/END` para diferenciar mensajes enviados de recibidos.
+    * **Filtrado de Duplicados**: Uso de `distinctBy` para garantizar una interfaz limpia.
+* **`AddConsoleFragment`**: Gestión de formularios con validación, DatePickers y captura de imágenes mediante `ActivityResultLauncher`.
+* **`MensajesFragment`**: Interfaz de chat con scroll automático y observación de flujos de datos en tiempo real.
 
-* **Modelo (Model):**
-    * Representa los datos y la lógica de negocio.
-    * Incluye clases que definen la estructura de una consola de videojuegos y manejan las operaciones de datos.
-    * La clase `Console` se encuentra en el paquete 'model'.
+---
 
-* **Vista (View):**
-    * Representa la interfaz de usuario de la aplicación.
-    * Es responsable de mostrar datos al usuario y capturar la entrada del usuario.
-    * Consiste en archivos *layout* XML que definen los componentes de la UI para diferentes pantallas.
-    * Se utiliza `RecyclerView` para mostrar listas de consolas.
-    * (En futuras versiones, la Vista incluirá componentes de UI para autenticación y perfiles).
+## 🛠️ Stack Tecnológico Detallado
 
-* **Controlador (Controller):**
-    * Actúa como un intermediario entre el Modelo y la Vista.
-    * Maneja la entrada del usuario, actualiza el Modelo y refresca la Vista.
-    * Incluye `Activities` que gestionan las interacciones. La `MainActivity` es responsable de mostrar la lista de consolas.
+| Herramienta | Implementación |
+| :--- | :--- |
+| **Inyección de Dependencias** | **Hilt (Dagger)** para proveer instancias de DAOs, Clientes API y Repositorios. |
+| **Networking** | **Retrofit 2** para REST y **OkHttp 3** con interceptores para Ngrok. |
+| **Real-time** | **WebSockets** sobre protocolos seguros (`wss://`). |
+| **Base de Datos** | **Room Persistence Library** con soporte para consultas asíncronas vía `Flow`. |
+| **Concurrencia** | **Kotlin Coroutines** (scopes de ViewModel y Repository) para evitar bloqueos en el hilo principal. |
+| **Navegación** | **Jetpack Navigation Component** con `SafeArgs` para paso de datos entre fragmentos. |
 
-* **Adaptadores (Adapters):**
-    * La aplicación utiliza `Adapters` para vincular datos del Modelo a los componentes de la Vista, particularmente para mostrar listas en `RecyclerViews`.
-    * El `ConsoleAdapter` es responsable de poblar el `RecyclerView` con datos de la consola.
-    * `ViewHConsole` se utiliza para contener las vistas de cada elemento de consola en el `RecyclerView`.
+---
 
-##  Futuras Mejoras
+## 🚀 Configuración y Despliegue
 
-* Implementar autenticación de usuario y gestión de perfiles usando **Firebase**.
-* Añadir funcionalidad para **editar y eliminar** consolas del catálogo.
-* Integrar un servicio *backend* para obtener datos de consolas y juegos relacionados.
-* Migrar de **MVC a MVVM** para una mejor separación de preocupaciones y facilitar las pruebas.
+### 📡 Conexión con el Servidor (Ngrok)
+Para permitir que la aplicación se comunique con un servidor local desde cualquier red, se utiliza un túnel de **Ngrok**:
 
-##  Autor
+1.  Ejecutar el túnel: `ngrok http 8081`.
+2.  Configurar el `NetworkModule`: Actualizar la constante `BASE_URL` con la URL HTTPS de Ngrok.
+3.  Configurar el `ChatService`: Asegurar el uso del prefijo `wss://` para el WebSocket.
+4.  **Header Especial**: Se incluye automáticamente el header `"ngrok-skip-browser-warning": "true"` en todas las peticiones para evitar bloqueos del proxy.
 
-* **Joaquin Domingo Domingo**
-* **Email:** dojoaquindo@gmail.com
-* **GitHub:** [JoaquinDomingo]
+### 💾 Persistencia e Integridad
+Para evitar duplicados en el chat y la colección, se ha implementado:
+* **Índices Únicos** en Room basados en la combinación de `sender + text + timestamp`.
+* **Normalización de Tiempo**: Redondeo de milisegundos en el cliente para asegurar que el ID de sincronización coincida entre el socket y la base de datos.
 
-## Otra Información
+---
 
-> Este proyecto es un proyecto educativo y no está destinado a uso comercial. Se está desarrollando para mejorar mis habilidades en el desarrollo de Android usando Kotlin para un proyecto de clase.
+## 👤 Autor
+**Joaquín Domingo Domingo**
+* 📧 [dojoaquindo@gmail.com](mailto:dojoaquindo@gmail.com)
+* 🐙 [GitHub: JoaquinDomingo](https://github.com/JoaquinDomingo)
+
+---
+> *Este proyecto demuestra el dominio de patrones de diseño modernos, arquitectura limpia y manejo de comunicaciones complejas en el ecosistema Android.*

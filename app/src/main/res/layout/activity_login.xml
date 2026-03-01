@@ -14,20 +14,20 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:padding="32dp">
+        android:padding="24dp">
 
         <com.google.android.material.card.MaterialCardView
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_marginTop="56dp"
-            app:cardCornerRadius="36dp"
-            app:cardElevation="14dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="48dp"
+            app:cardCornerRadius="30dp"
+            app:cardElevation="12dp"
             app:strokeWidth="0dp">
 
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="26dp"
+                android:padding="20dp"
                 android:scaleType="centerInside"
                 android:src="@drawable/images"
                 android:background="@color/white" />
@@ -36,110 +36,130 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="36dp"
-            android:text="Bienvenido"
+            android:layout_marginTop="32dp"
+            android:text="¡Hola de nuevo!"
             android:textStyle="bold"
             android:textColor="@color/azul_noche"
-            android:textSize="36sp"
-            android:letterSpacing="-0.04" />
+            android:textSize="32sp"
+            android:letterSpacing="-0.02" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Inicia sesión para continuar"
+            android:text="Inicia sesión para gestionar tus consolas"
             android:textColor="@color/gris_texto_secundario"
-            android:textSize="16sp"
-            android:alpha="0.7"
-            android:layout_marginBottom="48dp" />
+            android:textSize="15sp"
+            android:alpha="0.8"
+            android:layout_marginBottom="40dp" />
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="28dp"
-            app:cardElevation="6dp"
-            app:strokeColor="#151A1C2E"
+            app:cardCornerRadius="24dp"
+            app:cardElevation="4dp"
+            app:strokeColor="#E0E0E0"
             app:strokeWidth="1dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingVertical="6dp">
+                android:padding="12dp">
 
-                <EditText
-                    android:id="@+id/etUser"
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
-                    android:layout_height="68dp"
-                    android:background="@android:color/transparent"
-                    android:drawableStart="@android:drawable/ic_menu_edit"
-                    android:drawablePadding="18dp"
-                    android:drawableTint="@color/azul_noche"
+                    android:layout_height="wrap_content"
                     android:hint="Nombre de usuario"
-                    android:paddingHorizontal="24dp"
-                    android:textColor="@color/azul_noche"
-                    android:textSize="16sp"
-                    android:inputType="textPersonName" />
+                    app:startIconDrawable="@android:drawable/ic_menu_edit"
+                    app:startIconTint="@color/azul_noche"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                    app:boxStrokeWidth="0dp"
+                    app:boxStrokeWidthFocused="0dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etUser"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPersonName"
+                        android:paddingVertical="18dp"
+                        android:textSize="16sp" />
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="1.5dp"
-                    android:layout_marginHorizontal="24dp"
-                    android:background="@color/gris_fondo" />
+                    android:layout_height="1dp"
+                    android:layout_marginHorizontal="16dp"
+                    android:background="#F0F0F0" />
 
-                <EditText
-                    android:id="@+id/etEmail"
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
-                    android:layout_height="68dp"
-                    android:background="@android:color/transparent"
-                    android:drawableStart="@android:drawable/ic_dialog_email"
-                    android:drawablePadding="18dp"
-                    android:drawableTint="@color/azul_noche"
+                    android:layout_height="wrap_content"
                     android:hint="Correo electrónico"
-                    android:inputType="textEmailAddress"
-                    android:paddingHorizontal="24dp"
-                    android:textColor="@color/azul_noche"
-                    android:textSize="16sp" />
+                    app:startIconDrawable="@android:drawable/ic_dialog_email"
+                    app:startIconTint="@color/azul_noche"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                    app:boxStrokeWidth="0dp"
+                    app:boxStrokeWidthFocused="0dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textEmailAddress"
+                        android:paddingVertical="18dp"
+                        android:textSize="16sp" />
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="1.5dp"
-                    android:layout_marginHorizontal="24dp"
-                    android:background="@color/gris_fondo" />
+                    android:layout_height="1dp"
+                    android:layout_marginHorizontal="16dp"
+                    android:background="#F0F0F0" />
 
-                <EditText
-                    android:id="@+id/etPassword"
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
-                    android:layout_height="68dp"
-                    android:background="@android:color/transparent"
-                    android:drawableStart="@android:drawable/ic_lock_idle_lock"
-                    android:drawablePadding="18dp"
-                    android:drawableTint="@color/azul_noche"
+                    android:layout_height="wrap_content"
                     android:hint="Contraseña"
-                    android:inputType="textPassword"
-                    android:paddingHorizontal="24dp"
-                    android:textColor="@color/azul_noche"
-                    android:textSize="16sp" />
+                    app:startIconDrawable="@android:drawable/ic_lock_idle_lock"
+                    app:startIconTint="@color/azul_noche"
+                    app:passwordToggleEnabled="true"
+                    app:passwordToggleTint="@color/gris_texto_secundario"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                    app:boxStrokeWidth="0dp"
+                    app:boxStrokeWidthFocused="0dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPassword"
+                        android:paddingVertical="18dp"
+                        android:textSize="16sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnLogin"
             android:layout_width="match_parent"
-            android:layout_height="72dp"
-            android:layout_marginTop="44dp"
-            android:text="INGRESAR"
-            android:textSize="17sp"
+            android:layout_height="64dp"
+            android:layout_marginTop="40dp"
+            android:text="INGRESAR AHORA"
+            android:textSize="16sp"
             android:textStyle="bold"
+            app:icon="@android:drawable/ic_media_play"
+            app:iconGravity="textStart"
+            app:iconPadding="12dp"
             android:textColor="@color/white"
             app:backgroundTint="@color/azul_noche"
-            app:cornerRadius="24dp"
-            app:elevation="10dp"
-            android:letterSpacing="0.1" />
+            app:cornerRadius="20dp"
+            app:elevation="8dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="36dp"
+            android:layout_marginTop="24dp"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -148,27 +168,26 @@
                 style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="¿No tienes cuenta? Regístrate"
+                android:text="¿Eres nuevo? Crea una cuenta"
                 android:textColor="@color/azul_noche"
                 android:textAllCaps="false"
-                android:textStyle="bold"
-                android:textSize="15sp" />
+                android:textStyle="bold" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnRecover"
                 style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Olvidé mi contraseña"
+                android:text="Olvidé mis credenciales"
                 android:textColor="@color/gris_texto_secundario"
                 android:textAllCaps="false"
-                android:textSize="14sp"
-                android:alpha="0.6" />
+                android:textSize="13sp"
+                android:alpha="0.7" />
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="60dp" />
+            android:layout_height="40dp" />
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

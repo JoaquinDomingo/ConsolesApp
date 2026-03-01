@@ -1,263 +1,247 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gris_fondo"
-    android:fillViewport="true">
+    android:background="@color/white">
 
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="28dp">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-        <com.google.android.material.card.MaterialCardView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="320dp"
-            android:layout_marginBottom="32dp"
-            app:cardCornerRadius="32dp"
-            app:cardElevation="12dp"
-            app:strokeWidth="0dp">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/tvDetailImage"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/gris_suave"
-                android:scaleType="centerCrop"
-                tools:src="@android:drawable/ic_menu_gallery" />
-        </com.google.android.material.card.MaterialCardView>
+                android:layout_height="380dp">
 
-        <TextView
-            android:id="@+id/tvDetailName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:letterSpacing="-0.04"
-            android:textColor="@color/azul_noche"
-            android:textSize="38sp"
-            tools:text="Nintendo Switch" />
+                <ImageView
+                    android:id="@+id/tvDetailImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:background="@color/gris_suave"
+                    tools:src="@android:drawable/ic_menu_gallery" />
 
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            app:cardBackgroundColor="@color/white"
-            app:cardCornerRadius="24dp"
-            app:cardElevation="4dp"
-            app:strokeColor="#101A1C2E"
-            app:strokeWidth="1dp">
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_alignParentBottom="true"
+                    android:background="@android:drawable/screen_background_dark_transparent"
+                    android:alpha="0.8" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:orientation="vertical"
+                    android:padding="24dp">
+
+                    <TextView
+                        android:id="@+id/tvDetailName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:textSize="34sp"
+                        android:textStyle="bold"
+                        android:letterSpacing="-0.02"
+                        tools:text="Nintendo Switch" />
+
+                    <TextView
+                        android:id="@+id/tvDetailCompany"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"
+                        android:alpha="0.9"
+                        tools:text="NINTENDO ENTERTAINMENT" />
+                </LinearLayout>
+            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="20dp">
+                android:paddingHorizontal="24dp"
+                android:paddingTop="24dp"
+                android:paddingBottom="40dp"
+                android:background="@drawable/shape_top_rounded_corners"> <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:baselineAligned="false">
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@android:drawable/ic_menu_agenda"
-                        app:tint="@color/azul_noche" />
-
+                    android:layout_weight="1"
+                    android:orientation="vertical">
                     <TextView
-                        android:id="@+id/tvDetailCompany"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:textStyle="bold"
+                        android:text="LANZAMIENTO"
+                        android:textSize="11sp"
+                        android:letterSpacing="0.1"
+                        android:textColor="@color/gris_texto_secundario" />
+                    <TextView
+                        android:id="@+id/tvDetailDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:textColor="@color/azul_noche"
-                        android:textSize="19sp"
-                        tools:text="Nintendo" />
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        tools:text="Marzo 2017" />
                 </LinearLayout>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginVertical="16dp"
-                    android:background="@color/gris_fondo" />
-
                 <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="VALOR ESTIMADO"
+                        android:textSize="11sp"
+                        android:letterSpacing="0.1"
+                        android:textColor="@color/gris_texto_secundario" />
+                    <TextView
+                        android:id="@+id/tvDetailPrice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/azul_noche"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        tools:text="299.99 €" />
+                </LinearLayout>
+            </LinearLayout>
+
+                <com.google.android.material.divider.MaterialDivider
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:layout_marginVertical="24dp"
+                    app:dividerColor="#F0F0F0" />
 
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@android:drawable/ic_menu_my_calendar"
-                        app:tint="@color/gris_texto_secundario" />
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="0dp"
+                    app:strokeColor="#F0F0F0"
+                    app:strokeWidth="1dp"
+                    app:cardBackgroundColor="#FAFAFA">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:orientation="vertical">
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="16dp">
 
-                        <TextView
-                            android:id="@+id/tvDetailDate"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/gris_texto_secundario"
-                            android:textSize="15sp"
-                            android:alpha="0.8"
-                            tools:text="Lanzado en 2017" />
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:src="@android:drawable/ic_menu_myplaces"
+                            android:padding="10dp"
+                            android:background="@color/azul_noche"
+                            app:tint="@color/white"
+                            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full" />
 
-                        <TextView
-                            android:id="@+id/tvDetailPrice"
-                            android:layout_width="wrap_content"
+                        <LinearLayout
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:textStyle="bold"
-                            android:textColor="@color/azul_noche"
-                            android:textSize="18sp"
-                            tools:text="Precio: 299.99 €" />
+                            android:layout_marginStart="16dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Registrada por"
+                                android:textSize="12sp"
+                                android:textColor="@color/gris_texto_secundario" />
+                            <TextView
+                                android:id="@+id/tvDetailUser"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/azul_noche"
+                                android:textStyle="bold"
+                                tools:text="Joaquín Domingo" />
+                        </LinearLayout>
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnContactOwner"
+                            style="@style/Widget.Material3.Button.IconButton.Filled.Tonal"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            app:icon="@android:drawable/stat_notify_chat"
+                            app:iconTint="@color/azul_noche" />
                     </LinearLayout>
-                </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:text="HISTORIA Y ESPECIFICACIONES"
+                    android:textSize="12sp"
+                    android:letterSpacing="0.1"
+                    android:textStyle="bold"
+                    android:textColor="@color/gris_texto_secundario" />
+
+                <TextView
+                    android:id="@+id/tvDetailDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:lineSpacingExtra="6dp"
+                    android:textColor="#444444"
+                    android:textSize="16sp"
+                    tools:text="La Nintendo Switch es la consola que revolucionó el mercado híbrido..." />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnFavorite"
+                    style="@style/Widget.Material3.Button.TonalButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_marginTop="40dp"
+                    android:text="Añadir a Favoritos"
+                    app:icon="@android:drawable/btn_star_big_off"
+                    app:iconTint="@color/azul_noche"
+                    app:cornerRadius="16dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnGoToNative"
+                    android:layout_width="match_parent"
+                    android:layout_height="64dp"
+                    android:layout_marginTop="12dp"
+                    android:backgroundTint="@color/azul_noche"
+                    android:text="CATÁLOGO NATIVO"
+                    android:textStyle="bold"
+                    app:cornerRadius="16dp"
+                    app:icon="@android:drawable/ic_menu_view" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnGoToAdapted"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="64dp"
+                    android:layout_marginTop="12dp"
+                    android:text="JUEGOS ADAPTADOS"
+                    android:textColor="@color/azul_noche"
+                    app:strokeColor="@color/azul_noche"
+                    app:cornerRadius="16dp"
+                    app:icon="@android:drawable/ic_menu_share"
+                    app:iconTint="@color/azul_noche" />
+
             </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:letterSpacing="0.15"
-            android:text="PROPIETARIO"
-            android:textColor="@color/azul_noche"
-            android:textSize="13sp"
-            android:textStyle="bold"
-            android:alpha="0.6" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:padding="4dp">
-
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@android:drawable/ic_menu_myplaces"
-                app:tint="@color/azul_noche" />
-
-            <TextView
-                android:id="@+id/tvDetailUser"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_weight="1"
-                android:textColor="@color/azul_noche"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                tools:text="usuario@ejemplo.com" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnContactOwner"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="MENSAJE"
-                android:textColor="@color/azul_noche"
-                app:icon="@android:drawable/stat_notify_chat"
-                app:iconTint="@color/azul_noche" />
         </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:letterSpacing="0.15"
-            android:text="HISTORIA Y DETALLES"
-            android:textColor="@color/azul_noche"
-            android:textSize="13sp"
-            android:textStyle="bold"
-            android:alpha="0.6" />
-
-        <TextView
-            android:id="@+id/tvDetailDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:lineSpacingExtra="8dp"
-            android:textColor="@color/gris_texto_secundario"
-            android:textSize="18sp"
-            tools:text="Consola híbrida de gran éxito..." />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="48dp"
-            android:letterSpacing="0.15"
-            android:text="EXPLORAR CONTENIDO"
-            android:textColor="@color/azul_noche"
-            android:textSize="13sp"
-            android:textStyle="bold"
-            android:alpha="0.6" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnFavorite"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginTop="16dp"
-            android:text="Añadir a mis favoritos"
-            android:textStyle="bold"
-            android:textColor="@color/azul_noche"
-            app:cornerRadius="20dp"
-            app:strokeColor="@color/azul_noche"
-            app:strokeWidth="1dp"
-            app:icon="@android:drawable/btn_star_big_off"
-            app:iconTint="@color/azul_noche"
-            app:iconGravity="textStart" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnGoToNative"
-            android:layout_width="match_parent"
-            android:layout_height="72dp"
-            android:layout_marginTop="16dp"
-            android:backgroundTint="@color/azul_noche"
-            android:text="VER JUEGOS NATIVOS"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:cornerRadius="24dp"
-            app:elevation="8dp"
-            app:icon="@android:drawable/ic_menu_view"
-            app:iconSize="24dp"
-            app:iconPadding="12dp"
-            app:iconGravity="textStart" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnGoToAdapted"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="match_parent"
-            android:layout_height="72dp"
-            android:layout_marginTop="16dp"
-            android:text="BIBLIOTECA ADAPTADA"
-            android:textColor="@color/azul_noche"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:cornerRadius="24dp"
-            app:strokeColor="@color/azul_noche"
-            app:strokeWidth="2dp"
-            app:icon="@android:drawable/ic_menu_share"
-            app:iconPadding="12dp"
-            app:iconTint="@color/azul_noche"
-            app:iconGravity="textStart" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="60dp" />
-
-    </LinearLayout>
-</androidx.core.widget.NestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

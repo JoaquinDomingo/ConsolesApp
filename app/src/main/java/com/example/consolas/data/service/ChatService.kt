@@ -12,7 +12,7 @@ class ChatService @Inject constructor(
     private val sessionManager: SessionManager
 ) {
     private var webSocket: WebSocket? = null
-    private val URL = "wss://https://prothalloid-unsceptically-spencer.ngrok-free.dev//chat"
+    private val URL = "ws://http://192.168.1.29:8081/chat"
 
     fun connect(onMessageReceived: (String) -> Unit) {
         val email = sessionManager.userEmail()

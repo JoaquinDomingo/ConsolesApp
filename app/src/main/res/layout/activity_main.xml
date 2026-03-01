@@ -9,69 +9,75 @@
     android:fitsSystemWindows="true"
     tools:context=".ui.views.MainActivity">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="@color/gris_fondo">
+        android:background="@color/azul_noche">
 
-        <androidx.appcompat.widget.Toolbar
+        <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="64dp"
-            android:background="@color/azul_noche"
-            android:elevation="10dp"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@android:color/transparent"
+            app:titleCentered="true"
+            app:titleTextAppearance="@style/TextAppearance.Material3.TitleLarge"
             app:titleTextColor="@color/white"
-            app:contentInsetStartWithNavigation="0dp"
-            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+            app:navigationIconTint="@color/white"
+            android:elevation="0dp" />
 
-        <View
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/white"
-            android:alpha="0.08" />
+            android:layout_height="match_parent"
+            android:layout_below="@id/toolbar"
+            android:layout_above="@id/bottomNav"
+            app:cardCornerRadius="32dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="@color/gris_fondo"
+            app:strokeWidth="0dp">
 
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/nav_host_fragment"
-            android:name="androidx.navigation.fragment.NavHostFragment"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            app:defaultNavHost="true"
-            app:navGraph="@navigation/nav_graph" />
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/nav_host_fragment"
+                android:name="androidx.navigation.fragment.NavHostFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:defaultNavHost="true"
+                app:navGraph="@navigation/nav_graph" />
+
+        </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNav"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="72dp"
+            android:layout_alignParentBottom="true"
             android:background="@color/white"
-            app:elevation="24dp"
+            app:elevation="20dp"
             app:itemIconSize="26dp"
-            app:itemRippleColor="#151A1C2E"
             app:itemActiveIndicatorStyle="@style/Widget.Material3.BottomNavigationView.ActiveIndicator"
             app:itemIconTint="@color/azul_noche"
             app:itemTextColor="@color/azul_noche"
-            app:labelVisibilityMode="labeled"
+            app:labelVisibilityMode="selected"
             app:menu="@menu/bottom_menu" />
-    </LinearLayout>
+
+    </RelativeLayout>
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigationView"
-        android:layout_width="320dp"
+        android:layout_width="300dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:background="@color/white"
         app:headerLayout="@layout/nav_header"
         app:menu="@menu/drawer_menu"
-        app:itemShapeFillColor="#151A1C2E"
-        app:itemShapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Large"
+        app:itemShapeFillColor="#F4F6FA"
+        app:itemShapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
         app:itemIconTint="@color/azul_noche"
         app:itemTextColor="@color/azul_noche"
         app:itemHorizontalPadding="20dp"
-        app:itemIconPadding="18dp"
-        app:itemVerticalPadding="12dp"
+        app:itemVerticalPadding="14dp"
+        app:itemIconPadding="20dp"
         app:itemTextAppearanceActive="?attr/textAppearanceSubtitle1"
-        app:subheaderColor="@color/gris_texto_secundario" />
+        app:subheaderColor="@color/gris_texto_secundario"
+        app:insetForeground="@android:color/transparent" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

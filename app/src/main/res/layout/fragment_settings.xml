@@ -11,91 +11,109 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="28dp">
+        android:padding="24dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Ajustes"
             android:textColor="@color/azul_noche"
-            android:textSize="38sp"
+            android:textSize="34sp"
             android:textStyle="bold"
             android:letterSpacing="-0.04"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="36dp"/>
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="40dp"
+            android:layout_marginStart="8dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="SISTEMA"
-            android:textSize="13sp"
+            android:text="CONFIGURACIÓN DE SISTEMA"
+            android:textSize="11sp"
             android:textColor="@color/azul_noche"
             android:textStyle="bold"
             android:letterSpacing="0.15"
-            android:alpha="0.6"
+            android:alpha="0.5"
             android:layout_marginBottom="12dp"
-            android:layout_marginStart="12dp"/>
+            android:layout_marginStart="16dp"/>
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="28dp"
-            app:cardElevation="6dp"
-            android:layout_marginBottom="36dp"
-            app:cardBackgroundColor="@color/white"
-            app:strokeColor="#101A1C2E"
-            app:strokeWidth="1dp">
+            android:layout_marginBottom="32dp"
+            app:cardCornerRadius="24dp"
+            app:cardElevation="2dp"
+            app:strokeWidth="0dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingVertical="8dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="80dp"
+                    android:layout_height="72dp"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
-                    android:paddingHorizontal="24dp">
+                    android:paddingHorizontal="20dp">
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:padding="10dp"
+                        android:src="@android:drawable/ic_popup_reminder"
+                        android:background="#F0F2F8"
+                        app:tint="@color/azul_noche"
+                        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Small" />
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:layout_marginStart="16dp"
                         android:text="Notificaciones"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="@color/azul_noche"/>
 
-                    <CheckBox
+                    <com.google.android.material.switchmaterial.SwitchMaterial
                         android:id="@+id/checkNotifications"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:buttonTint="@color/azul_noche"
                         android:checked="true"
-                        android:scaleX="1.1"
-                        android:scaleY="1.1"/>
+                        app:thumbTint="@color/azul_noche" />
                 </LinearLayout>
 
-                <View
+                <com.google.android.material.divider.MaterialDivider
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginHorizontal="24dp"
-                    android:background="@color/gris_fondo" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    app:dividerColor="#F5F5F5" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="80dp"
+                    android:layout_height="72dp"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
-                    android:paddingHorizontal="24dp">
+                    android:paddingHorizontal="20dp">
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:padding="10dp"
+                        android:src="@android:drawable/ic_menu_month"
+                        android:background="#F0F2F8"
+                        app:tint="@color/azul_noche"
+                        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Small" />
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:layout_marginStart="16dp"
                         android:text="Modo oscuro"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="@color/azul_noche"/>
 
@@ -103,10 +121,7 @@
                         android:id="@+id/switchDarkMode"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:thumbTint="@color/azul_noche"
-                        app:trackTint="@color/gris_suave"
-                        android:scaleX="1.1"
-                        android:scaleY="1.1"/>
+                        app:thumbTint="@color/azul_noche" />
                 </LinearLayout>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -114,75 +129,116 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="SEGURIDAD Y SOPORTE"
-            android:textSize="13sp"
+            android:text="SEGURIDAD Y PRIVACIDAD"
+            android:textSize="11sp"
             android:textColor="@color/azul_noche"
             android:textStyle="bold"
             android:letterSpacing="0.15"
-            android:alpha="0.6"
+            android:alpha="0.5"
             android:layout_marginBottom="12dp"
-            android:layout_marginStart="12dp"/>
+            android:layout_marginStart="16dp"/>
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="28dp"
-            app:cardElevation="6dp"
-            app:cardBackgroundColor="@color/white"
-            app:strokeColor="#101A1C2E"
-            app:strokeWidth="1dp">
+            app:cardCornerRadius="24dp"
+            app:cardElevation="2dp"
+            app:strokeWidth="0dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingVertical="8dp">
 
-                <TextView
+                <LinearLayout
                     android:id="@+id/btnChangePassword"
                     android:layout_width="match_parent"
-                    android:layout_height="80dp"
+                    android:layout_height="72dp"
+                    android:orientation="horizontal"
                     android:gravity="center_vertical"
-                    android:paddingHorizontal="24dp"
-                    android:text="Cambiar contraseña"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/azul_noche"
+                    android:paddingHorizontal="20dp"
                     android:background="?attr/selectableItemBackground"
                     android:clickable="true"
-                    android:focusable="true" />
+                    android:focusable="true">
 
-                <View
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@android:drawable/ic_lock_lock"
+                        app:tint="@color/azul_noche" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="20dp"
+                        android:text="Cambiar contraseña"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/azul_noche" />
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@android:drawable/ic_media_play"
+                        android:alpha="0.3"
+                        app:tint="@color/azul_noche" />
+                </LinearLayout>
+
+                <com.google.android.material.divider.MaterialDivider
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginHorizontal="24dp"
-                    android:background="@color/gris_fondo" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    app:dividerColor="#F5F5F5" />
 
-                <TextView
+                <LinearLayout
                     android:id="@+id/btnHelp"
                     android:layout_width="match_parent"
-                    android:layout_height="80dp"
+                    android:layout_height="72dp"
+                    android:orientation="horizontal"
                     android:gravity="center_vertical"
-                    android:paddingHorizontal="24dp"
-                    android:text="Soporte técnico"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/azul_noche"
+                    android:paddingHorizontal="20dp"
                     android:background="?attr/selectableItemBackground"
                     android:clickable="true"
-                    android:focusable="true" />
+                    android:focusable="true">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@android:drawable/ic_menu_help"
+                        app:tint="@color/azul_noche" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="20dp"
+                        android:text="Soporte técnico"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/azul_noche" />
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@android:drawable/ic_media_play"
+                        android:alpha="0.3"
+                        app:tint="@color/azul_noche" />
+                </LinearLayout>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="56dp"
+            android:layout_marginTop="64dp"
             android:gravity="center"
-            android:text="Versión de la app 2.0.26"
-            android:textSize="14sp"
+            android:text="Versión 2.0.26"
+            android:textSize="12sp"
             android:textStyle="bold"
             android:textColor="@color/gris_texto_secundario"
-            android:alpha="0.5"
+            android:alpha="0.4"
             android:layout_marginBottom="40dp"/>
 
     </LinearLayout>
