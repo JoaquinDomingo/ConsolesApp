@@ -1,14 +1,16 @@
 package com.example.consolas.ui.adapter
 
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.consolas.databinding.ItemMessageBinding
 import com.example.consolas.domain.repository.Message
 import java.text.SimpleDateFormat
 import java.util.*
 
-class MessageAdapter(private val currentUserEmail: String) : RecyclerView.Adapter<MessageAdapter.VH>() {
+class MessageAdapter(private val myEmail: String) : RecyclerView.Adapter<MessageAdapter.VH>() {
 
     private val items = mutableListOf<Message>()
     private val sdf = SimpleDateFormat("HH:mm", Locale.getDefault())
@@ -19,14 +21,16 @@ class MessageAdapter(private val currentUserEmail: String) : RecyclerView.Adapte
     }
 
     fun submit(list: List<Message>) {
+        // SOLUCIÓN DUPLICADOS: Filtramos mensajes idénticos en la misma milésima
+        val distinctList = list.distinctBy { "${it.sender}_${it.timestamp}_${it.text}" }
+
         items.clear()
-        items.addAll(list)
+        items.addAll(distinctList)
         notifyDataSetChanged()
     }
 
     override fun getItemViewType(position: Int): Int {
-        // CORRECCIÓN: Si el sender es mi email, el mensaje es enviado (SENT)
-        return if (items[position].sender == currentUserEmail) TYPE_SENT else TYPE_RECEIVED
+        return if (items[position].sender == myEmail) TYPE_SENT else TYPE_RECEIVED
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
@@ -41,24 +45,24 @@ class MessageAdapter(private val currentUserEmail: String) : RecyclerView.Adapte
     override fun getItemCount(): Int = items.size
 
     inner class VH(private val binding: ItemMessageBinding) : RecyclerView.ViewHolder(binding.root) {
-
         fun bind(m: Message, viewType: Int) {
-            // CORRECCIÓN: Usamos m.text (o m.message según tu modelo de dominio)
             binding.tvMessage.text = m.text
             binding.tvTime.text = sdf.format(Date(m.timestamp))
 
-            val params = binding.card.layoutParams as ViewGroup.MarginLayoutParams
+            // SOLUCIÓN ALINEACIÓN: Usamos los parámetros del padre (LinearLayout)
+            val params = binding.card.layoutParams as LinearLayout.LayoutParams
 
             if (viewType == TYPE_SENT) {
-                binding.card.setCardBackgroundColor(0xFFE3F2FD.toInt()) // Azul claro
-                params.marginStart = 120
-                params.marginEnd = 16
+                // ENVIADOS: Derecha + Azul
+                binding.card.setCardBackgroundColor(0xFFE3F2FD.toInt())
+                params.gravity = Gravity.END
+                params.setMargins(100, 4, 8, 4)
             } else {
-                binding.card.setCardBackgroundColor(0xFFF5F5F5.toInt()) // Gris claro
-                params.marginStart = 16
-                params.marginEnd = 120
+                // RECIBIDOS: Izquierda + Gris
+                binding.card.setCardBackgroundColor(0xFFF5F5F5.toInt())
+                params.gravity = Gravity.START
+                params.setMargins(8, 4, 100, 4)
             }
-
             binding.card.layoutParams = params
         }
     }

@@ -35,7 +35,7 @@ interface MessageDao {
     """)
     fun observeLastMessages(myEmail: String): Flow<List<MessageEntity>>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(message: MessageEntity)
 
     @Query("DELETE FROM messages WHERE senderEmail = :userEmail OR receiverEmail = :userEmail")

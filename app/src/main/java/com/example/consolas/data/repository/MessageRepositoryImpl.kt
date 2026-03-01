@@ -47,11 +47,15 @@ class MessageRepositoryImpl @Inject constructor(
             try {
                 val chatMsg = gson.fromJson(json, ChatMessage::class.java)
                 repositoryScope.launch {
+                    // NORMALIZACIÓN: Redondeamos el tiempo para que coincida con la API
+                    val timestamp = (System.currentTimeMillis() / 1000) * 1000
+
                     saveInternal(
                         sender = chatMsg.sender,
                         receiver = chatMsg.receiver,
                         text = chatMsg.message,
-                        sessionEmail = myEmail
+                        sessionEmail = myEmail,
+                        timestamp = timestamp
                     )
                 }
             } catch (e: Exception) {
@@ -66,11 +70,15 @@ class MessageRepositoryImpl @Inject constructor(
             val response = api.getChatHistory(otherUserEmail)
             if (response.isSuccessful) {
                 response.body()?.forEach { remoteMsg ->
+                    // NORMALIZACIÓN: Usamos el mismo criterio que en el socket
+                    val timestamp = (System.currentTimeMillis() / 1000) * 1000
+
                     saveInternal(
                         sender = remoteMsg.sender,
                         receiver = remoteMsg.receiver,
                         text = remoteMsg.message,
-                        sessionEmail = myEmail
+                        sessionEmail = myEmail,
+                        timestamp = timestamp
                     )
                 }
             }
@@ -81,30 +89,35 @@ class MessageRepositoryImpl @Inject constructor(
 
     override suspend fun sendMessage(userEmail: String, text: String, fromUser: Boolean) {
         val myEmail = sessionManager.userEmail()
+        val now = (System.currentTimeMillis() / 1000) * 1000 // Normalizado
 
-        val chatMsg = ChatMessage(
-            sender = myEmail,
-            receiver = userEmail,
-            message = text
-        )
+        val chatMsg = ChatMessage(sender = myEmail, receiver = userEmail, message = text)
         chatService.sendMessage(gson.toJson(chatMsg))
 
         saveInternal(
             sender = myEmail,
             receiver = userEmail,
             text = text,
-            sessionEmail = myEmail
+            sessionEmail = myEmail,
+            timestamp = now
         )
     }
 
-    private suspend fun saveInternal(sender: String, receiver: String, text: String, sessionEmail: String) {
+    private suspend fun saveInternal(
+        sender: String,
+        receiver: String,
+        text: String,
+        sessionEmail: String,
+        timestamp: Long
+    ) {
         val entity = MessageEntity(
             senderEmail = sender,
             receiverEmail = receiver,
             text = text.trim(),
-            timestamp = System.currentTimeMillis(),
+            timestamp = timestamp,
             userEmail = sessionEmail
         )
+        // El DAO debe tener OnConflictStrategy.IGNORE para que esto no duplique
         messageDao.insert(entity)
     }
 
