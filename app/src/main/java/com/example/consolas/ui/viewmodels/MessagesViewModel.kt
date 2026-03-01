@@ -3,6 +3,7 @@ package com.example.consolas.ui.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.consolas.data.local.SessionManager
+import com.example.consolas.data.repository.MessageRepositoryImpl
 import com.example.consolas.domain.repository.Message
 import com.example.consolas.domain.repository.MessageRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,25 +19,47 @@ class MessagesViewModel @Inject constructor(
     private val sessionManager: SessionManager
 ) : ViewModel() {
 
-    private val email = sessionManager.userEmail()
+    private val myEmail = sessionManager.userEmail()
+    private var currentOtherEmail: String = ""
 
-    val messages: StateFlow<List<Message>> = messageRepository
-        .observeMessages(email)
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+    // Observamos los mensajes filtrados por el email del contacto con el que hablamos
+    lateinit var messages: StateFlow<List<Message>>
+
+    /**
+     * Se llama desde el Fragment al entrar, pasando el email del contacto
+     */
+    fun initChat(otherEmail: String) {
+        this.currentOtherEmail = otherEmail
+
+        // 1. Inicializamos el Flow observando solo los mensajes de este contacto
+        messages = messageRepository
+            .observeMessages(otherEmail)
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+
+        // 2. Conectamos el WebSocket (si no está conectado ya)
+        // Casteamos a la implementación para acceder a los métodos de red
+        (messageRepository as? MessageRepositoryImpl)?.startRealtimeChat(myEmail)
+
+        // 3. Sincronizamos historial antiguo desde MariaDB
+        viewModelScope.launch {
+            (messageRepository as? MessageRepositoryImpl)?.syncWithServer(otherEmail)
+        }
+    }
 
     fun send(text: String) {
-        if (text.isBlank()) return
-        viewModelScope.launch {
-            messageRepository.sendMessage(email, text, fromUser = true)
+        if (text.isBlank() || currentOtherEmail.isBlank()) return
 
-            // Respuesta "mock" para la demo en clase (hasta que haya chat real)
-            messageRepository.sendMessage(email, "Recibido ✅ (demo)", fromUser = false)
+        viewModelScope.launch {
+            // Enviamos el mensaje real al servidor y lo guardamos en Room
+            messageRepository.sendMessage(currentOtherEmail, text, fromUser = true)
         }
     }
 
     fun clear() {
         viewModelScope.launch {
-            messageRepository.deleteAll(email)
+            if (currentOtherEmail.isNotBlank()) {
+                messageRepository.deleteAll(currentOtherEmail)
+            }
         }
     }
 }

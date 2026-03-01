@@ -3,13 +3,9 @@ package com.example.consolas.ui.viewmodels
 import androidx.lifecycle.*
 import com.example.consolas.data.local.SessionManager
 import com.example.consolas.domain.useCase.*
-import com.example.consolas.domain.model.Console
-import com.example.consolas.domain.model.Game
-import com.example.consolas.domain.model.UpdateConsole
+import com.example.consolas.domain.model.*
 import com.example.consolas.domain.repository.LocalRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,73 +22,27 @@ class ConsoleViewModel @Inject constructor(
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
-    private val userEmailState = MutableStateFlow(sessionManager.userEmail())
+    val consoles: LiveData<List<Console>> = localRepository.observeAllConsoles().asLiveData()
 
-    val consoles: LiveData<List<Console>> = userEmailState.flatMapLatest { email ->
-        localRepository.observeLocalConsoles(email)
-    }.asLiveData()
-
-    init {
-        refreshFromApi()
-    }
+    init { refreshFromApi() }
 
     fun refreshFromApi() {
-        val email = sessionManager.userEmail()
-        if (email.isBlank()) return
-
         viewModelScope.launch {
-            if (consoles.value.isNullOrEmpty()) _isLoading.value = true
-
+            _isLoading.value = true
             try {
+                // 1. Pedimos a la API
                 val apiResult = getConsolesUseCase()
-                localRepository.upsertConsoles(email, apiResult)
+                // 2. Guardamos en Local (Él se encarga de no duplicar)
+                localRepository.upsertConsoles(apiResult)
             } catch (e: Exception) {
-                android.util.Log.e("DEBUG_API", "Error: ${e.message}")
+                android.util.Log.e("VM", "Error: ${e.message}")
             } finally {
                 _isLoading.value = false
             }
         }
     }
-
-
-    fun addGameToConsole(consoleName: String, game: Game, isNative: Boolean) {
-        val email = sessionManager.userEmail()
-
-        viewModelScope.launch {
-            _isLoading.value = true
-            val success = localRepository.addGameToConsole(consoleName, game, isNative, email)
-
-            if (success) {
-                android.util.Log.d("DEBUG_VM", "Actualización completada para $email")
-            }
-            _isLoading.value = false
-        }
-    }
-
-    fun addConsole(console: Console) {
-        viewModelScope.launch {
-            _isLoading.value = true
-            try {
-                addConsoleUseCase(console)
-                refreshFromApi()
-            } catch (e: Exception) {
-                android.util.Log.e("DEBUG_ADD", "Error al añadir consola: ${e.message}")
-            } finally {
-                _isLoading.value = false
-            }
-        }
-    }
-
-    fun deleteConsole(name: String) {
-        viewModelScope.launch {
-            try {
-                deleteConsoleUseCase(name)
-                val email = sessionManager.userEmail()
-                localRepository.deleteLocalConsole(email, name)
-            } catch (e: Exception) {
-                android.util.Log.e("DEBUG_DELETE", "Error al borrar consola: ${e.message}")
-            }
-        }
+    fun getCurrentUserEmail(): String {
+        return sessionManager.userEmail()
     }
 
     fun editConsole(oldName: String, updateConsole: UpdateConsole) {
@@ -106,10 +56,24 @@ class ConsoleViewModel @Inject constructor(
                 }
                 refreshFromApi()
             } catch (e: Exception) {
-                android.util.Log.e("DEBUG_EDIT", "Error al editar consola: ${e.message}")
+                android.util.Log.e("EDIT", "Error: ${e.message}")
             } finally {
                 _isLoading.value = false
             }
+        }
+    }
+
+    fun addConsole(console: Console) {
+        viewModelScope.launch {
+            addConsoleUseCase(console)
+            refreshFromApi()
+        }
+    }
+
+    fun deleteConsole(name: String) {
+        viewModelScope.launch {
+            deleteConsoleUseCase(name)
+            localRepository.deleteLocalConsole(sessionManager.userEmail(), name)
         }
     }
 
@@ -119,7 +83,9 @@ class ConsoleViewModel @Inject constructor(
         }
     }
 
-    fun updateEmail() {
-        userEmailState.value = sessionManager.userEmail()
+    fun addGameToConsole(consoleName: String, game: Game, isNative: Boolean) {
+        viewModelScope.launch {
+            localRepository.addGameToConsole(consoleName, game, isNative, sessionManager.userEmail())
+        }
     }
 }

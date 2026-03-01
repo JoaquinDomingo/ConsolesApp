@@ -11,11 +11,12 @@ class AuthRepository @Inject constructor(
     private val apiService: ApiService,
     private val sessionManager: SessionManager
 ) {
-    suspend fun login(email: String, pass: String): Boolean {
+    suspend fun login(email: String, pass: String, name: String): Boolean {
         return try {
             val response = apiService.login(UserRequest(email, pass))
             if (response.isSuccessful && response.body() != null) {
-                sessionManager.saveAuthData(response.body()!!.token, email)
+                // Guardamos Token, Email y el Nombre que viene del campo etUser
+                sessionManager.saveAuthData(response.body()!!.token, email, name)
                 true
             } else false
         } catch (e: Exception) {
@@ -24,11 +25,7 @@ class AuthRepository @Inject constructor(
     }
 
     suspend fun register(email: String, pass: String): Boolean {
-        return try {
-            val response = apiService.register(UserRequest(email, pass))
-            response.isSuccessful
-        } catch (e: Exception) {
-            false
-        }
+        val response = apiService.register(UserRequest(email, pass))
+        return response.isSuccessful
     }
 }

@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // 1. VERIFICACIÓN DE SEGURIDAD: Si no hay token, no deberíamos estar aquí
+        // 1. SEGURIDAD: Si el usuario no tiene token, redirigir a Login inmediatamente
         if (!sessionManager.isUserLoggedIn()) {
             startActivity(Intent(this, LoginActivity::class.java))
             finish()
@@ -61,6 +61,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        // Refrescamos los datos cada vez que la actividad vuelve al frente
         loadUserDataInHeader()
     }
 
@@ -98,10 +99,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // --- LÓGICA DE USUARIO Y UI ---
 
     fun loadUserDataInHeader() {
-        // Obtenemos el Header dinámicamente
         val headerView = binding.navigationView.getHeaderView(0)
         val tvName = headerView.findViewById<TextView>(R.id.tvUserName)
         val tvEmail = headerView.findViewById<TextView>(R.id.tvUserEmail)
@@ -109,23 +108,25 @@ class MainActivity : AppCompatActivity() {
 
         val currentEmail = sessionManager.userEmail()
         val currentName = sessionManager.userName()
+        val uriString = sessionManager.getProfileImage()
 
-        // Si el nombre está vacío (común tras el login solo con email), usamos el alias del email
-        tvName.text = if (currentName.isNotEmpty()) currentName.uppercase()
-        else currentEmail.substringBefore("@").uppercase()
+        android.util.Log.d("DEBUG_NAV", "Cargando Header - Name: '$currentName', Email: '$currentEmail'")
+
+        // Prioridad: 1. Nombre guardado -> 2. Email -> 3. Usuario genérico
+        tvName.text = when {
+            currentName.isNotBlank() -> currentName.uppercase()
+            currentEmail.isNotBlank() -> currentEmail.substringBefore("@").uppercase()
+            else -> "USUARIO"
+        }
+
         tvEmail.text = currentEmail
 
-        // Carga de imagen de perfil vinculada al email del usuario en MariaDB
-        sessionManager.getProfileImage()?.let { uriString ->
-            Glide.with(this)
-                .load(Uri.parse(uriString))
-                .circleCrop()
-                .placeholder(R.drawable.images)
-                .error(R.drawable.images)
-                .into(imgUser)
-        } ?: run {
-            imgUser.setImageResource(R.drawable.images)
-        }
+        Glide.with(this)
+            .load(if (!uriString.isNullOrBlank()) Uri.parse(uriString) else R.drawable.images)
+            .circleCrop()
+            .placeholder(R.drawable.images)
+            .error(R.drawable.images)
+            .into(imgUser)
     }
 
     fun updateNavHeaderData() {
@@ -133,7 +134,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupNavigationUI() {
-        // Definimos los destinos de nivel superior (sin flecha de "atrás")
         appBarConfiguration = AppBarConfiguration(
             setOf(R.id.FragmentJoaquin, R.id.crudFragment, R.id.profileFragment),
             drawerLayout
@@ -142,12 +142,13 @@ class MainActivity : AppCompatActivity() {
         binding.navigationView.setupWithNavController(navController)
         binding.bottomNav.setupWithNavController(navController)
 
-        // Manejo manual del Logout en el Drawer
         binding.navigationView.setNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.logout -> {
-                    sessionManager.logout() // Borra Token, Email y Preferencias
-                    startActivity(Intent(this, LoginActivity::class.java))
+                    sessionManager.logout()
+                    val intent = Intent(this, LoginActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(intent)
                     finish()
                     true
                 }
@@ -160,7 +161,5 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
-    }
+    override fun onSupportNavigateUp() = navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
 }

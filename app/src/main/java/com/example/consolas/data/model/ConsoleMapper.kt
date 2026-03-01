@@ -15,7 +15,9 @@ fun ResponseConsole.toDomain(): Console {
         favorite = this.favorite ?: false,
 
         nativeGames = this.nativeGames?.map { it.toDomain() } ?: emptyList(),
-        adaptedGames = this.adaptedGames?.map { it.toDomain() } ?: emptyList()
+        adaptedGames = this.adaptedGames?.map { it.toDomain() } ?: emptyList(),
+
+        userEmail = this.userEmail ?: ""
     )
 }
 

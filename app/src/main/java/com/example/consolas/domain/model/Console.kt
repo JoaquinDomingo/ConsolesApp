@@ -6,6 +6,7 @@ data class Console (
     var company: String,
     var description: String,
     var image: String,
+    val userEmail: String,
     val nativeGames: List<Game> = emptyList(),
     val adaptedGames: List<Game> = emptyList(),
     var price: Double,

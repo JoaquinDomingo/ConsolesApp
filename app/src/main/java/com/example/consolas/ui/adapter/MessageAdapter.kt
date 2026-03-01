@@ -1,7 +1,9 @@
 package com.example.consolas.ui.adapter
 
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.consolas.databinding.ItemMessageBinding
 import com.example.consolas.domain.repository.Message
@@ -13,10 +15,19 @@ class MessageAdapter : RecyclerView.Adapter<MessageAdapter.VH>() {
     private val items = mutableListOf<Message>()
     private val sdf = SimpleDateFormat("HH:mm", Locale.getDefault())
 
+    companion object {
+        private const val TYPE_SENT = 1
+        private const val TYPE_RECEIVED = 2
+    }
+
     fun submit(list: List<Message>) {
         items.clear()
         items.addAll(list)
         notifyDataSetChanged()
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return if (items[position].fromUser) TYPE_SENT else TYPE_RECEIVED
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
@@ -24,25 +35,30 @@ class MessageAdapter : RecyclerView.Adapter<MessageAdapter.VH>() {
         return VH(binding)
     }
 
-    override fun onBindViewHolder(holder: VH, position: Int) = holder.bind(items[position])
+    override fun onBindViewHolder(holder: VH, position: Int) {
+        holder.bind(items[position], getItemViewType(position))
+    }
 
     override fun getItemCount(): Int = items.size
 
     inner class VH(private val binding: ItemMessageBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(m: Message) {
+
+        fun bind(m: Message, viewType: Int) {
             binding.tvMessage.text = m.text
             binding.tvTime.text = sdf.format(Date(m.timestamp))
 
             val params = binding.card.layoutParams as ViewGroup.MarginLayoutParams
-            if (m.fromUser) {
-                binding.card.setCardBackgroundColor(0xFFE3F2FD.toInt()) // light blue
-                params.marginStart = 64
-                params.marginEnd = 8
+
+            if (viewType == TYPE_SENT) {
+                binding.card.setCardBackgroundColor(0xFFE3F2FD.toInt())
+                params.marginStart = 120
+                params.marginEnd = 16
             } else {
-                binding.card.setCardBackgroundColor(0xFFF1F1F1.toInt()) // light gray
-                params.marginStart = 8
-                params.marginEnd = 64
+                binding.card.setCardBackgroundColor(0xFFF5F5F5.toInt())
+                params.marginStart = 16
+                params.marginEnd = 120
             }
+
             binding.card.layoutParams = params
         }
     }

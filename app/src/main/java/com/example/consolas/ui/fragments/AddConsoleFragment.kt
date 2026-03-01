@@ -127,7 +127,8 @@ class AddConsoleFragment : Fragment(R.layout.fragment_add_console) {
                     price = price,
                     favorite = binding.swFavorite.isChecked,
                     nativeGames = emptyList(),
-                    adaptedGames = emptyList()
+                    adaptedGames = emptyList(),
+                    userEmail = viewModel.getCurrentUserEmail() ?: ""
                 )
                 viewModel.addConsole(newConsole)
                 findNavController().popBackStack()

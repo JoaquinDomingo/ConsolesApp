@@ -6,13 +6,13 @@ import javax.inject.Inject
 class LoginUseCase @Inject constructor(
     private val repository: AuthRepository
 ) {
-    suspend operator fun invoke(email: String, pass: String): Result<Boolean> {
-        return if (email.isBlank() || pass.isBlank()) {
-            Result.failure(Exception("Los campos no pueden estar vacíos"))
+    suspend operator fun invoke(email: String, pass: String, name: String): Result<Boolean> {
+        return if (email.isBlank() || pass.isBlank() || name.isBlank()) {
+            Result.failure(Exception("Todos los campos son obligatorios"))
         } else {
-            val success = repository.login(email, pass)
+            val success = repository.login(email, pass, name)
             if (success) Result.success(true)
-            else Result.failure(Exception("Email o contraseña incorrectos"))
+            else Result.failure(Exception("Error al iniciar sesión"))
         }
     }
 }

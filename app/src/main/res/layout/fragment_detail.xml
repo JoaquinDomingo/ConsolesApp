@@ -129,7 +129,54 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="32dp"
+            android:letterSpacing="0.15"
+            android:text="PROPIETARIO"
+            android:textColor="@color/azul_noche"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:alpha="0.6" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="4dp">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@android:drawable/ic_menu_myplaces"
+                app:tint="@color/azul_noche" />
+
+            <TextView
+                android:id="@+id/tvDetailUser"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_weight="1"
+                android:textColor="@color/azul_noche"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                tools:text="usuario@ejemplo.com" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnContactOwner"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MENSAJE"
+                android:textColor="@color/azul_noche"
+                app:icon="@android:drawable/stat_notify_chat"
+                app:iconTint="@color/azul_noche" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
             android:letterSpacing="0.15"
             android:text="HISTORIA Y DETALLES"
             android:textColor="@color/azul_noche"

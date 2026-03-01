@@ -32,6 +32,9 @@ class ResponseConsole (){
     @SerializedName("favorite")
     var favorite: Boolean? = null
 
+    @SerializedName("user_email")
+    var userEmail: String? = null
+
     @SerializedName("nativeGames")
     var nativeGames: List<ResponseGame>? = null
 

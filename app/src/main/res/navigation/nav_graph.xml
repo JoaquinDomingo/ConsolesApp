@@ -51,6 +51,9 @@
         <action
             android:id="@+id/action_detailFragment_to_editConsoleFragment"
             app:destination="@id/editConsoleFragment" />
+        <action
+            android:id="@+id/action_detailFragment_to_mensajesFragment"
+            app:destination="@id/mensajesFragment" />
     </fragment>
 
     <fragment
@@ -131,10 +134,24 @@
     </fragment>
 
     <fragment
+        android:id="@+id/chatFragment"
+        android:name="com.example.consolas.ui.fragments.ChatFragment"
+        android:label="Chats"
+        tools:layout="@layout/fragment_chat">
+        <action
+            android:id="@+id/action_chatFragment_to_mensajesFragment"
+            app:destination="@id/mensajesFragment" />
+    </fragment>
+
+    <fragment
         android:id="@+id/mensajesFragment"
         android:name="com.example.consolas.ui.fragments.MensajesFragment"
         android:label="Mensajes"
-        tools:layout="@layout/fragment_mensajes" />
+        tools:layout="@layout/fragment_mensajes">
+        <argument
+            android:name="otherEmail"
+            app:argType="string" />
+    </fragment>
 
     <fragment
         android:id="@+id/settingsFragment"

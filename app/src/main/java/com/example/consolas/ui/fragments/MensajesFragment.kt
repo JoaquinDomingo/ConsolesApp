@@ -24,20 +24,34 @@ class MensajesFragment : Fragment(R.layout.fragment_mensajes) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentMensajesBinding.bind(view)
 
+        // 1. Recuperar el email del contacto desde los argumentos del Navigation
+        val otherEmail = arguments?.getString("otherEmail") ?: ""
+
+        // Inicializar el chat en el ViewModel (Cargar historial y conectar WebSocket)
+        vm.initChat(otherEmail)
+
+        // Configuración del RecyclerView
         binding.rvMessages.layoutManager = LinearLayoutManager(requireContext()).apply {
             stackFromEnd = true
         }
         binding.rvMessages.adapter = adapter
 
+        // Botón de enviar
         binding.btnSend.setOnClickListener {
-            vm.send(binding.etMessage.text?.toString().orEmpty())
-            binding.etMessage.setText("")
+            val text = binding.etMessage.text?.toString().orEmpty()
+            if (text.isNotBlank()) {
+                vm.send(text) // El VM ya sabe que el receptor es 'otherEmail'
+                binding.etMessage.setText("")
+            }
         }
 
+        // Observar mensajes (Room + WebSockets vía Flow)
         viewLifecycleOwner.lifecycleScope.launch {
             vm.messages.collect { list ->
                 adapter.submit(list)
-                if (list.isNotEmpty()) binding.rvMessages.scrollToPosition(list.size - 1)
+                if (list.isNotEmpty()) {
+                    binding.rvMessages.scrollToPosition(list.size - 1)
+                }
             }
         }
     }

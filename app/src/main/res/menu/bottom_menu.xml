@@ -11,7 +11,7 @@
         android:icon="@android:drawable/ic_menu_agenda"
         android:title="Consolas" />
     <item
-        android:id="@+id/mensajesFragment"
+        android:id="@+id/chatFragment"
         android:icon="@android:drawable/ic_dialog_email"
         android:title="Mensajes"
         />

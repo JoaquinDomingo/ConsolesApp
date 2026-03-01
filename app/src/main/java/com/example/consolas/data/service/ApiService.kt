@@ -42,4 +42,21 @@ interface ApiService {
 
     @DELETE("console/{name}")
     suspend fun deleteConsole(@Path("name") name: String): Response<Unit>
+
+    // --- RUTAS DE CHAT E HISTORIAL ---
+
+    /**
+     * Obtiene todos los usuarios registrados para poder iniciar una conversación.
+     */
+    @GET("users")
+    suspend fun getUsers(): Response<List<UserResponse>>
+
+    /**
+     * Obtiene el historial de mensajes entre el usuario actual y el contacto especificado.
+     * @param otherEmail El email del usuario con el que se mantiene la conversación.
+     */
+    @GET("messages")
+    suspend fun getChatHistory(
+        @Query("with") otherEmail: String
+    ): Response<List<ChatMessage>>
 }

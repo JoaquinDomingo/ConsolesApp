@@ -2,7 +2,7 @@ package com.example.consolas.data.local
 
 import com.example.consolas.domain.model.Console
 
-fun ConsoleEntity.toDomain(): Console = Console(
+fun ConsoleEntity.toDomain(ownerEmail: String? = null): Console = Console(
     name = this.name,
     releasedate = this.releasedate,
     company = this.company,
@@ -11,8 +11,10 @@ fun ConsoleEntity.toDomain(): Console = Console(
     price = this.price,
     favorite = this.favorite,
     nativeGames = this.nativeGames,
-    adaptedGames = this.adaptedGames
+    adaptedGames = this.adaptedGames,
+    userEmail = ownerEmail ?: this.userEmail
 )
+
 
 fun Console.toEntity(userEmail: String): ConsoleEntity = ConsoleEntity(
     name = this.name,
@@ -25,5 +27,4 @@ fun Console.toEntity(userEmail: String): ConsoleEntity = ConsoleEntity(
     favorite = this.favorite,
     nativeGames = this.nativeGames,
     adaptedGames = this.adaptedGames
-
 )

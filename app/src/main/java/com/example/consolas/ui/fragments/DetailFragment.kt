@@ -2,6 +2,7 @@ package com.example.consolas.ui.fragments
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -24,23 +25,34 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentDetailBinding.bind(view)
+
+        // MODIFICACIÓN CRÍTICA: Forzamos al ViewModel a recargar los datos
+        // para que no use la lista antigua que tiene en memoria RAM.
+        viewModel.refreshFromApi()
+
         setupData()
         setupButtons()
     }
 
     private fun setupData() {
-        // CAMBIO: Ahora usamos consoleName en lugar de position
         val nameToFind = args.consoleName
 
         viewModel.consoles.observe(viewLifecycleOwner) { lista ->
-            // Buscamos la consola por su nombre único en la lista
+            // Buscamos la consola en la lista actualizada que viene del Repositorio
             val console = lista?.find { it.name == nameToFind } ?: return@observe
 
+            // Log de control para verificar que el objeto ya trae el email correcto
+            android.util.Log.d("CHAT_DEBUG", "Mostrando -> Consola: ${console.name} | Propietario: ${console.userEmail}")
+
+            // Asignación de datos a la UI
             binding.tvDetailName.text = console.name
             binding.tvDetailCompany.text = console.company
             binding.tvDetailDate.text = "Lanzamiento: ${console.releasedate}"
             binding.tvDetailPrice.text = "Precio: ${String.format("%.2f", console.price)} €"
             binding.tvDetailDescription.text = console.description
+
+            // Mostrar el autor real que viene de la Base de Datos
+            binding.tvDetailUser.text = "Subido por: ${console.userEmail}"
 
             Glide.with(this)
                 .load(console.image)
@@ -60,19 +72,26 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
     }
 
     private fun setupButtons() {
+        // Botón para iniciar chat con el propietario real (el del campo userEmail)
+        binding.btnContactOwner.setOnClickListener {
+            val console = current ?: return@setOnClickListener
+
+            // Navegamos al MensajesFragment pasando el email del dueño de la consola
+            val bundle = bundleOf("otherEmail" to console.userEmail)
+            findNavController().navigate(R.id.action_detailFragment_to_mensajesFragment, bundle)
+        }
+
         binding.btnFavorite.setOnClickListener {
             val item = current ?: return@setOnClickListener
             viewModel.setFavorite(item.name, !item.favorite)
         }
 
         binding.btnGoToNative.setOnClickListener {
-            // CAMBIO: Pasamos el nombre para que NativeGamesFragment sepa qué consola cargar
             val action = DetailFragmentDirections.actionDetailFragmentToNativeGamesFragment(args.consoleName)
             findNavController().navigate(action)
         }
 
         binding.btnGoToAdapted.setOnClickListener {
-            // CAMBIO: Pasamos el nombre para que AdaptedGamesFragment sepa qué consola cargar
             val action = DetailFragmentDirections.actionDetailFragmentToAdaptedGamesFragment(args.consoleName)
             findNavController().navigate(action)
         }

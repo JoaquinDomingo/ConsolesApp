@@ -22,10 +22,10 @@ class AuthViewModel @Inject constructor(
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
-    fun login(email: String, pass: String) {
+    fun login(email: String, pass: String, name: String) {
         viewModelScope.launch {
-            _isLoading.value = true
-            val result = loginUseCase(email, pass)
+            _isLoading.postValue(true)
+            val result = loginUseCase(email, pass, name)
             _authState.value = result
             _isLoading.value = false
         }
