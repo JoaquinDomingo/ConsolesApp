@@ -6,8 +6,9 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "messages")
 data class MessageEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
-    val userEmail: String,
+    val senderEmail: String,    // <--- AÑADIR ESTO
+    val receiverEmail: String,  // <--- AÑADIR ESTO
     val text: String,
     val timestamp: Long,
-    val fromUser: Boolean
+    val userEmail: String       // Email del dueño de la sesión
 )

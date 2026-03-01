@@ -7,7 +7,8 @@ data class Message(
     val id: Long,
     val text: String,
     val timestamp: Long,
-    val fromUser: Boolean
+    val sender: String,
+    val receiver: String
 )
 
 interface MessageRepository {

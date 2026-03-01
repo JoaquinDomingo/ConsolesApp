@@ -25,6 +25,10 @@ class MessagesViewModel @Inject constructor(
     // Observamos los mensajes filtrados por el email del contacto con el que hablamos
     lateinit var messages: StateFlow<List<Message>>
 
+    // Dentro de MessagesViewModel
+    fun getMyEmail(): String {
+        return sessionManager.userEmail() // sessionManager debe estar inyectado en el constructor
+    }
     /**
      * Se llama desde el Fragment al entrar, pasando el email del contacto
      */

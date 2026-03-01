@@ -1,16 +1,14 @@
 package com.example.consolas.ui.adapter
 
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.consolas.databinding.ItemMessageBinding
 import com.example.consolas.domain.repository.Message
 import java.text.SimpleDateFormat
 import java.util.*
 
-class MessageAdapter : RecyclerView.Adapter<MessageAdapter.VH>() {
+class MessageAdapter(private val currentUserEmail: String) : RecyclerView.Adapter<MessageAdapter.VH>() {
 
     private val items = mutableListOf<Message>()
     private val sdf = SimpleDateFormat("HH:mm", Locale.getDefault())
@@ -27,7 +25,8 @@ class MessageAdapter : RecyclerView.Adapter<MessageAdapter.VH>() {
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (items[position].fromUser) TYPE_SENT else TYPE_RECEIVED
+        // CORRECCIÓN: Si el sender es mi email, el mensaje es enviado (SENT)
+        return if (items[position].sender == currentUserEmail) TYPE_SENT else TYPE_RECEIVED
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
@@ -44,17 +43,18 @@ class MessageAdapter : RecyclerView.Adapter<MessageAdapter.VH>() {
     inner class VH(private val binding: ItemMessageBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(m: Message, viewType: Int) {
+            // CORRECCIÓN: Usamos m.text (o m.message según tu modelo de dominio)
             binding.tvMessage.text = m.text
             binding.tvTime.text = sdf.format(Date(m.timestamp))
 
             val params = binding.card.layoutParams as ViewGroup.MarginLayoutParams
 
             if (viewType == TYPE_SENT) {
-                binding.card.setCardBackgroundColor(0xFFE3F2FD.toInt())
+                binding.card.setCardBackgroundColor(0xFFE3F2FD.toInt()) // Azul claro
                 params.marginStart = 120
                 params.marginEnd = 16
             } else {
-                binding.card.setCardBackgroundColor(0xFFF5F5F5.toInt())
+                binding.card.setCardBackgroundColor(0xFFF5F5F5.toInt()) // Gris claro
                 params.marginStart = 16
                 params.marginEnd = 120
             }
